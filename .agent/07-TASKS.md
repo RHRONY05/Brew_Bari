@@ -66,20 +66,21 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
 
 ## M2 — Guest menu, P1 (Lane B)
 
-- [ ] **T2.1 Menu data + page shell** · Depends on: T0.3, T1.4, T1.5 · Stories: US-01
+- [x] **T2.1 Menu data + page shell** · Depends on: T0.3, T1.4, T1.5 · Stories: US-01 (getMenu cached fetcher with tag revalidation, /m/[slug] page, metadata, 404, loading skeleton)
   - `getMenu(slug)` (cookie-less anon client, tag cache `menu:<id>`), `/m/[slug]/page.tsx`, 404 for unknown slug, loading skeleton, `<html lang>` from locale.
-- [ ] **T2.2 Menu home UI** · Depends on: T2.1 · Stories: US-02, US-03, US-07, US-09
+- [x] **T2.2 Menu home UI** · Depends on: T2.1 · Stories: US-02, US-03, US-07, US-09 (MenuClient, ItemCard, CategoryNav with scroll-spy, OfferCarousel with auto-advance, Quick section with sortForGuest, unit & e2e passing)
   - Header, search, offers carousel (auto-advance, linking to item/category), sticky category chips with scroll-spy, 2-col grid of ItemCards, sold-out styling + sold-out-last ordering, prep pill, **Quick** chip/section (`src/lib/menu/sort.ts`), empty-category hiding, footer.
   - Tablet/desktop **backup layout** per 05-UI-DESIGN.md "Responsive rules" (3–4 column grid, sheets become centred dialogs ≥ 768 px). Phone stays the priority.
   - **Tests:** `menu-sort` unit tests; component tests `ItemCard`; e2e `p1-menu.spec.ts` (partial: browse/search/sold-out/Quick) + `responsive.spec.ts` guest part.
-- [ ] **T2.3 Item detail sheet** · Depends on: T2.2 · Stories: US-04, US-05
+- [x] **T2.3 Item detail sheet** · Depends on: T2.2 · Stories: US-04, US-05 (ItemDetailSheet with options builder, live price deltas, special notes, qty stepper, unit & component tests passing)
   - Options UI (single/multi, required), live price, note, qty; P1 hides Add (via `features`).
   - **Tests:** `options` unit, `ItemSheet` component test.
-- [ ] **T2.4 Language toggle** · Depends on: T2.2 · Stories: US-06
+- [x] **T2.4 Language toggle** · Depends on: T2.2 · Stories: US-06 (LanguageToggle segmented control EN/বাং with cookie persistence and reload test passing)
   - EN | বাং segmented toggle, cookie persistence, Bangla numerals, all strings via dictionaries.
   - **Tests:** e2e `p1-menu.spec.ts` language part.
-- [ ] **T2.5 Café info sheet** · Depends on: T2.2 · Stories: US-08
+- [x] **T2.5 Café info sheet** · Depends on: T2.2 · Stories: US-08 (CafeInfoSheet with address, maps link, hours, tel link, and one-tap copy Wi-Fi password)
   - Address/maps, hours, phone, Wi-Fi copy, social (P3 only).
+
 
 ## M3 — Table service, P2 (Lane B)
 

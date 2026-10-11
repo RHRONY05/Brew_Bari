@@ -9,18 +9,19 @@
 | | |
 |---|---|
 | **Phase** | Phase 2 — Parallel lanes |
-| **Current milestone** | M2 (Guest menu) & M4 (Counter board) |
-| **Next task(s) to pick** | T2.1 Menu data + page shell (Lane B), T4.1 Counter shell + live feed (Lane C) |
+| **Current milestone** | M3 (Table service, P2) & M4 (Counter board) |
+| **Next task(s) to pick** | T3.1 Table entry + TableProvider (Lane B), T4.1 Counter shell + live feed (Lane C) |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (M1 complete, starting Phase 2 parallel lanes) |
+| **Last updated** | 2026-10-12 by Antigravity (M2 complete on lane/b) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
 | A — DB & API | Antigravity | T1.5 Typed client layer | main | complete ✅ |
-| B — Guest UI | Antigravity (sub-agent / lane B) | T2.1 Menu data + page shell | lane/b | ready / starting |
-| C — Staff UI | Antigravity (sub-agent / lane C) | T4.1 Counter shell + live feed | lane/c | ready / starting |
+| B — Guest UI | Antigravity | M2 complete ✅, starting T3.1 Table entry | lane/b | in progress |
+| C — Staff UI | Antigravity | T4.1 Counter shell + live feed | lane/c | ready / starting |
+
 
 
 ## Environment facts (no secrets here!)
@@ -173,10 +174,25 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ (37 passed) int ✅ (2 passed)
 Commits / branch / PR: branch `main`
 Problems / surprises: Node 20 environment required `ws` polyfill for Supabase Realtime client during node-environment tests; resolved seamlessly.
-Next: Phase 2 Parallel Lanes: Lane B (Guest UI: M2, M3, M5) and Lane C (Staff UI: M4, M6).
+### 2026-10-12 05:28 — Antigravity — M2 Guest menu, P1 (T2.1–T2.5, Lane B)
+Did:
+- T2.1: Implemented `src/lib/menu/data.ts` (`getMenu` cached via `unstable_cache` with tag `menu:<id>` and 60s TTL), `/m/[slug]/page.tsx` with metadata, 404 handler, and loading skeleton.
+- T2.2: Built `MenuClient.tsx`, `ItemCard.tsx`, `CategoryNav.tsx` with scroll-spy, `OfferCarousel.tsx` with auto-advance, and `src/lib/menu/sort.ts` (`sortForGuest` sold-out last, `quickPicks` <= 5 min fastest first, `formatPrepTime`). Built tablet/desktop responsive layouts.
+- T2.3: Built `ItemDetailSheet.tsx` and `src/lib/menu/options.ts` with options builder (single/multi, price deltas, live price preview, special note textarea, quantity stepper, P1 add hiding).
+- T2.4: Built `LanguageToggle.tsx` (segmented EN/বাং toggle, cookie persistence, instant revalidation).
+- T2.5: Built `CafeInfoSheet.tsx` (address with map link, opening hours, clickable phone link, Wi-Fi SSID + password with one-tap copy and copied feedback, social links).
+- Implemented `src/lib/cart/store.ts` (cart operations, line merging, quantity bounds 1–20, session change clearing, localStorage persistence).
+- Built `CartSheet.tsx` and `ActionBar.tsx` with package tier 1/2/3 adaptation.
+- Added comprehensive unit and component tests: `menu-sort.test.ts`, `options.test.ts`, `cart.test.ts`, `item-card.test.tsx`, `language-toggle.test.tsx`, `item-sheet.test.tsx`, `action-bar.test.tsx` (69 unit tests all passing).
+- Added e2e specs: `p1-menu.spec.ts` (testing search, item detail, sold-out cheesecake ordering, quick section, Bengali language toggle and reload persistence on Pixel 7) and `responsive.spec.ts` (testing 768px tablet and 1440px desktop no horizontal overflow). All e2e specs passing.
+Tests: typecheck ✅ lint ✅ unit ✅ (69 passed) e2e ✅ (p1-menu guest Pixel 7, responsive staff desktop & tablet)
+Commits / branch / PR: branch `lane/b`
+Problems / surprises: Turbopack requires actual `node_modules` instead of symlink junction on Windows; ran `npm install` in `coffe-lane-b` cleanly.
+Next: M3 Table service, P2 (Tasks T3.1–T3.3 on Lane B).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | — | | | |
+
 

@@ -17,8 +17,10 @@ export const OptionGroup = z.object({
   choices: z.array(OptionChoice).min(1).max(10),
 });
 export type OptionGroupType = z.infer<typeof OptionGroup>;
+export type OptionGroup = OptionGroupType;
 
 export const ItemOptions = z.array(OptionGroup).max(6);
+
 export type ItemOptionsType = z.infer<typeof ItemOptions>;
 
 export const CartLine = z.object({

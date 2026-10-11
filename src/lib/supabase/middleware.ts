@@ -31,11 +31,32 @@ export async function updateSession(request: NextRequest) {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (request.nextUrl.pathname.startsWith('/staff/(protected)') || request.nextUrl.pathname.startsWith('/staff/counter') || request.nextUrl.pathname.startsWith('/staff/admin')) {
+  const pathname = request.nextUrl.pathname
+
+  const isStaffRoute =
+    pathname.startsWith('/staff/counter') ||
+    pathname.startsWith('/staff/admin') ||
+    pathname.startsWith('/staff/(protected)')
+
+  if (isStaffRoute) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/staff/login'
       return NextResponse.redirect(url)
+    }
+
+    if (pathname.startsWith('/staff/admin')) {
+      const { data: staffMember } = await supabase
+        .from('staff')
+        .select('role')
+        .eq('user_id', user.id)
+        .single()
+
+      if (!staffMember || staffMember.role !== 'admin') {
+        const url = request.nextUrl.clone()
+        url.pathname = '/staff/counter'
+        return NextResponse.redirect(url)
+      }
     }
   }
 

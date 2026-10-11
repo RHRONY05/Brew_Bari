@@ -59,9 +59,10 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
   - Create 2 Auth users (admin + counter) — via MCP/Dashboard or a one-off local script using the secret key that is **not committed**. Link with `staff` rows. Put credentials only in `.env.local` (`TEST_STAFF_*`) and tell the human where they are.
   - **AC:** anon `select` on `menu_items` returns 28 items; `get_table_context(<table 1 token>)` returns a session.
 
-- [ ] **T1.5 Typed client layer** · Depends on: T1.3, T0.1
+- [x] **T1.5 Typed client layer** · Depends on: T1.3, T0.1 (Zod schemas, errors, device-id, requests state machine, typed RPC wrappers, middleware guards, unit and integration tests passing)
   - `src/lib/supabase/{server,client,middleware}.ts`, `middleware.ts` (refresh + guards per 02-ARCHITECTURE.md), `src/lib/schemas.ts`, `src/lib/errors.ts`, `src/lib/table/rpc.ts` (typed wrappers returning `{data} | {error: {code, detail}}`), `src/lib/requests.ts` (transitions + tile state), `src/lib/device-id.ts`.
   - **Tests:** `errors`, `schemas`, `requests` unit tests; integration test: anon `get_table_context` on table 99 + anon `from('tables')` returns empty.
+
 
 ## M2 — Guest menu, P1 (Lane B)
 

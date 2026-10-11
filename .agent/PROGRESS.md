@@ -8,19 +8,20 @@
 ## Now
 | | |
 |---|---|
-| **Phase** | Phase 1 — Foundation (M1 in progress) |
-| **Current milestone** | M1 — Database & API |
-| **Next task(s) to pick** | T1.5 Typed client layer |
+| **Phase** | Phase 2 — Parallel lanes |
+| **Current milestone** | M2 (Guest menu) & M4 (Counter board) |
+| **Next task(s) to pick** | T2.1 Menu data + page shell (Lane B), T4.1 Counter shell + live feed (Lane C) |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (T1.4 done, starting T1.5) |
+| **Last updated** | 2026-10-12 by Antigravity (M1 complete, starting Phase 2 parallel lanes) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
-| A — DB & API | Antigravity | T1.5 Typed client layer | main | in progress |
-| B — Guest UI | — | — | — | waiting on M1 |
-| C — Staff UI | — | — | — | waiting on M1 |
+| A — DB & API | Antigravity | T1.5 Typed client layer | main | complete ✅ |
+| B — Guest UI | Antigravity (sub-agent / lane B) | T2.1 Menu data + page shell | lane/b | ready / starting |
+| C — Staff UI | Antigravity (sub-agent / lane C) | T4.1 Counter shell + live feed | lane/c | ready / starting |
+
 
 ## Environment facts (no secrets here!)
 | Item | Value |
@@ -159,9 +160,23 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) Auth login ✅ (admin + counter)
 Commits / branch / PR: branch `main`
 Problems / surprises: Fixed GoTrue schema scan requirement for empty-string token columns in `auth.users`.
-Next: T1.5 Typed client layer (M1 Lane A).
+### 2026-10-12 05:15 — Antigravity — T1.5 Typed client layer
+Did:
+- Implemented `src/lib/schemas.ts` (Zod validation for `OptionChoice`, `OptionGroup`, `ItemOptions`, `CartLine`, `Cart`, `TableContextResult`, `BillResult`, `FeedbackInput`).
+- Implemented `src/lib/errors.ts` (Postgres/RPC error parsing, code categorization, and bilingual user error messages in English & Bengali).
+- Implemented `src/lib/device-id.ts` (persistent local device uuid generation for anonymous guest rate-limiting and device tracking).
+- Implemented `src/lib/requests.ts` (state transition matrix `NEXT`, `canTransition`, table tile priority `getTableTileState`, and guest status labels `getGuestStatusLabel`).
+- Implemented `src/lib/table/rpc.ts` (strongly typed RPC wrappers for all 7 guest RPCs with Zod validation, error catching, and structured response shapes).
+- Configured `src/lib/supabase/middleware.ts` (automatic session token refreshing, route protection for `/staff/counter` and `/staff/admin`, role verification for admin routes).
+- Added unit tests in `tests/unit/errors.test.ts`, `tests/unit/schemas.test.ts`, and `tests/unit/requests.test.ts` (all 37 unit tests passing).
+- Added integration test `tests/integration/table-context.test.ts` (verifying anon `from('tables').select()` returns empty `[]` under RLS, and anon `get_table_context` on test table 99 returns active session and restaurant details).
+Tests: typecheck ✅ lint ✅ unit ✅ (37 passed) int ✅ (2 passed)
+Commits / branch / PR: branch `main`
+Problems / surprises: Node 20 environment required `ws` polyfill for Supabase Realtime client during node-environment tests; resolved seamlessly.
+Next: Phase 2 Parallel Lanes: Lane B (Guest UI: M2, M3, M5) and Lane C (Staff UI: M4, M6).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | — | | | |
+

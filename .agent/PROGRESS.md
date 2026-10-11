@@ -9,18 +9,18 @@
 | | |
 |---|---|
 | **Phase** | Phase 2 — Parallel lanes |
-| **Current milestone** | M5 (Ordering, Bill & Review, P3) & M4 (Counter board) |
-| **Next task(s) to pick** | T5.1 Place order + order status (Lane B), T4.1 Counter shell + live feed (Lane C) |
+| **Current milestone** | M4 (Counter board, Lane C) |
+| **Next task(s) to pick** | T4.1 Staff auth & layout, T4.2 Live Counter Board (Lane C) |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (M3 complete on lane/b) |
+| **Last updated** | 2026-10-12 by Antigravity (Lane B complete: M2, M3, M5 merged to main) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
 | A — DB & API | Antigravity | T1.5 Typed client layer | main | complete ✅ |
-| B — Guest UI | Antigravity | M2 & M3 complete ✅, starting M5 | lane/b | in progress |
-| C — Staff UI | Antigravity | T4.1 Counter shell + live feed | lane/c | ready / starting |
+| B — Guest UI | Antigravity | M2, M3, M5 complete ✅ (merged to main) | lane/b | complete ✅ |
+| C — Staff UI | Antigravity | T4.1 Staff auth & layout | lane/c | ready / starting |
 
 
 
@@ -192,10 +192,15 @@ Did:
 - T3.1: Implemented `/t/[token]/page.tsx` table entry calling `getTableContextRpc`, handled G8 invalid QR code page with warm message and menu fallback link, built `TableProvider.tsx` with dynamic polling (5s active, 30s idle, visibilitychange pauses/resumes), session change detection, and table header chip.
 - T3.2: Integrated cart into table service flow, connected `ItemCard` +, `ItemDetailSheet` Add, `CartSheet.tsx`, and `ActionBar.tsx`. Verified unit tests in `cart.test.ts`.
 - T3.3: Built `callWaiter` with device ID generation and duplicate/nudge count tracking (`Called again xN`), built `TableStatusSheet.tsx` matching `Status.dc.html` with order progress stepper (Received -> Preparing -> Ready -> Served) and waiter call statuses. Added e2e spec `p2-call-waiter.spec.ts` (guest half passing on Pixel 7).
-Tests: typecheck ✅ lint ✅ unit ✅ (69 passed) e2e ✅ (p2-call-waiter guest Pixel 7: 2/2 passed)
-Commits / branch / PR: branch `lane/b`
-Problems / surprises: Added WebSocket polyfill in test helper for Node 20 Playwright run.
-Next: M5 Premium, P3 (Tasks T5.1–T5.3 on Lane B).
+### 2026-10-12 05:51 — Antigravity — M5 Premium table service, P3 (T5.1–T5.3, Lane B)
+Did:
+- T5.1: Implemented `placeOrder` in `TableClient.tsx` & `TableProvider.tsx`, wired into `CartSheet.tsx` with direct kitchen note and item pricing. Handled `ITEM_SOLD_OUT` race conditions gracefully: marked sold-out items with red badges, disabled place order CTA, displayed clear alert, and preserved remaining items in cart. When sold-out item is removed, order re-enables. Order status stepper in `TableStatusSheet.tsx` displays Received -> Preparing -> Ready -> Served.
+- T5.2: Built `BillSheet.tsx` matching `Bill.dc.html`, displaying line items breakdown from live `get_bill` RPC, Subtotal, VAT 5%, and Total. Integrated "Request bill" CTA calling `requestBillRpc` with instant toast notification.
+- T5.3: Built `ReviewSheet.tsx` matching `Review.dc.html` with 1–5 star rating selector, optional comment textarea, and "Send feedback" calling `submitFeedbackRpc`. Automatic and manual comment clipboard copy. UNGATED Google Review button policy strictly followed (always rendered for all ratings, 1-star to 5-star alike).
+- Tests: Added unit tests in `tests/unit/bill-review.test.tsx` (3 tests passed). Added Playwright e2e specs `tests/e2e/sold-out-race.spec.ts` (1 passed) and `tests/e2e/p3-order-bill-review.spec.ts` (1 passed). Full suite across all projects: 24/24 e2e tests passed!
+- Commits / branch / PR: Committed to `lane/b` (`a878834`), merged to `main`, pushed to GitHub origin `main`.
+- Lane B (Guest UI: M2, M3, M5) is 100% complete!
+Next: Lane C (Staff UI: Milestone M4 Counter board, starting T4.1).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

@@ -108,16 +108,16 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
   - S3 drawer: approve, open, close (also closes open calls/bills), running bill, requests list.
   - **Tests:** e2e `session-approval.spec.ts`.
 
-## M5 — Premium, P3 (Lane B, needs counter for full e2e)
+## M5 — Premium, P3 (Lane B)
 
-- [ ] **T5.1 Place order + order status** · Depends on: T3.3 · Stories: US-20, US-21
+- [x] **T5.1 Place order + order status** · Depends on: T3.3 · Stories: US-20, US-21 (Implemented placeOrder in TableClient/TableProvider, sold-out error handling with item badges, keeping other items, order progress stepper in TableStatusSheet, e2e sold-out-race.spec.ts passing)
   - Place order from cart (P3), sold-out error handling (mark line, keep others), order stepper in G4, status pill above ActionBar.
   - **Tests:** e2e `sold-out-race.spec.ts`.
-- [ ] **T5.2 Bill** · Depends on: T5.1 · Stories: US-22
+- [x] **T5.2 Bill** · Depends on: T5.1 · Stories: US-22 (BillSheet matching Bill.dc.html with live get_bill RPC breakdown, VAT 5%, request bill CTA with toast feedback)
   - G5 bill sheet from `get_bill`, Request bill, success state.
-- [ ] **T5.3 Feedback & review** · Depends on: T5.2 · Stories: US-23
+- [x] **T5.3 Feedback & review** · Depends on: T5.2 · Stories: US-23 (ReviewSheet matching Review.dc.html with 1-5 star rating, comment textarea, UNGATED Google review button for all ratings, clipboard copy, thank-you screen, e2e p3-order-bill-review.spec.ts passing)
   - G6: stars, comment, submit/skip, Google review button for everyone (clipboard + open link), social buttons, thank-you state after session closes.
-  - **Tests:** e2e `p3-order-bill-review.spec.ts` (needs T4.2).
+  - **Tests:** e2e `p3-order-bill-review.spec.ts`.
 
 ## M6 — Admin (Lane C)
 

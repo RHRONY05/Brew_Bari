@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Check, Bell, Receipt } from 'lucide-react';
+import { Check, Bell, Receipt, Star } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { SessionRequestJson } from '@/lib/schemas';
 import { formatTaka } from '@/lib/money';
@@ -13,6 +13,7 @@ interface TableStatusSheetProps {
   locale: 'en' | 'bn';
   onCallWaiter?: () => void;
   onViewBill?: () => void;
+  onLeaveReview?: () => void;
   onClose: () => void;
 }
 
@@ -45,6 +46,7 @@ export function TableStatusSheet({
   locale,
   onCallWaiter,
   onViewBill,
+  onLeaveReview,
   onClose,
 }: TableStatusSheetProps) {
   const title = locale === 'bn' ? `টেবিল ${tableNumber}` : `Table ${tableNumber}`;
@@ -183,26 +185,40 @@ export function TableStatusSheet({
         )}
 
         {/* Bottom actions */}
-        <div className="flex gap-2 pt-3 border-t border-[#F6E9DA]">
-          {onViewBill && (
-            <button
-              type="button"
-              onClick={onViewBill}
-              className="flex-1 h-12 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#FFF7EE] active:scale-98 transition-all"
-            >
-              <Receipt className="w-4 h-4 stroke-[2]" />
-              <span>{locale === 'bn' ? 'বিল দেখুন' : 'View bill'}</span>
-            </button>
-          )}
+        <div className="flex flex-col gap-2 pt-3 border-t border-[#F6E9DA]">
+          <div className="flex gap-2">
+            {onViewBill && (
+              <button
+                type="button"
+                onClick={onViewBill}
+                className="flex-1 h-12 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#FFF7EE] active:scale-98 transition-all"
+              >
+                <Receipt className="w-4 h-4 stroke-[2]" />
+                <span>{locale === 'bn' ? 'বিল দেখুন' : 'View bill'}</span>
+              </button>
+            )}
 
-          {onCallWaiter && (
+            {onCallWaiter && (
+              <button
+                type="button"
+                onClick={onCallWaiter}
+                className="flex-1 h-12 rounded-full bg-[#6B4226] text-[#FFF7EE] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#57351e] active:scale-98 transition-all shadow-sm"
+              >
+                <Bell className="w-4 h-4 stroke-[2]" />
+                <span>{locale === 'bn' ? 'ওয়েটার ডাকুন' : 'Call waiter'}</span>
+              </button>
+            )}
+          </div>
+
+          {onLeaveReview && (
             <button
               type="button"
-              onClick={onCallWaiter}
-              className="flex-1 h-12 rounded-full bg-[#6B4226] text-[#FFF7EE] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#57351e] active:scale-98 transition-all shadow-sm"
+              data-testid="leave-review-button"
+              onClick={onLeaveReview}
+              className="w-full h-11 rounded-full border border-[#F0DFCB] bg-[#FFF7EE] text-[#8A5A37] font-bold text-[13.5px] flex items-center justify-center gap-2 hover:bg-[#FBEBD7] active:scale-98 transition-all"
             >
-              <Bell className="w-4 h-4 stroke-[2]" />
-              <span>{locale === 'bn' ? 'ওয়েটার ডাকুন' : 'Call waiter'}</span>
+              <Star className="w-4 h-4 fill-current stroke-[1.5]" />
+              <span>{locale === 'bn' ? 'মতামত বা রিভিউ দিন' : 'Leave feedback or review'}</span>
             </button>
           )}
         </div>

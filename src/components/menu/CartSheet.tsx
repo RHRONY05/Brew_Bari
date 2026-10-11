@@ -18,6 +18,8 @@ interface CartSheetProps {
   tableNumber?: number | null;
   packageTier?: number;
   kitchenNote: string;
+  soldOutItemIds?: string[];
+  isPlacingOrder?: boolean;
   onKitchenNoteChange: (note: string) => void;
   onUpdateQuantity: (lineId: string, quantity: number) => void;
   onPlaceOrder?: () => void;
@@ -32,6 +34,8 @@ export function CartSheet({
   tableNumber,
   packageTier = 3,
   kitchenNote,
+  soldOutItemIds = [],
+  isPlacingOrder = false,
   onKitchenNoteChange,
   onUpdateQuantity,
   onPlaceOrder,
@@ -39,6 +43,7 @@ export function CartSheet({
   onClose,
 }: CartSheetProps) {
   const { count, subtotal } = getCartTotals(items);
+  const hasSoldOut = items.some((line) => soldOutItemIds.includes(line.item.id));
 
   const formatChoicesSummary = (item: CartItem): string => {
     if (!item.choices || item.choices.length === 0) return '';
@@ -123,6 +128,15 @@ export function CartSheet({
                         {formatTaka(line.lineTotal, locale)}
                       </span>
                     </div>
+
+                    {soldOutItemIds.includes(line.item.id) && (
+                      <span
+                        data-testid={`sold-out-badge-${line.item.id}`}
+                        className="inline-block px-2 py-0.5 rounded-md bg-[#FCE8E6] text-[#C5221F] text-[11px] font-extrabold w-fit my-0.5"
+                      >
+                        {locale === 'bn' ? 'শেষ হয়ে গেছে' : 'Sold out'}
+                      </span>
+                    )}
 
                     {choicesText && (
                       <span className="text-[12.5px] leading-snug text-[#6F5A4B] line-clamp-1">
@@ -211,6 +225,18 @@ export function CartSheet({
               </div>
             </div>
 
+            {/* Sold out alert */}
+            {hasSoldOut && (
+              <div
+                data-testid="sold-out-alert"
+                className="p-3 rounded-2xl bg-[#FFF0EE] border border-[#FCD2CD] text-[13px] font-semibold text-[#CE2C31]"
+              >
+                {locale === 'bn'
+                  ? 'কিছু আইটেম শেষ হয়ে গেছে। অর্ডার দিতে সেগুলো কার্ট থেকে বাদ দিন।'
+                  : 'Some items just sold out. Please remove them to proceed.'}
+              </div>
+            )}
+
             {/* CTAs */}
             <div className="flex flex-col gap-2 pt-2 border-t border-[#F6E9DA]">
               {/* Place Order CTA */}
@@ -218,20 +244,29 @@ export function CartSheet({
                 <button
                   type="button"
                   data-testid="place-order-button"
+                  disabled={hasSoldOut || isPlacingOrder}
                   onClick={onPlaceOrder}
-                  className="w-full h-13 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)]"
+                  className="w-full h-13 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>
-                    {packageTier === 2
+                    {isPlacingOrder
                       ? locale === 'bn'
-                        ? 'ওয়েটার ডেকে অর্ডার দিন'
-                        : 'Call waiter with order'
-                      : locale === 'bn'
-                        ? 'অর্ডার দিন'
-                        : 'Place order'}
+                        ? 'অর্ডার দেওয়া হচ্ছে…'
+                        : 'Placing order…'
+                      : packageTier === 2
+                        ? locale === 'bn'
+                          ? 'ওয়েটার ডেকে অর্ডার দিন'
+                          : 'Call waiter with order'
+                        : locale === 'bn'
+                          ? 'অর্ডার দিন'
+                          : 'Place order'}
                   </span>
-                  <span>·</span>
-                  <span className="tabular-nums">{formatTaka(subtotal, locale)}</span>
+                  {!isPlacingOrder && (
+                    <>
+                      <span>·</span>
+                      <span className="tabular-nums">{formatTaka(subtotal, locale)}</span>
+                    </>
+                  )}
                 </button>
               )}
 

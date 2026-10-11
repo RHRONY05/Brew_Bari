@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { toast } from 'sonner';
-import { callWaiterRpc, getSessionStatusRpc } from '@/lib/table/rpc';
+import { callWaiterRpc, getSessionStatusRpc, placeOrderRpc } from '@/lib/table/rpc';
 import { getDeviceId } from '@/lib/device-id';
 import { getErrorMessage } from '@/lib/errors';
 import type { TableContextResult, SessionRequestJson, SessionStatus } from '@/lib/schemas';
@@ -15,9 +15,14 @@ export interface TableContextType {
   requests: SessionRequestJson[];
   packageTier: number;
   isCallingWaiter: boolean;
+  isPlacingOrder: boolean;
   nudgeCount: number;
   activeStatusText: string | null;
   callWaiter: (items?: CartLineType[], note?: string) => Promise<boolean>;
+  placeOrder: (
+    items: CartLineType[],
+    note?: string
+  ) => Promise<{ success: boolean; soldOutItemId?: string; message?: string }>;
   refreshStatus: () => Promise<void>;
 }
 
@@ -52,6 +57,7 @@ export function TableProvider({
     initialContext.session?.requests ?? []
   );
   const [isCallingWaiter, setIsCallingWaiter] = useState(false);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
   const [nudgeCount, setNudgeCount] = useState(0);
 
   const sessionIdRef = useRef(session?.id);
@@ -150,6 +156,49 @@ export function TableProvider({
     [token, locale, nudgeCount, refreshStatus]
   );
 
+  // Place order handler
+  const placeOrder = useCallback(
+    async (
+      items: CartLineType[],
+      note?: string
+    ): Promise<{ success: boolean; soldOutItemId?: string; message?: string }> => {
+      setIsPlacingOrder(true);
+      try {
+        const deviceId = getDeviceId();
+        const res = await placeOrderRpc(token, deviceId, items, note);
+
+        if (res.error) {
+          if (res.error.code === 'ITEM_SOLD_OUT') {
+            return {
+              success: false,
+              soldOutItemId: res.error.detail || undefined,
+              message: res.error.message,
+            };
+          }
+          const errMsg = getErrorMessage(res.error.code, locale);
+          toast.error(errMsg);
+          return { success: false, message: errMsg };
+        }
+
+        if (res.data) {
+          toast.success(
+            locale === 'bn' ? 'অর্ডার সফলভাবে গ্রহণ করা হয়েছে!' : 'Order placed successfully!'
+          );
+          await refreshStatus();
+          return { success: true };
+        }
+
+        return { success: false };
+      } catch {
+        toast.error(locale === 'bn' ? 'একটি সমস্যা হয়েছে' : 'Something went wrong');
+        return { success: false };
+      } finally {
+        setIsPlacingOrder(false);
+      }
+    },
+    [token, locale, refreshStatus]
+  );
+
   // Polling logic per 04-API.md
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
@@ -192,9 +241,11 @@ export function TableProvider({
     requests,
     packageTier: initialContext.package,
     isCallingWaiter,
+    isPlacingOrder,
     nudgeCount,
     activeStatusText,
     callWaiter,
+    placeOrder,
     refreshStatus,
   };
 

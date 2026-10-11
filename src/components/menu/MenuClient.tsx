@@ -34,6 +34,11 @@ interface MenuClientProps {
   activeStatusText?: string | null;
   onCallWaiter?: () => void;
   onOpenStatus?: () => void;
+  onPlaceOrder?: (
+    items: CartItem[],
+    kitchenNote: string,
+    onSuccess: () => void
+  ) => Promise<{ soldOutItemId?: string } | void>;
 }
 
 export function MenuClient({
@@ -44,6 +49,7 @@ export function MenuClient({
   activeStatusText = null,
   onCallWaiter,
   onOpenStatus,
+  onPlaceOrder,
 }: MenuClientProps) {
 
   const [locale, setLocale] = useState<'en' | 'bn'>(initialLocale);
@@ -54,6 +60,8 @@ export function MenuClient({
   const [isInfoOpen, setIsInfoOpen] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [kitchenNote, setKitchenNote] = useState('');
+  const [soldOutItemIds, setSoldOutItemIds] = useState<string[]>([]);
+  const [isPlacingOrder, setIsPlacingOrder] = useState(false);
 
   // Cart state
   const [cartItems, setCartItems] = useState<CartItem[]>(() => {
@@ -136,6 +144,31 @@ export function MenuClient({
     const updated = updateCartQuantity(cartItems, lineId, qty);
     setCartItems(updated);
     saveCartToStorage(tableContext?.sessionId, updated);
+
+    // If an item was reduced to 0 or removed, clear its ID from soldOutItemIds
+    const remainingItemIds = new Set(updated.map((ci) => ci.item.id));
+    setSoldOutItemIds((prev) => prev.filter((id) => remainingItemIds.has(id)));
+  };
+
+  const handlePlaceOrder = async () => {
+    if (!onPlaceOrder || isPlacingOrder || cartItems.length === 0) return;
+    setIsPlacingOrder(true);
+    try {
+      const res = await onPlaceOrder(cartItems, kitchenNote, () => {
+        setCartItems([]);
+        saveCartToStorage(tableContext?.sessionId, []);
+        setKitchenNote('');
+        setIsCartOpen(false);
+        setSoldOutItemIds([]);
+      });
+      if (res?.soldOutItemId) {
+        setSoldOutItemIds((prev) =>
+          prev.includes(res.soldOutItemId!) ? prev : [...prev, res.soldOutItemId!]
+        );
+      }
+    } finally {
+      setIsPlacingOrder(false);
+    }
   };
 
   const handleOfferSelect = (offer: Offer) => {
@@ -407,8 +440,12 @@ export function MenuClient({
         tableNumber={tableContext?.tableNumber}
         packageTier={packageTier}
         kitchenNote={kitchenNote}
+        soldOutItemIds={soldOutItemIds}
+        isPlacingOrder={isPlacingOrder}
         onKitchenNoteChange={setKitchenNote}
         onUpdateQuantity={handleUpdateQuantity}
+        onPlaceOrder={onPlaceOrder ? handlePlaceOrder : undefined}
+        onCallWaiter={onCallWaiter}
         onClose={() => setIsCartOpen(false)}
       />
 

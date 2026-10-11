@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feedback on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.tab{height:40px;padding:0 11px;border-radius:999px;color:#6F5A4B;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;text-decoration:none;flex:none}
+.tab.on{background:#24170F;color:#FFF7EE}
+.card{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08);padding:16px}
+.bar{height:8px;border-radius:999px;background:#F6E9DA;flex:1;overflow:hidden}
+.bar span{display:block;height:8px;border-radius:999px;background:#E3A651}
+.fb{display:flex;flex-direction:column;gap:6px;padding:14px 0;border-bottom:1px solid #F6E9DA}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 844px; position: relative; background: #FFF7EE; overflow: hidden">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #F0DFCB">
+    <div style="padding: 16px 16px 10px; display: flex; align-items: center; gap: 10px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div style="flex: 1"><div style="font-size: 16px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+      <a href="CounterMobile.dc.html" style="height: 38px; padding: 0 12px; border-radius: 999px; border: 1px solid #F0DFCB; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Counter</a>
+    </div>
+    <nav aria-label="Admin" style="display: flex; gap: 2px; padding: 0 10px 10px; overflow-x: auto">
+      <a class="tab" href="AdminMobile.dc.html">Menu</a>
+      <a class="tab" href="AdminMobileOffers.dc.html">Offers</a>
+      <a class="tab" href="AdminMobileTables.dc.html">Tables</a>
+      <a class="tab" href="AdminMobileSettings.dc.html">Settings</a>
+      <a class="tab on" href="AdminMobileFeedback.dc.html" aria-current="page">Feedback</a>
+    </nav>
+  </header>
+
+  <div style="padding: 14px 12px; display: flex; flex-direction: column; gap: 12px">
+    <div style="padding: 0 4px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em">Feedback</h1>
+      <div style="font-size: 12.5px; color: #6F5A4B">Private ratings from guests after their bill. Last 30 days.</div>
+    </div>
+
+    <section class="card" aria-label="Summary" style="display: flex; gap: 18px; align-items: center">
+      <div style="text-align: center; flex: none">
+        <div style="font-size: 40px; font-weight: 800; letter-spacing: -.03em; line-height: 44px">4.5</div>
+        <div role="img" aria-label="4.5 out of 5 stars" style="display: flex; gap: 1px; justify-content: center; color: #E3A651">
+          <sc-for list="{{five}}" as="s" hint-placeholder-count="5">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="{{s.fill}}" stroke="#E3A651" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"></path></svg>
+          </sc-for>
+        </div>
+        <div style="font-size: 12px; color: #6F5A4B; margin-top: 2px">23 ratings</div>
+      </div>
+      <div style="flex: 1; display: flex; flex-direction: column; gap: 6px">
+        <sc-for list="{{dist}}" as="d" hint-placeholder-count="5">
+          <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 700; color: #6F5A4B">
+            <span style="width: 10px">{{d.n}}</span>
+            <span class="bar"><span style="{{d.w}}"></span></span>
+            <span style="width: 18px; text-align: right">{{d.c}}</span>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Recent feedback" style="padding-top: 4px; padding-bottom: 4px">
+      <sc-for list="{{items}}" as="f" hint-placeholder-count="4">
+        <div class="fb">
+          <div style="display: flex; justify-content: space-between; align-items: center">
+            <span style="font-size: 14px; font-weight: 800; color: #B4650A; letter-spacing: .05em" aria-label="{{f.aria}}">{{f.stars}}</span>
+            <span style="font-size: 11.5px; color: #8C7767; font-weight: 600">{{f.meta}}</span>
+          </div>
+          <div style="font-size: 14px; line-height: 20px">{{f.text}}</div>
+        </div>
+      </sc-for>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const counts = [[5, 16], [4, 4], [3, 2], [2, 1], [1, 0]];
+    const star = (n) => '★★★★★'.slice(0, n) + '☆☆☆☆☆'.slice(0, 5 - n);
+    return {
+      five: [1, 2, 3, 4, 5].map((n) => ({ fill: n <= 4 ? '#E3A651' : 'none' })),
+      dist: counts.map(([n, c]) => ({ n, c, w: 'width:' + Math.round((c / 16) * 100) + '%' })),
+      items: [
+        [5, 'Table 5 · 12 min ago', 'Great caramel macchiato and fast service. Loved the window seat!'],
+        [3, 'Table 2 · yesterday', 'Coffee was good but the brownie came 15 minutes later than the drinks.'],
+        [5, 'Table 7 · yesterday', 'মাল্টার জুসটা দারুণ! আবার আসব।'],
+        [4, 'Table 1 · 2 days ago', 'Nice place to work, Wi-Fi was fast. A bit noisy in the evening.']
+      ].map(([n, meta, text]) => ({ stars: star(n), aria: n + ' out of 5 stars', meta, text }))
+    };
+  }
+}
+</script>
+</body>
+</html>

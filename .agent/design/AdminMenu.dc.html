@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin menu editor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.nav{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;color:#6F5A4B;font-size:14px;font-weight:700;text-decoration:none}
+.nav.on{background:#FBEBD7;color:#24170F}
+.chip{height:38px;padding:0 14px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:13px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px}
+.chip.on{background:#6B4226;border-color:#6B4226;color:#FFF7EE}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #F6E9DA}
+.row.sel{background:#FFF7EE}
+.th{width:48px;height:48px;border-radius:12px;background:#FBEBD7;color:#B98A5E;display:flex;align-items:center;justify-content:center;flex:none}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#2F7D57;justify-content:flex-end}
+.sw.off{background:#D9C7B4;justify-content:flex-start}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl label{font-size:12px;font-weight:700;color:#6F5A4B}
+.in{height:42px;border-radius:12px;border:1px solid #F0DFCB;background:#FFFFFF;padding:0 12px;font:inherit;font-size:14px;color:#24170F;box-sizing:border-box;width:100%}
+.tag{height:30px;padding:0 10px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;font-size:12px;font-weight:700;color:#6F5A4B;display:flex;align-items:center}
+.tag.on{background:#F2C27D;border-color:#F2C27D;color:#24170F}
+.og{border:1px solid #F0DFCB;border-radius:14px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;background:#FFFFFF}
+</style>
+</helmet>
+<div class="bb" style="width: 100%; min-height: 800px; background: #FFF7EE; display: flex; flex-wrap: wrap; box-sizing: border-box">
+  <!-- Sidebar -->
+  <nav aria-label="Admin" style="flex: 1 1 200px; max-width: 100%; padding: 18px 14px; background: #FFFFFF; border-right: 1px solid #F0DFCB; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 16px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div><div style="font-size: 15px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+    </div>
+    <a class="nav on" href="#">Menu</a>
+    <a class="nav" href="#">Offers</a>
+    <a class="nav" href="AdminTables.dc.html">Tables &amp; QR</a>
+    <a class="nav" href="AdminSettings.dc.html">Settings</a>
+    <a class="nav" href="#">Feedback</a>
+    <div style="height: 1px; background: #F0DFCB; margin: 10px 4px"></div>
+    <a class="nav" href="Counter.dc.html">Counter board</a>
+    <a class="nav" href="Main.dc.html">View guest menu</a>
+  </nav>
+
+  <!-- Content -->
+  <main style="flex: 999 1 640px; min-width: 0; padding: 22px 24px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; box-sizing: border-box">
+    <!-- Items list -->
+    <section style="flex: 999 1 420px; min-width: 0; display: flex; flex-direction: column; gap: 14px">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between">
+        <div>
+          <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em">Menu</h1>
+          <div style="font-size: 13px; color: #6F5A4B">Changes show on the guest menu right after saving.</div>
+        </div>
+        <button style="height: 44px; padding: 0 18px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 14px; font-weight: 800; display: flex; align-items: center; gap: 6px">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+          Add item
+        </button>
+      </div>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px">
+        <button class="chip on">Hot Coffee · 6</button>
+        <button class="chip">Cold Coffee · 5</button>
+        <button class="chip">Fresh Juice · 5</button>
+        <button class="chip">Shakes · 4</button>
+        <button class="chip">Tea · 2</button>
+        <button class="chip">Bites · 4</button>
+        <button class="chip">Combos · 2</button>
+        <button class="chip" style="border-style: dashed; color: #6F5A4B">+ Category</button>
+      </div>
+      <div style="background: #FFFFFF; border-radius: 20px; box-shadow: 0 6px 20px rgba(107,66,38,.08); overflow: hidden">
+        <div style="display: flex; justify-content: space-between; padding: 10px 14px; font-size: 11.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #8C7767; border-bottom: 1px solid #F6E9DA">
+          <span>Item</span><span>Price · Available</span>
+        </div>
+        <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+          <div class="{{it.rowCls}}">
+            <span class="th"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path></svg></span>
+            <div style="flex: 1; min-width: 0">
+              <div style="font-size: 14.5px; font-weight: 700">{{it.en}} <span style="font-weight: 500; color: #6F5A4B">· {{it.bn}}</span></div>
+              <div style="font-size: 12px; color: {{it.subColor}}; font-weight: 600">{{it.sub}}</div>
+            </div>
+            <span style="font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums">{{it.price}}</span>
+            <button class="{{it.swCls}}" role="switch" aria-checked="{{it.on}}" aria-label="{{it.swLabel}}" onClick="{{it.toggle}}"><span></span></button>
+            <button aria-label="{{it.editLabel}}" style="width: 40px; height: 40px; border: none; border-radius: 999px; background: transparent; color: #6F5A4B; display: flex; align-items: center; justify-content: center">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4L19 9l-4-4L4 16z"></path></svg>
+            </button>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Edit panel -->
+    <aside aria-label="Edit item" style="flex: 1 1 340px; min-width: 0; background: #FFFFFF; border-radius: 20px; box-shadow: 0 6px 20px rgba(107,66,38,.08); padding: 18px; display: flex; flex-direction: column; gap: 14px; box-sizing: border-box">
+      <div style="display: flex; justify-content: space-between; align-items: center">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 800">Edit · Mocha</h2>
+        <span style="font-size: 12px; color: #6F5A4B; font-weight: 600">Hot Coffee</span>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: center">
+        <div style="width: 84px; height: 84px; border-radius: 16px; background: #FBEBD7; color: #B98A5E; display: flex; align-items: center; justify-content: center; flex: none">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path></svg>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <button style="height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #F0DFCB; background: #FFFFFF; font-size: 13px; font-weight: 700; color: #24170F">Upload photo</button>
+          <span style="font-size: 11.5px; color: #8C7767">Square, cropped automatically</span>
+        </div>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="fl"><label for="ne">Name (English)</label><input id="ne" class="in" value="Mocha"></div>
+        <div class="fl"><label for="nb">Name (বাংলা)</label><input id="nb" class="in" value="মোকা"></div>
+        <div class="fl"><label for="pr">Price (৳)</label><input id="pr" class="in" value="290"></div>
+        <div class="fl"><label for="wp">“Was” price (৳)</label><input id="wp" class="in" placeholder="optional"></div>
+        <div class="fl"><label for="pt">Prep time (minutes)</label><input id="pt" class="in" value="6"></div>
+        <div class="fl" style="justify-content: flex-end"><span style="font-size: 12px; line-height: 17px; color: #6F5A4B">Guests see “~6 min”. 1 = “Ready now”. 5 or less shows under Quick.</span></div>
+      </div>
+      <div class="fl"><label for="de">Description (English)</label><input id="de" class="in" value="Espresso meets rich chocolate."></div>
+      <div class="fl">
+        <label>Tags</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 6px">
+          <span class="tag on">Hot</span><span class="tag">Iced</span><span class="tag">Bestseller</span><span class="tag">New</span><span class="tag">Seasonal</span>
+        </div>
+      </div>
+      <div class="fl">
+        <label>Options</label>
+        <div class="og">
+          <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 800"><span>Size</span><span style="font-size: 11px; color: #8A5A37">Required · pick 1</span></div>
+          <div style="font-size: 12.5px; color: #6F5A4B">Regular +৳0 · Large +৳60</div>
+        </div>
+        <div class="og">
+          <div style="display: flex; justify-content: space-between; font-size: 13.5px; font-weight: 800"><span>Milk</span><span style="font-size: 11px; color: #8C7767">Optional · pick 1</span></div>
+          <div style="font-size: 12.5px; color: #6F5A4B">Regular +৳0 · Oat milk +৳80</div>
+        </div>
+        <button style="height: 38px; border-radius: 12px; border: 1px dashed #D9C7B4; background: transparent; font-size: 13px; font-weight: 700; color: #6F5A4B">+ Add option group</button>
+      </div>
+      <div style="display: flex; gap: 8px; margin-top: 4px">
+        <button style="flex: 1; height: 48px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 15px; font-weight: 800">Save</button>
+        <button style="height: 48px; padding: 0 18px; border-radius: 999px; border: 1px solid #F0DFCB; background: #FFFFFF; color: #6F5A4B; font-size: 14px; font-weight: 700">Cancel</button>
+      </div>
+    </aside>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { off: { mocha: false } };
+  }
+  renderVals() {
+    const defs = [
+      ['espresso', 'Espresso', 'এসপ্রেসো', 180, '~2 min · Hot · Quick'],
+      ['americano', 'Americano', 'আমেরিকানো', 200, '~3 min · Hot · Quick'],
+      ['cappuccino', 'Cappuccino', 'ক্যাপুচিনো', 250, '~4 min · Hot · Bestseller · Quick'],
+      ['latte', 'Café Latte', 'ক্যাফে লাতে', 260, '~4 min · Hot · Quick'],
+      ['macchiato', 'Caramel Macchiato', 'ক্যারামেল ম্যাকিয়াতো', 300, '~6 min · Hot · Bestseller'],
+      ['mocha', 'Mocha', 'মোকা', 290, '~6 min · Hot']
+    ];
+    const items = defs.map(([id, en, bn, price, sub]) => {
+      const on = !this.state.off[id];
+      return {
+        en, bn, price: '৳' + price,
+        sub: on ? sub : 'Sold out — hidden from ordering',
+        subColor: on ? '#6F5A4B' : '#B83B30',
+        rowCls: id === 'mocha' ? 'row sel' : 'row',
+        swCls: on ? 'sw on' : 'sw off', on: on ? 'true' : 'false',
+        swLabel: en + ' available', editLabel: 'Edit ' + en,
+        toggle: () => this.setState({ off: Object.assign({}, this.state.off, { [id]: on }) })
+      };
+    });
+    return { items };
+  }
+}
+</script>
+</body>
+</html>

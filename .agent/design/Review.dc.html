@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Feedback and review</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.star{width:52px;height:52px;border:none;background:transparent;display:flex;align-items:center;justify-content:center;padding:0}
+.soc{flex:1;height:46px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 844px; position: relative; background: #FFF7EE; overflow: hidden">
+  <div style="position: absolute; inset: 0; background: rgba(36,23,15,.45)"></div>
+  <div role="dialog" aria-label="Feedback" style="position: absolute; left: 0; right: 0; top: 70px; bottom: 0; background: #FFFFFF; border-radius: 28px 28px 0 0; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: center; padding: 10px 0 0"><span style="width: 40px; height: 5px; border-radius: 999px; background: #E9D3B8"></span></div>
+
+    <div style="margin: 14px 16px 0; padding: 12px 14px; border-radius: 16px; background: #E7F3EC; color: #1F5C3F; display: flex; gap: 10px; align-items: center; font-size: 13.5px; font-weight: 600">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none"><path d="M5 12l5 5 9-10"></path></svg>
+      Your bill is on the way · ৳1,764
+    </div>
+
+    <sc-if value="{{showForm}}" hint-placeholder-val="{{true}}">
+      <div style="flex: 1; padding: 22px 16px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+        <h1 style="margin: 0; font-size: 24px; line-height: 30px; font-weight: 800; letter-spacing: -.02em">How was your visit?</h1>
+        <p style="margin: 0; font-size: 14px; color: #6F5A4B">Your feedback goes straight to the owner.</p>
+        <div role="radiogroup" aria-label="Rating" style="display: flex; gap: 2px; margin-top: 4px">
+          <sc-for list="{{stars}}" as="s" hint-placeholder-count="5">
+            <button class="star" role="radio" aria-checked="{{s.on}}" aria-label="{{s.label}}" onClick="{{s.pick}}">
+              <svg width="38" height="38" viewBox="0 0 24 24" fill="{{s.fill}}" stroke="{{s.stroke}}" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"></path></svg>
+            </button>
+          </sc-for>
+        </div>
+        <div style="font-size: 13px; font-weight: 700; color: #8A5A37; min-height: 18px">{{ratingWord}}</div>
+        <label for="cm" style="align-self: flex-start; font-size: 13px; font-weight: 700">Tell us more (optional)</label>
+        <textarea id="cm" style="width: 100%; box-sizing: border-box; height: 110px; border-radius: 16px; border: 1px solid #F0DFCB; background: #FFF7EE; padding: 12px 14px; font: inherit; font-size: 14px; color: #24170F; resize: none">Great caramel macchiato and fast service. Loved the window seat!</textarea>
+      </div>
+      <div style="padding: 12px 16px 20px; display: flex; flex-direction: column; gap: 6px">
+        <button onClick="{{send}}" style="height: 54px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 16px; font-weight: 800">Send feedback</button>
+        <button onClick="{{send}}" style="height: 44px; border: none; background: transparent; color: #6F5A4B; font-size: 14px; font-weight: 600">Skip</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{showThanks}}" hint-placeholder-val="{{false}}">
+      <div style="flex: 1; padding: 34px 16px 0; display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center">
+        <div style="width: 88px; height: 88px; border-radius: 999px; background: #FBEBD7; color: #6B4226; display: flex; align-items: center; justify-content: center">
+          <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>
+        </div>
+        <h1 style="margin: 0; font-size: 24px; line-height: 30px; font-weight: 800; letter-spacing: -.02em">Thank you!</h1>
+        <p style="margin: 0; font-size: 14px; line-height: 21px; color: #6F5A4B; max-width: 300px">Would you share your experience on Google? It really helps a small café like ours.</p>
+        <div style="margin-top: 6px; width: 100%; padding: 12px 14px; box-sizing: border-box; border-radius: 16px; background: #FFF7EE; text-align: left; font-size: 13px; line-height: 19px; color: #6F5A4B; display: flex; gap: 10px">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; color: #8A5A37"><rect x="8" y="8" width="12" height="12" rx="2"></rect><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"></path></svg>
+          We copy your comment, so you can paste it straight into Google.
+        </div>
+      </div>
+      <div style="padding: 12px 16px 20px; display: flex; flex-direction: column; gap: 10px">
+        <a href="https://www.google.com/maps" style="height: 54px; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9z"></path></svg>
+          Review us on Google
+        </a>
+        <div style="display: flex; gap: 8px">
+          <a class="soc" href="https://facebook.com">Facebook</a>
+          <a class="soc" href="https://instagram.com">Instagram</a>
+        </div>
+        <button onClick="{{back}}" style="height: 40px; border: none; background: transparent; color: #6F5A4B; font-size: 13px; font-weight: 600">Back</button>
+      </div>
+    </sc-if>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { rating: 4, sent: false };
+  }
+  renderVals() {
+    const words = ['', 'Not good', 'Could be better', 'Okay', 'Good', 'Loved it'];
+    const r = this.state.rating;
+    const stars = [1, 2, 3, 4, 5].map((n) => ({
+      on: n === r ? 'true' : 'false',
+      label: n + (n === 1 ? ' star' : ' stars'),
+      fill: n <= r ? '#F2C27D' : 'none',
+      stroke: n <= r ? '#E3A651' : '#CDB59B',
+      pick: () => this.setState({ rating: n })
+    }));
+    return {
+      stars, ratingWord: words[r],
+      showForm: !this.state.sent, showThanks: this.state.sent,
+      send: () => this.setState({ sent: true }),
+      back: () => this.setState({ sent: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

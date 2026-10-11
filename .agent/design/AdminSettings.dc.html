@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin settings</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.nav{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;color:#6F5A4B;font-size:14px;font-weight:700;text-decoration:none}
+.nav.on{background:#FBEBD7;color:#24170F}
+.panel{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08);padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0;box-sizing:border-box}
+.ph{margin:0;font-size:17px;font-weight:800}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl label{font-size:12px;font-weight:700;color:#6F5A4B}
+.in{height:42px;border-radius:12px;border:1px solid #F0DFCB;background:#FFFFFF;padding:0 12px;font:inherit;font-size:14px;color:#24170F;box-sizing:border-box;width:100%}
+.help{font-size:11.5px;line-height:16px;color:#8C7767}
+.pk{border-radius:18px;padding:16px;display:flex;flex-direction:column;gap:8px;text-align:left;min-width:0;border:2px solid #F0DFCB;background:#FFFFFF;color:#24170F}
+.pk.on{border-color:#6B4226;background:#FFF7EE;box-shadow:0 0 0 4px rgba(107,66,38,.10)}
+.pk ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:4px;font-size:12.5px;line-height:17px;color:#6F5A4B}
+.pk li{display:flex;gap:6px}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#2F7D57;justify-content:flex-end}
+.sw.off{background:#D9C7B4;justify-content:flex-start}
+</style>
+</helmet>
+<div class="bb" style="width: 100%; min-height: 1240px; background: #FFF7EE; display: flex; flex-wrap: wrap; box-sizing: border-box">
+  <nav aria-label="Admin" style="flex: 1 1 200px; max-width: 100%; padding: 18px 14px; background: #FFFFFF; border-right: 1px solid #F0DFCB; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 16px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div><div style="font-size: 15px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+    </div>
+    <a class="nav" href="AdminMenu.dc.html">Menu</a>
+    <a class="nav" href="#">Offers</a>
+    <a class="nav" href="AdminTables.dc.html">Tables &amp; QR</a>
+    <a class="nav on" href="AdminSettings.dc.html" aria-current="page">Settings</a>
+    <a class="nav" href="#">Feedback</a>
+    <div style="height: 1px; background: #F0DFCB; margin: 10px 4px"></div>
+    <a class="nav" href="Counter.dc.html">Counter board</a>
+    <a class="nav" href="Main.dc.html">View guest menu</a>
+  </nav>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 22px 24px 28px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div>
+      <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em">Settings</h1>
+      <div style="font-size: 13px; color: #6F5A4B">Café details shown to guests, plus how table service works.</div>
+    </div>
+
+    <!-- Package -->
+    <section class="panel" aria-label="Package">
+      <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px; align-items: baseline">
+        <h2 class="ph">Package</h2>
+        <span class="help">Switching takes effect immediately on every phone.</span>
+      </div>
+      <div role="radiogroup" aria-label="Package" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px">
+        <sc-for list="{{packages}}" as="p" hint-placeholder-count="3">
+          <button class="{{p.cls}}" role="radio" aria-checked="{{p.on}}" onClick="{{p.pick}}">
+            <div style="display: flex; justify-content: space-between; align-items: center; width: 100%">
+              <span style="font-size: 12px; font-weight: 800; letter-spacing: .06em; color: #8A5A37">{{p.code}}</span>
+              <sc-if value="{{p.selected}}" hint-placeholder-val="{{false}}">
+                <span style="height: 22px; padding: 0 8px; border-radius: 999px; background: #6B4226; color: #FFF7EE; font-size: 11px; font-weight: 800; display: flex; align-items: center">Current</span>
+              </sc-if>
+            </div>
+            <span style="font-size: 18px; font-weight: 800">{{p.name}}</span>
+            <ul>
+              <sc-for list="{{p.features}}" as="f" hint-placeholder-count="3">
+                <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2F7D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none; margin-top: 2px"><path d="M5 12l5 5 9-10"></path></svg>{{f}}</li>
+              </sc-for>
+            </ul>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 18px">
+      <!-- Café info -->
+      <section class="panel" aria-label="Café info">
+        <h2 class="ph">Café info</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div class="fl"><label for="n1">Name (English)</label><input id="n1" class="in" value="Brew Bari"></div>
+          <div class="fl"><label for="n2">Name (বাংলা)</label><input id="n2" class="in" value="ব্রু বাড়ি"></div>
+        </div>
+        <div class="fl"><label for="tg">Tagline</label><input id="tg" class="in" value="Coffee &amp; fresh juice, made with love"></div>
+        <div class="fl"><label for="hr">Opening hours</label><input id="hr" class="in" value="Every day 9 AM – 11 PM"></div>
+        <div class="fl"><label for="ad">Address</label><input id="ad" class="in" value="GEC Circle, Chattogram"></div>
+        <div style="display: flex; gap: 12px; align-items: center">
+          <div style="width: 56px; height: 56px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800">BB</div>
+          <button style="height: 38px; padding: 0 14px; border-radius: 999px; border: 1px solid #F0DFCB; background: #FFFFFF; font-size: 13px; font-weight: 700; color: #24170F">Change logo</button>
+        </div>
+      </section>
+
+      <!-- Wi-Fi & contact -->
+      <section class="panel" aria-label="Wi-Fi and contact">
+        <h2 class="ph">Wi-Fi &amp; contact</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div class="fl"><label for="wn">Wi-Fi name</label><input id="wn" class="in" value="BrewBari_Guest"></div>
+          <div class="fl"><label for="wp">Wi-Fi password</label><input id="wp" class="in" value="coffee2026"></div>
+        </div>
+        <span class="help">Guests can copy the password from the menu’s info button. Leave empty to hide.</span>
+        <div class="fl"><label for="ph">Phone</label><input id="ph" class="in" placeholder="+880 1XXX-XXXXXX"></div>
+        <div class="fl"><label for="mp">Google Maps link</label><input id="mp" class="in" placeholder="https://maps.app.goo.gl/…"></div>
+      </section>
+
+      <!-- Links & reviews -->
+      <section class="panel" aria-label="Links and reviews">
+        <h2 class="ph">Social &amp; reviews</h2>
+        <div class="fl"><label for="fb">Facebook page</label><input id="fb" class="in" placeholder="https://facebook.com/brewbari"></div>
+        <div class="fl"><label for="ig">Instagram</label><input id="ig" class="in" placeholder="https://instagram.com/brewbari"></div>
+        <div class="fl">
+          <label for="gr">Google review link</label>
+          <input id="gr" class="in" placeholder="https://g.page/r/…/review">
+          <span class="help">Google Business Profile → “Ask for reviews” → copy the link. Every guest sees this button after their bill (P3).</span>
+        </div>
+      </section>
+
+      <!-- Bill & tables -->
+      <section class="panel" aria-label="Bill and tables">
+        <h2 class="ph">Bill &amp; tables</h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+          <div class="fl"><label for="vt">VAT (%)</label><input id="vt" class="in" value="5"></div>
+          <div class="fl"><label for="sc">Service charge (%)</label><input id="sc" class="in" value="0"></div>
+        </div>
+        <div style="display: flex; gap: 14px; align-items: flex-start; padding-top: 6px">
+          <div style="flex: 1">
+            <div style="font-size: 14px; font-weight: 700">Staff approve new tables</div>
+            <div class="help" style="font-size: 12px; line-height: 17px; margin-top: 2px">When a table is scanned for the first time, the counter sees it as “Scanned” until someone taps Approve. Guests can still call and order — requests are marked “Unverified”.</div>
+          </div>
+          <button class="{{apprCls}}" role="switch" aria-checked="{{apprOn}}" aria-label="Staff approve new tables" onClick="{{toggleAppr}}"><span></span></button>
+        </div>
+      </section>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; gap: 8px; padding-top: 4px">
+      <button style="height: 48px; padding: 0 20px; border-radius: 999px; border: 1px solid #F0DFCB; background: #FFFFFF; color: #6F5A4B; font-size: 14px; font-weight: 700">Discard</button>
+      <button style="height: 48px; padding: 0 28px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 15px; font-weight: 800">Save changes</button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { pkg: 'P3', approve: true };
+  }
+  renderVals() {
+    const defs = [
+      ['P1', 'Digital menu', ['Menu, photos, prices, sold-out', 'Offers & EN / বাংলা', 'One shop QR to share anywhere']],
+      ['P2', 'Table service', ['Everything in Digital menu', 'A QR code on every table', 'Guest list + Call waiter', 'Live counter board with sound']],
+      ['P3', 'Premium', ['Everything in Table service', 'Guests place orders & track them', 'Request bill from the table', 'Feedback → Google review button']]
+    ];
+    const packages = defs.map(([code, name, features]) => {
+      const sel = this.state.pkg === code;
+      return {
+        code, name, features, selected: sel, on: sel ? 'true' : 'false',
+        cls: sel ? 'pk on' : 'pk',
+        pick: () => this.setState({ pkg: code })
+      };
+    });
+    const a = this.state.approve;
+    return {
+      packages,
+      apprCls: a ? 'sw on' : 'sw off', apprOn: a ? 'true' : 'false',
+      toggleAppr: () => this.setState({ approve: !a })
+    };
+  }
+}
+</script>
+</body>
+</html>

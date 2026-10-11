@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brew Bari menu</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.iconbtn{width:44px;height:44px;border-radius:999px;border:none;background:#FFFFFF;box-shadow:0 6px 20px rgba(107,66,38,.10);display:flex;align-items:center;justify-content:center;color:#6B4226}
+.chip{height:40px;padding:0 16px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:14px;font-weight:600;white-space:nowrap;display:flex;align-items:center;gap:8px}
+.chip.on{background:#6B4226;border-color:#6B4226;color:#FFF7EE}
+.card{background:#FFFFFF;border-radius:24px;box-shadow:0 6px 20px rgba(107,66,38,.08);padding:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.thumb{position:relative;aspect-ratio:1/1;border-radius:16px;background:#FBEBD7;display:flex;align-items:center;justify-content:center;color:#B98A5E;overflow:hidden}
+.soldout .thumb{filter:grayscale(.6);opacity:.7}
+.badge{position:absolute;top:8px;left:8px;height:22px;padding:0 9px;border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;display:flex;align-items:center}
+.b-best{background:#F2C27D;color:#24170F}
+.b-new{background:#2F7D57;color:#FFFFFF}
+.b-sold{background:#B83B30;color:#FFFFFF}
+.b-season{background:#6B4226;color:#FFF7EE}
+.temp{position:absolute;top:8px;right:8px;width:26px;height:26px;border-radius:999px;background:rgba(255,255,255,.9);display:flex;align-items:center;justify-content:center;color:#6B4226}
+.plus{width:36px;height:36px;border-radius:999px;border:none;background:#F2C27D;color:#24170F;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 10px rgba(227,166,81,.35)}
+.price{font-size:16px;font-weight:800;font-variant-numeric:tabular-nums}
+.was{font-size:12px;color:#8C7767;text-decoration:line-through;font-weight:500}
+.sec-title{margin:0;font-size:22px;line-height:28px;font-weight:700;display:flex;align-items:center;gap:10px}
+.dot{width:6px;height:6px;border-radius:999px;background:#E9D3B8}
+.dot.on{width:18px;background:#6B4226}
+.seg{display:flex;background:#FBEBD7;border-radius:999px;padding:3px}
+.seg button{height:34px;min-width:44px;padding:0 10px;border:none;border-radius:999px;background:transparent;font-size:13px;font-weight:700;color:#6F5A4B}
+.seg button.on{background:#FFFFFF;color:#24170F;box-shadow:0 2px 6px rgba(107,66,38,.15)}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 2420px; position: relative; background: #FFF7EE; overflow: hidden; box-sizing: border-box">
+
+  <!-- Header -->
+  <header style="padding: 20px 16px 12px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px">
+    <div style="display: flex; gap: 12px; align-items: center; min-width: 0">
+      <div style="width: 48px; height: 48px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 17px; letter-spacing: -.02em; flex: none">BB</div>
+      <div style="min-width: 0">
+        <div style="font-size: 24px; line-height: 28px; font-weight: 800; letter-spacing: -.02em">{{name}}</div>
+        <div style="font-size: 13px; line-height: 18px; color: #6F5A4B">{{t.tagline}}</div>
+      </div>
+    </div>
+    <div style="display: flex; gap: 8px; align-items: center; flex: none">
+      <div class="seg" role="group" aria-label="Language">
+        <button class="{{enCls}}" onClick="{{setEn}}">EN</button>
+        <button class="{{bnCls}}" onClick="{{setBn}}">বাং</button>
+      </div>
+      <button class="iconbtn" aria-label="Café info">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Table chip -->
+  <div style="padding: 0 16px 14px; display: flex; gap: 8px; align-items: center">
+    <div style="height: 32px; padding: 0 12px; border-radius: 999px; background: #6B4226; color: #FFF7EE; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M3 8h18M5 8v11M19 8v11M8 8l1-3h6l1 3"></path></svg>
+      {{t.table}}
+    </div>
+    <div style="font-size: 12px; color: #6F5A4B">{{t.tableHint}}</div>
+  </div>
+
+  <!-- Search -->
+  <div style="padding: 0 16px 18px">
+    <label for="q" style="position: absolute; left: -9999px">Search</label>
+    <div style="height: 50px; border-radius: 999px; background: #FFFFFF; border: 1px solid #F0DFCB; display: flex; align-items: center; gap: 10px; padding: 0 18px; color: #8C7767">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+      <input id="q" placeholder="{{t.search}}" style="border: none; outline: none; background: transparent; font: inherit; font-size: 15px; color: #24170F; flex: 1; min-width: 0">
+    </div>
+  </div>
+
+  <!-- Offer carousel -->
+  <div style="padding: 0 16px">
+    <div style="height: 172px; border-radius: 24px; background: #6B4226; position: relative; overflow: hidden; display: flex">
+      <div style="position: absolute; right: -40px; top: -30px; width: 230px; height: 230px; border-radius: 999px; background: #8A5A37"></div>
+      <div style="position: absolute; right: 18px; top: 26px; width: 120px; height: 120px; border-radius: 999px; background: #F2C27D; display: flex; align-items: center; justify-content: center; color: #6B4226">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4h10l-1.5 16h-7z"></path><path d="M7.5 9h9"></path><path d="M13 4l2-2"></path></svg>
+      </div>
+      <div style="position: relative; padding: 20px; display: flex; flex-direction: column; gap: 6px; max-width: 200px">
+        <div style="align-self: flex-start; height: 22px; padding: 0 9px; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 10.5px; font-weight: 800; letter-spacing: .04em; text-transform: uppercase; display: flex; align-items: center">{{t.offerBadge}}</div>
+        <div style="font-size: 22px; line-height: 26px; font-weight: 800; color: #FFF7EE; letter-spacing: -.01em">{{t.offerTitle}}</div>
+        <div style="font-size: 13px; line-height: 18px; color: #F3E3CF">{{t.offerSub}}</div>
+        <a href="ItemDetail.dc.html" style="margin-top: 6px; align-self: flex-start; height: 36px; padding: 0 16px; border-radius: 999px; background: #FFF7EE; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">{{t.offerCta}}</a>
+      </div>
+    </div>
+    <div style="display: flex; gap: 6px; justify-content: center; padding: 10px 0 4px">
+      <span class="dot on"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
+
+  <!-- Category chips (sticky in the real app) -->
+  <nav aria-label="Categories" style="padding: 12px 0 12px 16px; display: flex; gap: 8px; overflow: hidden; background: #FFF7EE">
+    <sc-for list="{{chips}}" as="c" hint-placeholder-count="5">
+      <button class="{{c.cls}}" onClick="{{c.pick}}"><sc-if value="{{c.isQuick}}" hint-placeholder-val="{{false}}"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 3L5 14h6l-1 7 8-11h-6z"></path></svg></sc-if>{{c.label}}</button>
+    </sc-for>
+  </nav>
+
+  <!-- Sections -->
+  <main style="padding: 8px 16px 0; display: flex; flex-direction: column; gap: 28px">
+    <sc-for list="{{sections}}" as="s" hint-placeholder-count="3">
+      <section style="display: flex; flex-direction: column; gap: 14px">
+        <h2 class="sec-title">{{s.title}} <span style="font-size: 13px; font-weight: 600; color: #8C7767">{{s.count}}</span></h2>
+        <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px">
+          <sc-for list="{{s.items}}" as="it" hint-placeholder-count="4">
+            <article class="{{it.cardCls}}">
+              <a href="ItemDetail.dc.html" class="thumb" aria-label="{{it.name}}">
+                <sc-if value="{{it.isHot}}" hint-placeholder-val="{{true}}">
+                  <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path><path d="M8 3c-.6.8-.6 1.6 0 2.4M11.5 3c-.6.8-.6 1.6 0 2.4"></path></svg>
+                </sc-if>
+                <sc-if value="{{it.isCold}}" hint-placeholder-val="{{false}}">
+                  <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h12l-1.6 14H7.6z"></path><path d="M6.6 11h10.8"></path><path d="M13 6l2.5-4"></path></svg>
+                </sc-if>
+                <sc-if value="{{it.isFood}}" hint-placeholder-val="{{false}}">
+                  <svg width="58" height="58" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 17l9-11 9 11z"></path><path d="M3 17v3h18v-3"></path><path d="M9 13h6"></path></svg>
+                </sc-if>
+                <sc-if value="{{it.hasBadge}}" hint-placeholder-val="{{false}}">
+                  <span class="{{it.badgeCls}}">{{it.badge}}</span>
+                </sc-if>
+              </a>
+              <div style="padding: 0 4px; display: flex; flex-direction: column; gap: 2px; min-height: 80px">
+                <h3 style="margin: 0; font-size: 15px; line-height: 20px; font-weight: 700">{{it.name}}</h3>
+                <p style="margin: 0; font-size: 12.5px; line-height: 17px; color: #6F5A4B; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.desc}}</p>
+                <sc-if value="{{it.hasPrep}}" hint-placeholder-val="{{true}}">
+                  <span style="{{it.prepStyle}}">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+                    {{it.prep}}
+                  </span>
+                </sc-if>
+              </div>
+              <div style="padding: 0 0 0 4px; display: flex; align-items: center; justify-content: space-between; gap: 6px">
+                <div style="display: flex; align-items: baseline; gap: 6px">
+                  <span class="price">{{it.price}}</span>
+                  <sc-if value="{{it.hasWas}}" hint-placeholder-val="{{false}}"><span class="was">{{it.was}}</span></sc-if>
+                </div>
+                <sc-if value="{{it.canAdd}}" hint-placeholder-val="{{true}}">
+                  <button class="plus" aria-label="{{it.addLabel}}" onClick="{{it.add}}">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+                  </button>
+                </sc-if>
+              </div>
+            </article>
+          </sc-for>
+        </div>
+      </section>
+    </sc-for>
+
+    <footer style="padding: 8px 0 0; text-align: center; font-size: 12px; line-height: 18px; color: #8C7767">
+      <div>{{t.footer}}</div>
+      <div style="margin-top: 4px; font-size: 11px">Powered by [PRODUCT NAME]</div>
+    </footer>
+  </main>
+
+  <!-- Bottom action area (fixed to the viewport in the real app) -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 0 12px 16px; display: flex; flex-direction: column; gap: 8px">
+    <a href="Status.dc.html" style="align-self: center; height: 34px; padding: 0 14px; border-radius: 999px; background: #FFFFFF; box-shadow: 0 6px 20px rgba(107,66,38,.14); display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #24170F; text-decoration: none">
+      <span style="width: 8px; height: 8px; border-radius: 999px; background: #C77C0E"></span>
+      {{t.orderPill}}
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+    </a>
+    <div style="background: #FFFFFF; border-radius: 28px; box-shadow: 0 -4px 24px rgba(36,23,15,.12); padding: 8px; display: flex; gap: 8px">
+      <button style="height: 52px; padding: 0 18px; border: none; border-radius: 999px; background: #6B4226; color: #FFF7EE; font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; flex: none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 15V11a6 6 0 0 1 12 0v4l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+        {{t.callWaiter}}
+      </button>
+      <a href="Cart.dc.html" style="height: 52px; flex: 1; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 10px; text-decoration: none; min-width: 0">
+        <span style="position: relative; display: flex">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 8h14l-1 12H6z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg>
+          <span style="position: absolute; top: -6px; right: -8px; min-width: 18px; height: 18px; border-radius: 999px; background: #24170F; color: #FFF7EE; font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; padding: 0 4px">{{cartCount}}</span>
+        </span>
+        <span style="white-space: nowrap">{{t.viewOrder}} · {{cartTotal}}</span>
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"package":{"editor":"enum","options":["P1","P2","P3"],"default":"P3"},"$preview":{"width":390,"height":2420}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { lang: 'en', chip: 'hot', count: 2, total: 530 };
+  }
+  renderVals() {
+    const L = this.state.lang;
+    const pkg = this.props.package ?? 'P3';
+    const bn = L === 'bn';
+    const digits = (s) => bn ? String(s).replace(/\d/g, (d) => '০১২৩৪৫৬৭৮৯'[d]) : String(s);
+    const money = (n) => '৳' + digits(n.toLocaleString('en-IN'));
+    const T = bn ? {
+      tagline: 'ভালোবাসায় বানানো কফি আর ফ্রেশ জুস', table: 'টেবিল ৫', tableHint: 'আপনার টেবিল সংযুক্ত',
+      search: 'কফি, জুস খুঁজুন…', offerBadge: 'মৌসুমি', offerTitle: 'আমের মৌসুম এসে গেছে', offerSub: 'তাজা আমের জুস, মাত্র ৳২২০',
+      offerCta: 'দেখুন', footer: 'জিইসি সার্কেল, চট্টগ্রাম · প্রতিদিন সকাল ৯টা – রাত ১১টা', callWaiter: 'ওয়েটার ডাকুন',
+      viewOrder: 'অর্ডার', orderPill: 'অর্ডার #১ · তৈরি হচ্ছে', soldOut: 'শেষ', best: 'বেস্টসেলার', isNew: 'নতুন', add: 'যোগ করুন'
+    } : {
+      tagline: 'Coffee & fresh juice, made with love', table: 'Table 5', tableHint: 'Your table is connected',
+      search: 'Search coffee, juice…', offerBadge: 'Seasonal', offerTitle: 'Mango season is here', offerSub: 'Fresh mango juice, only ৳220',
+      offerCta: 'See item', footer: 'GEC Circle, Chattogram · Every day 9 AM – 11 PM', callWaiter: 'Call waiter',
+      viewOrder: 'Order', orderPill: 'Order #1 · Preparing', soldOut: 'Sold out', best: 'Bestseller', isNew: 'New', add: 'Add'
+    };
+    const canAdd = pkg !== 'P1';
+    const chipDefs = [
+      ['quick', 'Quick', 'ঝটপট'],
+      ['hot', 'Hot Coffee', 'হট কফি'], ['cold', 'Cold Coffee', 'কোল্ড কফি'], ['juice', 'Fresh Juice', 'ফ্রেশ জুস'],
+      ['shake', 'Shakes', 'শেক'], ['tea', 'Tea', 'চা'], ['bites', 'Bites', 'স্ন্যাকস']
+    ];
+    const chips = chipDefs.map(([id, en, b]) => ({
+      label: bn ? b : en, isQuick: id === 'quick',
+      cls: this.state.chip === id ? 'chip on' : 'chip',
+      pick: () => this.setState({ chip: id })
+    }));
+    const prepBase = 'display:inline-flex;align-items:center;gap:4px;margin-top:4px;align-self:flex-start;height:22px;padding:0 8px;border-radius:999px;font-size:11.5px;font-weight:700;';
+    const mk = (kind, en, b, dEn, dBn, price, opts) => {
+      const o = opts || {};
+      const badge = o.sold ? T.soldOut : o.best ? T.best : o.isNew ? T.isNew : '';
+      const badgeCls = o.sold ? 'badge b-sold' : o.best ? 'badge b-best' : o.isNew ? 'badge b-new' : 'badge';
+      const now = o.prep <= 1;
+      return {
+        prepMin: o.prep, sold: !!o.sold,
+        hasPrep: !o.sold && !!o.prep,
+        prep: now ? (bn ? 'এখনই রেডি' : 'Ready now') : (bn ? '~' + digits(o.prep) + ' মিনিট' : '~' + o.prep + ' min'),
+        prepStyle: prepBase + (now ? 'background:#E7F3EC;color:#1F5C3F' : 'background:#FFF7EE;color:#6F5A4B'),
+        name: bn ? b : en, desc: bn ? dBn : dEn, price: money(price),
+        hasWas: !!o.was, was: o.was ? money(o.was) : '',
+        isHot: kind === 'hot', isCold: kind === 'cold', isFood: kind === 'food',
+        hasBadge: !!badge, badge, badgeCls,
+        cardCls: o.sold ? 'card soldout' : 'card',
+        canAdd: canAdd && !o.sold,
+        addLabel: T.add + ' ' + (bn ? b : en),
+        add: () => this.setState({ count: this.state.count + 1, total: this.state.total + price })
+      };
+    };
+    // Sold-out items always sort to the end of their section.
+    const sortSold = (xs) => xs.filter((x) => !x.sold).concat(xs.filter((x) => x.sold));
+    const all = [
+      { title: bn ? 'হট কফি' : 'Hot Coffee', count: digits(6), items: sortSold([
+        mk('hot', 'Cappuccino', 'ক্যাপুচিনো', 'Espresso, steamed milk, thick foam', 'এসপ্রেসো, স্টিমড দুধ আর ঘন ফোম', 250, { best: true, prep: 4 }),
+        mk('hot', 'Café Latte', 'ক্যাফে লাতে', 'Smooth espresso, silky milk', 'প্রচুর মসৃণ দুধে নরম এসপ্রেসো', 260, { prep: 4 }),
+        mk('hot', 'Caramel Macchiato', 'ক্যারামেল ম্যাকিয়াতো', 'Vanilla milk, caramel drizzle', 'ভ্যানিলা দুধ আর ক্যারামেল', 300, { best: true, prep: 6 }),
+        mk('hot', 'Mocha', 'মোকা', 'Espresso meets rich chocolate', 'এসপ্রেসো আর ঘন চকলেট', 290, { prep: 6 })
+      ])},
+      { title: bn ? 'কোল্ড কফি' : 'Cold Coffee', count: digits(5), items: sortSold([
+        mk('cold', 'Iced Latte', 'আইসড লাতে', 'Espresso, cold milk, lots of ice', 'এসপ্রেসো, ঠান্ডা দুধ আর বরফ', 280, { best: true, prep: 3 }),
+        mk('cold', 'Cold Brew', 'কোল্ড ব্রু', 'Steeped 18 hours, smooth finish', '১৮ ঘণ্টা ভিজিয়ে বানানো', 300, { isNew: true, prep: 1 })
+      ])},
+      { title: bn ? 'স্ন্যাকস ও ডেজার্ট' : 'Bites & Desserts', count: digits(4), items: sortSold([
+        mk('food', 'Baked Cheesecake', 'বেকড চিজকেক', 'Creamy New York style', 'ক্রিমি নিউইয়র্ক স্টাইল', 350, { sold: true, prep: 1 }),
+        mk('food', 'Morning Combo', 'মর্নিং কম্বো', 'Cappuccino + Butter Croissant', 'ক্যাপুচিনো + বাটার ক্রোয়াসাঁ', 380, { was: 430, prep: 6 }),
+        mk('food', 'Chocolate Brownie', 'চকলেট ব্রাউনি', 'Fudgy brownie, served warm', 'গরম গরম নরম ব্রাউনি', 190, { best: true, prep: 1 })
+      ])}
+    ];
+    const quick = [].concat(...all.map((s) => s.items)).filter((x) => !x.sold && x.prepMin <= 5).sort((a, b) => a.prepMin - b.prepMin);
+    const sections = this.state.chip === 'quick'
+      ? [{ title: bn ? 'ঝটপট · ৫ মিনিটের মধ্যে' : 'Quick · ready in 5 min or less', count: digits(quick.length), items: quick }]
+      : all;
+    return {
+      name: bn ? 'ব্রু বাড়ি' : 'Brew Bari',
+      t: T, chips, sections,
+      enCls: bn ? '' : 'on', bnCls: bn ? 'on' : '',
+      setEn: () => this.setState({ lang: 'en' }), setBn: () => this.setState({ lang: 'bn' }),
+      cartCount: digits(this.state.count), cartTotal: money(this.state.total)
+    };
+  }
+}
+</script>
+</body>
+</html>

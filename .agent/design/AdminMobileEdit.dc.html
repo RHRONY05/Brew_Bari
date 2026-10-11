@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Edit item on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.card{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08);padding:16px;display:flex;flex-direction:column;gap:12px}
+.ct{margin:0;font-size:15px;font-weight:800}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl label{font-size:12px;font-weight:700;color:#6F5A4B}
+.in{height:48px;border-radius:14px;border:1px solid #F0DFCB;background:#FFFFFF;padding:0 14px;font:inherit;font-size:15px;color:#24170F;box-sizing:border-box;width:100%}
+.ta{height:84px;padding:12px 14px;resize:none}
+.help{font-size:12px;line-height:17px;color:#8C7767}
+.tag{height:38px;padding:0 14px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;font-size:13px;font-weight:700;color:#6F5A4B}
+.tag.on{background:#F2C27D;border-color:#F2C27D;color:#24170F}
+.step{width:48px;height:48px;border-radius:14px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;display:flex;align-items:center;justify-content:center}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#2F7D57;justify-content:flex-end}
+.sw.off{background:#D9C7B4;justify-content:flex-start}
+.og{border:1px solid #F0DFCB;border-radius:14px;padding:12px;display:flex;align-items:center;gap:10px}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 1560px; position: relative; background: #FFF7EE; overflow: hidden">
+  <header style="height: 64px; padding: 0 8px 0 4px; display: flex; align-items: center; gap: 4px; background: #FFFFFF; border-bottom: 1px solid #F0DFCB">
+    <a href="AdminMobile.dc.html" aria-label="Back to menu" style="width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; color: #24170F">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"></path></svg>
+    </a>
+    <div style="flex: 1; min-width: 0">
+      <div style="font-size: 17px; font-weight: 800">Edit item</div>
+      <div style="font-size: 12px; color: #6F5A4B">Hot Coffee</div>
+    </div>
+    <a href="AdminMobile.dc.html" style="height: 40px; padding: 0 18px; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 14px; font-weight: 800; display: flex; align-items: center; text-decoration: none">Save</a>
+  </header>
+
+  <div style="padding: 14px 12px 120px; display: flex; flex-direction: column; gap: 12px">
+    <!-- Photo -->
+    <div style="position: relative; height: 200px; border-radius: 20px; background: #FBEBD7; display: flex; align-items: center; justify-content: center; color: #B98A5E">
+      <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path></svg>
+      <button style="position: absolute; right: 12px; bottom: 12px; height: 40px; padding: 0 14px; border: none; border-radius: 999px; background: #FFFFFF; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; box-shadow: 0 4px 12px rgba(36,23,15,.12)">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"></path><circle cx="12" cy="13" r="3.5"></circle></svg>
+        Change photo
+      </button>
+    </div>
+
+    <!-- Availability -->
+    <div class="card" style="flex-direction: row; align-items: center">
+      <div style="flex: 1">
+        <div style="font-size: 15px; font-weight: 800">{{availTitle}}</div>
+        <div class="help">{{availHelp}}</div>
+      </div>
+      <button class="{{swCls}}" role="switch" aria-checked="{{swOn}}" aria-label="Available to order" onClick="{{toggle}}"><span></span></button>
+    </div>
+
+    <!-- Basics -->
+    <section class="card" aria-label="Basics">
+      <h2 class="ct">Basics</h2>
+      <div class="fl"><label for="ne">Name (English)</label><input id="ne" class="in" value="Mocha"></div>
+      <div class="fl"><label for="nb">Name (বাংলা)</label><input id="nb" class="in" value="মোকা"></div>
+      <div class="fl"><label for="ca">Category</label>
+        <select id="ca" class="in"><option>Hot Coffee</option><option>Cold Coffee</option><option>Fresh Juice</option></select>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="fl"><label for="pr">Price (৳)</label><input id="pr" class="in" inputmode="numeric" value="290"></div>
+        <div class="fl"><label for="wp">“Was” price (৳)</label><input id="wp" class="in" inputmode="numeric" placeholder="optional"></div>
+      </div>
+    </section>
+
+    <!-- Prep time -->
+    <section class="card" aria-label="Prep time">
+      <h2 class="ct">Prep time</h2>
+      <div style="display: flex; align-items: center; gap: 10px">
+        <button class="step" aria-label="Less time" onClick="{{less}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M5 12h14"></path></svg></button>
+        <div style="flex: 1; height: 48px; border-radius: 14px; background: #FFF7EE; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800">{{prep}} min</div>
+        <button class="step" aria-label="More time" onClick="{{more}}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg></button>
+      </div>
+      <div style="display: flex; align-items: center; gap: 8px">
+        <span class="help">Guests see</span>
+        <span style="{{pillStyle}}">{{pill}}</span>
+        <sc-if value="{{isQuick}}" hint-placeholder-val="{{false}}"><span class="help">· listed under Quick</span></sc-if>
+      </div>
+    </section>
+
+    <!-- Description & tags -->
+    <section class="card" aria-label="Description and tags">
+      <h2 class="ct">Description &amp; tags</h2>
+      <div class="fl"><label for="de">Description (English)</label><textarea id="de" class="in ta">Espresso meets rich chocolate.</textarea></div>
+      <div class="fl"><label for="db">Description (বাংলা)</label><textarea id="db" class="in ta">এসপ্রেসো আর ঘন চকলেটের মিলন।</textarea></div>
+      <div class="fl">
+        <label>Tags</label>
+        <div style="display: flex; flex-wrap: wrap; gap: 8px">
+          <sc-for list="{{tags}}" as="t" hint-placeholder-count="5">
+            <button class="{{t.cls}}" aria-pressed="{{t.on}}" onClick="{{t.toggle}}">{{t.label}}</button>
+          </sc-for>
+        </div>
+      </div>
+    </section>
+
+    <!-- Options -->
+    <section class="card" aria-label="Options">
+      <h2 class="ct">Options</h2>
+      <div class="og">
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 14px; font-weight: 800">Size <span style="font-size: 11px; color: #8A5A37; font-weight: 700">· Required</span></div>
+          <div class="help">Regular +৳0 · Large +৳60</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C7767" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+      </div>
+      <div class="og">
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 14px; font-weight: 800">Milk <span style="font-size: 11px; color: #8C7767; font-weight: 700">· Optional</span></div>
+          <div class="help">Regular +৳0 · Oat milk +৳80</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C7767" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+      </div>
+      <div class="og">
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 14px; font-weight: 800">Extras <span style="font-size: 11px; color: #8C7767; font-weight: 700">· Any</span></div>
+          <div class="help">Extra shot +৳50 · Caramel +৳40 · Cream +৳40</div>
+        </div>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8C7767" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+      </div>
+      <button style="height: 46px; border-radius: 14px; border: 1px dashed #D9C7B4; background: transparent; font-size: 14px; font-weight: 700; color: #6F5A4B">+ Add option group</button>
+    </section>
+
+    <button style="height: 48px; border: none; background: transparent; color: #B83B30; font-size: 14px; font-weight: 700">Hide this item from the menu</button>
+  </div>
+
+  <!-- Sticky save bar -->
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px 20px; background: #FFFFFF; box-shadow: 0 -4px 16px rgba(36,23,15,.08); display: flex; gap: 8px">
+    <a href="AdminMobile.dc.html" style="height: 52px; padding: 0 20px; border-radius: 999px; border: 1px solid #F0DFCB; color: #6F5A4B; font-size: 15px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Cancel</a>
+    <a href="AdminMobile.dc.html" style="flex: 1; height: 52px; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; text-decoration: none">Save changes</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1560}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { avail: true, prep: 6, tags: { hot: true } };
+  }
+  renderVals() {
+    const s = this.state;
+    const now = s.prep <= 1;
+    const base = 'display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;font-size:12px;font-weight:700;';
+    const tagDefs = [['hot', 'Hot'], ['iced', 'Iced'], ['bestseller', 'Bestseller'], ['new', 'New'], ['seasonal', 'Seasonal'], ['veg', 'Veg']];
+    return {
+      availTitle: s.avail ? 'Available' : 'Sold out',
+      availHelp: s.avail ? 'Guests can order it now.' : 'Shown greyed out at the end of its category.',
+      swCls: s.avail ? 'sw on' : 'sw off', swOn: s.avail ? 'true' : 'false',
+      toggle: () => this.setState({ avail: !s.avail }),
+      prep: s.prep,
+      less: () => this.setState({ prep: Math.max(1, s.prep - 1) }),
+      more: () => this.setState({ prep: Math.min(120, s.prep + 1) }),
+      pill: now ? 'Ready now' : '~' + s.prep + ' min',
+      pillStyle: base + (now ? 'background:#E7F3EC;color:#1F5C3F' : 'background:#FFF7EE;color:#6F5A4B'),
+      isQuick: s.prep <= 5,
+      tags: tagDefs.map(([id, label]) => ({
+        label, on: s.tags[id] ? 'true' : 'false', cls: s.tags[id] ? 'tag on' : 'tag',
+        toggle: () => this.setState({ tags: Object.assign({}, s.tags, { [id]: !s.tags[id] }) })
+      }))
+    };
+  }
+}
+</script>
+</body>
+</html>

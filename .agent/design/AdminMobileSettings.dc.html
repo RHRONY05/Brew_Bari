@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Settings on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.tab{height:40px;padding:0 11px;border-radius:999px;color:#6F5A4B;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;text-decoration:none;flex:none}
+.tab.on{background:#24170F;color:#FFF7EE}
+.card{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08);padding:16px;display:flex;flex-direction:column;gap:12px}
+.ct{margin:0;font-size:16px;font-weight:800}
+.fl{display:flex;flex-direction:column;gap:6px;min-width:0}
+.fl label{font-size:12px;font-weight:700;color:#6F5A4B}
+.in{height:48px;border-radius:14px;border:1px solid #F0DFCB;background:#FFFFFF;padding:0 14px;font:inherit;font-size:15px;color:#24170F;box-sizing:border-box;width:100%}
+.help{font-size:12px;line-height:17px;color:#8C7767}
+.pk{width:100%;border-radius:16px;padding:14px;display:flex;gap:12px;text-align:left;border:2px solid #F0DFCB;background:#FFFFFF;color:#24170F;align-items:flex-start}
+.pk.on{border-color:#6B4226;background:#FFF7EE}
+.radio{width:22px;height:22px;border-radius:999px;border:2px solid #CDB59B;flex:none;margin-top:2px;box-sizing:border-box;display:flex;align-items:center;justify-content:center}
+.pk.on .radio{border-color:#6B4226}
+.pk.on .radio span{width:10px;height:10px;border-radius:999px;background:#6B4226}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#2F7D57;justify-content:flex-end}
+.sw.off{background:#D9C7B4;justify-content:flex-start}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 1780px; position: relative; background: #FFF7EE; overflow: hidden">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #F0DFCB">
+    <div style="padding: 16px 16px 10px; display: flex; align-items: center; gap: 10px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div style="flex: 1"><div style="font-size: 16px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+      <a href="CounterMobile.dc.html" style="height: 38px; padding: 0 12px; border-radius: 999px; border: 1px solid #F0DFCB; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Counter</a>
+    </div>
+    <nav aria-label="Admin" style="display: flex; gap: 2px; padding: 0 10px 10px; overflow-x: auto">
+      <a class="tab" href="AdminMobile.dc.html">Menu</a>
+      <a class="tab" href="AdminMobileOffers.dc.html">Offers</a>
+      <a class="tab" href="AdminMobileTables.dc.html">Tables</a>
+      <a class="tab on" href="AdminMobileSettings.dc.html" aria-current="page">Settings</a>
+      <a class="tab" href="AdminMobileFeedback.dc.html">Feedback</a>
+    </nav>
+  </header>
+
+  <div style="padding: 14px 12px 110px; display: flex; flex-direction: column; gap: 12px">
+    <div style="padding: 0 4px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em">Settings</h1>
+    </div>
+
+    <section class="card" aria-label="Package">
+      <div>
+        <h2 class="ct">Package</h2>
+        <div class="help">Changes every guest’s phone immediately.</div>
+      </div>
+      <div role="radiogroup" aria-label="Package" style="display: flex; flex-direction: column; gap: 8px">
+        <sc-for list="{{packages}}" as="p" hint-placeholder-count="3">
+          <button class="{{p.cls}}" role="radio" aria-checked="{{p.on}}" onClick="{{p.pick}}">
+            <span class="radio"><span></span></span>
+            <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+              <span style="font-size: 15px; font-weight: 800">{{p.code}} · {{p.name}}</span>
+              <span style="font-size: 12.5px; line-height: 17px; color: #6F5A4B">{{p.desc}}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section class="card" aria-label="Café info">
+      <h2 class="ct">Café info</h2>
+      <div class="fl"><label for="n1">Name (English)</label><input id="n1" class="in" value="Brew Bari"></div>
+      <div class="fl"><label for="n2">Name (বাংলা)</label><input id="n2" class="in" value="ব্রু বাড়ি"></div>
+      <div class="fl"><label for="hr">Opening hours</label><input id="hr" class="in" value="Every day 9 AM – 11 PM"></div>
+      <div class="fl"><label for="ad">Address</label><input id="ad" class="in" value="GEC Circle, Chattogram"></div>
+    </section>
+
+    <section class="card" aria-label="Wi-Fi">
+      <h2 class="ct">Wi-Fi</h2>
+      <div class="fl"><label for="wn">Network name</label><input id="wn" class="in" value="BrewBari_Guest"></div>
+      <div class="fl"><label for="wp">Password</label><input id="wp" class="in" value="coffee2026"></div>
+      <span class="help">Guests copy it from the menu. Leave empty to hide.</span>
+    </section>
+
+    <section class="card" aria-label="Social and reviews">
+      <h2 class="ct">Social &amp; reviews</h2>
+      <div class="fl"><label for="fb">Facebook page</label><input id="fb" class="in" placeholder="facebook.com/brewbari"></div>
+      <div class="fl"><label for="ig">Instagram</label><input id="ig" class="in" placeholder="instagram.com/brewbari"></div>
+      <div class="fl"><label for="gr">Google review link</label><input id="gr" class="in" placeholder="g.page/r/…/review">
+        <span class="help">Google Business Profile → “Ask for reviews” → copy link.</span></div>
+    </section>
+
+    <section class="card" aria-label="Bill and tables">
+      <h2 class="ct">Bill &amp; tables</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div class="fl"><label for="vt">VAT (%)</label><input id="vt" class="in" inputmode="decimal" value="5"></div>
+        <div class="fl"><label for="sc">Service (%)</label><input id="sc" class="in" inputmode="decimal" value="0"></div>
+      </div>
+      <div style="display: flex; gap: 12px; align-items: flex-start">
+        <div style="flex: 1">
+          <div style="font-size: 14.5px; font-weight: 700">Staff approve new tables</div>
+          <div class="help">First scan shows as “Scanned” on the counter until approved.</div>
+        </div>
+        <button class="{{apprCls}}" role="switch" aria-checked="{{apprOn}}" aria-label="Staff approve new tables" onClick="{{toggleAppr}}"><span></span></button>
+      </div>
+    </section>
+
+    <button style="height: 48px; border: none; background: transparent; color: #6F5A4B; font-size: 14px; font-weight: 700">Log out</button>
+  </div>
+
+  <div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 16px 20px; background: #FFFFFF; box-shadow: 0 -4px 16px rgba(36,23,15,.08)">
+    <button style="width: 100%; height: 52px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 16px; font-weight: 800">Save changes</button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1780}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { pkg: 'P3', approve: true };
+  }
+  renderVals() {
+    const defs = [
+      ['P1', 'Digital menu', 'Menu, offers, EN / বাংলা and one shop QR.'],
+      ['P2', 'Table service', 'Adds table QR codes, guest list and Call waiter with a live counter.'],
+      ['P3', 'Premium', 'Adds ordering, order tracking, bill requests and Google reviews.']
+    ];
+    const a = this.state.approve;
+    return {
+      packages: defs.map(([code, name, desc]) => {
+        const sel = this.state.pkg === code;
+        return { code, name, desc, on: sel ? 'true' : 'false', cls: sel ? 'pk on' : 'pk', pick: () => this.setState({ pkg: code }) };
+      }),
+      apprCls: a ? 'sw on' : 'sw off', apprOn: a ? 'true' : 'false',
+      toggleAppr: () => this.setState({ approve: !a })
+    };
+  }
+}
+</script>
+</body>
+</html>

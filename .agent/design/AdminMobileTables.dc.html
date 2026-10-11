@@ -1,0 +1,133 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Tables and QR on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.tab{height:40px;padding:0 11px;border-radius:999px;color:#6F5A4B;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;text-decoration:none;flex:none}
+.tab.on{background:#24170F;color:#FFF7EE}
+.card{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08)}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #F6E9DA}
+.num{width:44px;height:44px;border-radius:12px;background:#FBEBD7;color:#6B4226;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex:none}
+.icb{width:44px;height:44px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;display:flex;align-items:center;justify-content:center;flex:none}
+.btn-s{height:40px;padding:0 14px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:13px;font-weight:700}
+.qr{display:grid;grid-template-columns:repeat(21,minmax(0,1fr));background:#FFFFFF}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 1040px; position: relative; background: #FFF7EE; overflow: hidden">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #F0DFCB">
+    <div style="padding: 16px 16px 10px; display: flex; align-items: center; gap: 10px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div style="flex: 1"><div style="font-size: 16px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+      <a href="CounterMobile.dc.html" style="height: 38px; padding: 0 12px; border-radius: 999px; border: 1px solid #F0DFCB; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Counter</a>
+    </div>
+    <nav aria-label="Admin" style="display: flex; gap: 2px; padding: 0 10px 10px; overflow-x: auto">
+      <a class="tab" href="AdminMobile.dc.html">Menu</a>
+      <a class="tab" href="AdminMobileOffers.dc.html">Offers</a>
+      <a class="tab on" href="AdminMobileTables.dc.html" aria-current="page">Tables</a>
+      <a class="tab" href="AdminMobileSettings.dc.html">Settings</a>
+      <a class="tab" href="AdminMobileFeedback.dc.html">Feedback</a>
+    </nav>
+  </header>
+
+  <div style="padding: 14px 12px 24px; display: flex; flex-direction: column; gap: 12px">
+    <div style="padding: 0 4px">
+      <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em">Tables &amp; QR</h1>
+      <div style="font-size: 12.5px; color: #6F5A4B">Print once — cards keep working when the menu changes.</div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+      <button style="height: 52px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 6px">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"></path><rect x="3" y="9" width="18" height="8" rx="2"></rect><path d="M6 14h12v7H6z"></path></svg>
+        Print cards
+      </button>
+      <button style="height: 52px; border-radius: 999px; border: 1px solid #F0DFCB; background: #FFFFFF; color: #24170F; font-size: 14px; font-weight: 700">+ Add table</button>
+    </div>
+
+    <!-- Shop QR -->
+    <section class="card" aria-label="Shop QR" style="padding: 14px; display: flex; gap: 14px; align-items: center">
+      <div role="img" aria-label="QR code preview for the shop menu" style="padding: 6px; border: 1px solid #F0DFCB; border-radius: 12px; flex: none">
+        <div class="qr" style="width: 84px; height: 84px">
+          <sc-for list="{{cells}}" as="c" hint-placeholder-count="441"><span style="{{c.s}}"></span></sc-for>
+        </div>
+      </div>
+      <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+        <div style="font-size: 15px; font-weight: 800">Shop QR</div>
+        <div style="font-size: 12px; line-height: 16px; color: #6F5A4B">Menu only — for the door, flyers and Facebook.</div>
+        <div style="display: flex; gap: 6px">
+          <button class="btn-s">Share</button>
+          <button class="btn-s">Download</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Table list -->
+    <section class="card" aria-label="Tables" style="overflow: hidden">
+      <sc-for list="{{tables}}" as="t" hint-placeholder-count="8">
+        <div class="row">
+          <span class="num">{{t.n}}</span>
+          <div style="flex: 1; min-width: 0">
+            <div style="font-size: 15px; font-weight: 700">{{t.name}}</div>
+            <div style="font-size: 12px; color: #6F5A4B; font-weight: 600">{{t.sub}}</div>
+          </div>
+          <button class="icb" aria-label="{{t.viewLabel}}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="4" width="6" height="6"></rect><rect x="14" y="4" width="6" height="6"></rect><rect x="4" y="14" width="6" height="6"></rect><path d="M14 14h2v2h-2zM18 18h2v2h-2zM14 18h2M18 14h2"></path></svg>
+          </button>
+          <button class="icb" aria-label="{{t.moreLabel}}">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.8"></circle><circle cx="12" cy="12" r="1.8"></circle><circle cx="12" cy="19" r="1.8"></circle></svg>
+          </button>
+        </div>
+      </sc-for>
+    </section>
+    <div style="padding: 0 6px; font-size: 12px; line-height: 17px; color: #6F5A4B">
+      The <b>⋮</b> menu has <b>New QR</b> (old printed card stops working), rename, seats and turn off.
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1040}}'>
+class Component extends DCLogic {
+  qrCells(seed) {
+    const N = 21;
+    const finder = (r, c, R, C) => {
+      const y = r - R, x = c - C;
+      if (y < 0 || x < 0 || y > 6 || x > 6) return null;
+      return y === 0 || y === 6 || x === 0 || x === 6 || (y >= 2 && y <= 4 && x >= 2 && x <= 4);
+    };
+    const cells = [];
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        let on = finder(r, c, 0, 0);
+        if (on === null) on = finder(r, c, 0, 14);
+        if (on === null) on = finder(r, c, 14, 0);
+        const near = (r < 8 && c < 8) || (r < 8 && c > 12) || (r > 12 && c < 8);
+        if (on === null) on = near ? false : ((r * 7 + c * 13 + seed * (r ^ c) + r * c) % 5) < 2;
+        cells.push({ s: on ? 'background:#24170F' : 'background:transparent' });
+      }
+    }
+    return cells;
+  }
+  renderVals() {
+    const tables = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+      n,
+      name: 'Table ' + n + (n === 5 ? ' · Window' : ''),
+      sub: (n <= 4 ? 2 : 4) + ' seats' + (n === 3 ? ' · new QR 2 days ago' : ''),
+      viewLabel: 'Show QR for table ' + n,
+      moreLabel: 'More actions for table ' + n
+    }));
+    return { tables, cells: this.qrCells(3) };
+  }
+}
+</script>
+</body>
+</html>

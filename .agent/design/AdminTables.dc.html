@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin tables and QR</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.nav{display:flex;align-items:center;gap:10px;height:44px;padding:0 14px;border-radius:12px;color:#6F5A4B;font-size:14px;font-weight:700;text-decoration:none}
+.nav.on{background:#FBEBD7;color:#24170F}
+.panel{background:#FFFFFF;border-radius:20px;box-shadow:0 6px 20px rgba(107,66,38,.08)}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid #F6E9DA}
+.num{width:44px;height:44px;border-radius:12px;background:#FBEBD7;color:#6B4226;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:800;flex:none}
+.btn-s{height:38px;padding:0 14px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:13px;font-weight:700;white-space:nowrap;display:flex;align-items:center;gap:6px;text-decoration:none}
+.btn-p{height:44px;padding:0 18px;border:none;border-radius:999px;background:#F2C27D;color:#24170F;font-size:14px;font-weight:800;white-space:nowrap;display:flex;align-items:center;gap:6px;text-decoration:none}
+.qr{display:grid;grid-template-columns:repeat(21,minmax(0,1fr));background:#FFFFFF}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none;background:#2F7D57;justify-content:flex-end}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF}
+</style>
+</helmet>
+<div class="bb" style="width: 100%; min-height: 900px; background: #FFF7EE; display: flex; flex-wrap: wrap; box-sizing: border-box">
+  <nav aria-label="Admin" style="flex: 1 1 200px; max-width: 100%; padding: 18px 14px; background: #FFFFFF; border-right: 1px solid #F0DFCB; display: flex; flex-direction: column; gap: 4px; box-sizing: border-box">
+    <div style="display: flex; align-items: center; gap: 10px; padding: 0 6px 16px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div><div style="font-size: 15px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+    </div>
+    <a class="nav" href="AdminMenu.dc.html">Menu</a>
+    <a class="nav" href="#">Offers</a>
+    <a class="nav on" href="AdminTables.dc.html" aria-current="page">Tables &amp; QR</a>
+    <a class="nav" href="AdminSettings.dc.html">Settings</a>
+    <a class="nav" href="#">Feedback</a>
+    <div style="height: 1px; background: #F0DFCB; margin: 10px 4px"></div>
+    <a class="nav" href="Counter.dc.html">Counter board</a>
+    <a class="nav" href="Main.dc.html">View guest menu</a>
+  </nav>
+
+  <main style="flex: 999 1 640px; min-width: 0; padding: 22px 24px; display: flex; flex-direction: column; gap: 18px; box-sizing: border-box">
+    <div style="display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between">
+      <div>
+        <h1 style="margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -.02em">Tables &amp; QR</h1>
+        <div style="font-size: 13px; color: #6F5A4B">Each table has its own QR code. Print them once — they keep working after menu changes.</div>
+      </div>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap">
+        <button class="btn-s">+ Add table</button>
+        <a class="btn-p" href="#">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9V3h12v6"></path><rect x="3" y="9" width="18" height="8" rx="2"></rect><path d="M6 14h12v7H6z"></path></svg>
+          Print QR cards
+        </a>
+      </div>
+    </div>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+      <!-- Table list -->
+      <section class="panel" aria-label="Tables" style="flex: 999 1 440px; min-width: 0; overflow: hidden">
+        <div style="display: flex; justify-content: space-between; padding: 12px 16px; font-size: 11.5px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #8C7767; border-bottom: 1px solid #F6E9DA">
+          <span>Table</span><span>QR · Active</span>
+        </div>
+        <sc-for list="{{tables}}" as="t" hint-placeholder-count="8">
+          <div class="row">
+            <span class="num">{{t.n}}</span>
+            <div style="flex: 1; min-width: 140px">
+              <div style="font-size: 14.5px; font-weight: 700">{{t.name}}</div>
+              <div style="font-size: 12px; color: #6F5A4B; font-weight: 600">{{t.sub}}</div>
+            </div>
+            <span style="font-size: 12px; color: #8C7767; font-family: ui-monospace, monospace">{{t.token}}</span>
+            <button class="btn-s" aria-label="{{t.regenLabel}}">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11a8 8 0 1 0-2.3 5.7"></path><path d="M20 5v6h-6"></path></svg>
+              New QR
+            </button>
+            <button class="sw" role="switch" aria-checked="true" aria-label="{{t.activeLabel}}"><span></span></button>
+          </div>
+        </sc-for>
+        <div style="padding: 12px 16px; font-size: 12px; line-height: 18px; color: #6F5A4B; background: #FFF7EE">
+          <b>New QR</b> makes the old printed code stop working — use it if a QR photo is being misused, then reprint that table’s card.
+        </div>
+      </section>
+
+      <!-- QR previews -->
+      <div style="flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 20px">
+        <section class="panel" aria-label="Shop QR" style="padding: 18px; display: flex; flex-direction: column; gap: 12px">
+          <div>
+            <h2 style="margin: 0; font-size: 17px; font-weight: 800">Shop QR — menu only</h2>
+            <div style="font-size: 12.5px; color: #6F5A4B; line-height: 18px">For the door, the counter, flyers and your Facebook page. Opens the menu without a table.</div>
+          </div>
+          <div style="display: flex; gap: 14px; align-items: center">
+            <div role="img" aria-label="QR code preview for the shop menu" style="padding: 10px; background: #FFFFFF; border: 1px solid #F0DFCB; border-radius: 14px; flex: none">
+              <div class="qr" style="width: 126px; height: 126px">
+                <sc-for list="{{cells}}" as="c" hint-placeholder-count="441"><span style="{{c.s}}"></span></sc-for>
+              </div>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
+              <span style="font-size: 12px; color: #6F5A4B; word-break: break-all">brewbari.app/m/brew-bari</span>
+              <button class="btn-s">Download PNG</button>
+              <button class="btn-s">Download SVG</button>
+            </div>
+          </div>
+        </section>
+
+        <section aria-label="Printed card preview" style="display: flex; flex-direction: column; gap: 8px">
+          <div style="font-size: 12px; font-weight: 800; letter-spacing: .05em; text-transform: uppercase; color: #8C7767">Printed card preview · A4 holds 6</div>
+          <div style="background: #FFFFFF; border-radius: 20px; border: 1px dashed #D9C7B4; padding: 22px; display: flex; flex-direction: column; align-items: center; gap: 10px; text-align: center">
+            <div style="display: flex; align-items: center; gap: 8px">
+              <div style="width: 30px; height: 30px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px">BB</div>
+              <span style="font-size: 15px; font-weight: 800">Brew Bari</span>
+            </div>
+            <div style="font-size: 30px; font-weight: 800; letter-spacing: -.02em; line-height: 34px">Table 5</div>
+            <div role="img" aria-label="QR code preview for table 5" style="padding: 8px; border-radius: 12px; background: #FFF7EE">
+              <div class="qr" style="width: 150px; height: 150px">
+                <sc-for list="{{cells2}}" as="c" hint-placeholder-count="441"><span style="{{c.s}}"></span></sc-for>
+              </div>
+            </div>
+            <div style="font-size: 13.5px; font-weight: 700">Scan to see the menu &amp; call a waiter</div>
+            <div style="font-size: 13.5px; font-weight: 600; color: #6F5A4B">মেনু দেখতে ও ওয়েটার ডাকতে স্ক্যান করুন</div>
+            <div style="font-size: 11px; color: #8C7767">No app needed · Free Wi-Fi: BrewBari_Guest</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":900}}'>
+class Component extends DCLogic {
+  qrCells(seed) {
+    const N = 21;
+    const finder = (r, c, R, C) => {
+      const y = r - R, x = c - C;
+      if (y < 0 || x < 0 || y > 6 || x > 6) return null;
+      const edge = y === 0 || y === 6 || x === 0 || x === 6;
+      const core = y >= 2 && y <= 4 && x >= 2 && x <= 4;
+      return edge || core;
+    };
+    const cells = [];
+    for (let r = 0; r < N; r++) {
+      for (let c = 0; c < N; c++) {
+        let on = finder(r, c, 0, 0);
+        if (on === null) on = finder(r, c, 0, 14);
+        if (on === null) on = finder(r, c, 14, 0);
+        const nearFinder = (r < 8 && c < 8) || (r < 8 && c > 12) || (r > 12 && c < 8);
+        if (on === null) on = nearFinder ? false : ((r * 7 + c * 13 + seed * (r ^ c) + r * c) % 5) < 2;
+        cells.push({ s: on ? 'background:#24170F' : 'background:transparent' });
+      }
+    }
+    return cells;
+  }
+  renderVals() {
+    const tokens = ['…4f1a', '…9c2e', '…07bd', '…e3a1', '…b85c', '…12f9', '…6d40', '…a7e3'];
+    const tables = [1, 2, 3, 4, 5, 6, 7, 8].map((n) => ({
+      n,
+      name: 'Table ' + n + (n === 5 ? ' · Window' : ''),
+      sub: (n <= 4 ? 2 : 4) + ' seats' + (n === 3 ? ' · QR renewed 2 days ago' : ''),
+      token: tokens[n - 1],
+      regenLabel: 'Make a new QR code for table ' + n,
+      activeLabel: 'Table ' + n + ' active'
+    }));
+    return { tables, cells: this.qrCells(3), cells2: this.qrCells(5) };
+  }
+}
+</script>
+</body>
+</html>

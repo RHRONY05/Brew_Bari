@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bill sheet</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.row{display:flex;justify-content:space-between;gap:12px;font-size:14px;line-height:20px}
+.pend{font-size:10.5px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;color:#8A5A37;background:#FBEBD7;border-radius:999px;padding:2px 7px;margin-left:6px}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 844px; position: relative; background: #FFF7EE; overflow: hidden">
+  <div style="position: absolute; inset: 0; background: rgba(36,23,15,.45)"></div>
+  <div role="dialog" aria-label="Your bill" style="position: absolute; left: 0; right: 0; top: 70px; bottom: 0; background: #FFFFFF; border-radius: 28px 28px 0 0; display: flex; flex-direction: column">
+    <div style="display: flex; justify-content: center; padding: 10px 0 0"><span style="width: 40px; height: 5px; border-radius: 999px; background: #E9D3B8"></span></div>
+    <div style="padding: 10px 16px 6px; display: flex; justify-content: space-between; align-items: flex-start">
+      <div>
+        <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em">Your bill</h1>
+        <div style="font-size: 13px; color: #6F5A4B">Brew Bari · Table 5 · 2 orders</div>
+      </div>
+      <a href="Status.dc.html" aria-label="Close" style="width: 44px; height: 44px; border-radius: 999px; background: #FFF7EE; display: flex; align-items: center; justify-content: center; color: #24170F">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+      </a>
+    </div>
+
+    <div style="flex: 1; overflow: hidden; padding: 10px 16px 0">
+      <div style="background: #FFF7EE; border-radius: 20px; padding: 16px; display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{lines}}" as="l" hint-placeholder-count="5">
+          <div class="row">
+            <span><span style="font-weight: 700">{{l.qty}}×</span> {{l.name}}<sc-if value="{{l.pending}}" hint-placeholder-val="{{false}}"><span class="pend">awaiting confirmation</span></sc-if></span>
+            <span style="font-weight: 700; font-variant-numeric: tabular-nums">{{l.price}}</span>
+          </div>
+        </sc-for>
+        <div style="border-top: 1px dashed #E3CDB2; margin: 6px 0 2px"></div>
+        <div class="row" style="color: #6F5A4B"><span>Subtotal</span><span>৳1,680</span></div>
+        <div class="row" style="color: #6F5A4B"><span>VAT (5%)</span><span>৳84</span></div>
+        <div style="border-top: 1px dashed #E3CDB2; margin: 2px 0"></div>
+        <div class="row" style="align-items: baseline"><span style="font-size: 16px; font-weight: 800">Total</span><span style="font-size: 26px; font-weight: 800; letter-spacing: -.02em">৳1,764</span></div>
+      </div>
+      <div style="margin-top: 12px; display: flex; gap: 10px; align-items: flex-start; font-size: 12.5px; line-height: 18px; color: #6F5A4B">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="flex: none; color: #8A5A37"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg>
+        Pay at the counter or to your waiter — cash, card, bKash or Nagad, whatever the café accepts.
+      </div>
+    </div>
+
+    <div style="padding: 12px 16px 20px; border-top: 1px solid #F6E9DA">
+      <a href="Review.dc.html" style="height: 54px; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 16px; font-weight: 800; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2z"></path><path d="M9 8h6M9 12h6"></path></svg>
+        Request bill
+      </a>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      lines: [
+        { qty: 1, name: 'Cappuccino', price: '৳250', pending: false },
+        { qty: 1, name: 'Iced Latte', price: '৳280', pending: false },
+        { qty: 1, name: 'Caramel Macchiato', price: '৳490', pending: true },
+        { qty: 1, name: 'Iced Latte', price: '৳280', pending: true },
+        { qty: 2, name: 'Chocolate Brownie', price: '৳380', pending: true }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

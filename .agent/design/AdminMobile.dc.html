@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Admin on a phone</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Hind+Siliguri:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#6B4226}a:hover{color:#24170F}
+.bb{font-family:"Plus Jakarta Sans","Hind Siliguri",system-ui,sans-serif;color:#24170F}
+.bb button{font-family:inherit;cursor:pointer}
+.tab{height:40px;padding:0 11px;border-radius:999px;color:#6F5A4B;font-size:14px;font-weight:700;white-space:nowrap;display:flex;align-items:center;text-decoration:none;flex:none}
+.tab.on{background:#24170F;color:#FFF7EE}
+.chip{height:36px;padding:0 12px;border-radius:999px;border:1px solid #F0DFCB;background:#FFFFFF;color:#24170F;font-size:13px;font-weight:700;white-space:nowrap;flex:none}
+.chip.on{background:#6B4226;border-color:#6B4226;color:#FFF7EE}
+.row{display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #F6E9DA}
+.th{width:48px;height:48px;border-radius:12px;background:#FBEBD7;color:#B98A5E;display:flex;align-items:center;justify-content:center;flex:none}
+.sw{width:52px;height:30px;border-radius:999px;border:none;padding:3px;display:flex;flex:none}
+.sw span{width:24px;height:24px;border-radius:999px;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.sw.on{background:#2F7D57;justify-content:flex-end}
+.sw.off{background:#D9C7B4;justify-content:flex-start}
+</style>
+</helmet>
+<div class="bb" style="width: 390px; height: 844px; position: relative; background: #FFF7EE; overflow: hidden">
+  <header style="background: #FFFFFF; border-bottom: 1px solid #F0DFCB">
+    <div style="padding: 16px 16px 10px; display: flex; align-items: center; gap: 10px">
+      <div style="width: 38px; height: 38px; border-radius: 999px; background: #6B4226; color: #F2C27D; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 13px">BB</div>
+      <div style="flex: 1"><div style="font-size: 16px; font-weight: 800">Brew Bari</div><div style="font-size: 11.5px; color: #6F5A4B">Admin</div></div>
+      <a href="CounterMobile.dc.html" style="height: 38px; padding: 0 12px; border-radius: 999px; border: 1px solid #F0DFCB; color: #24170F; font-size: 13px; font-weight: 700; display: flex; align-items: center; text-decoration: none">Counter</a>
+    </div>
+    <nav aria-label="Admin" style="display: flex; gap: 2px; padding: 0 10px 10px; overflow-x: auto">
+      <a class="tab on" href="AdminMobile.dc.html" aria-current="page">Menu</a>
+      <a class="tab" href="AdminMobileOffers.dc.html">Offers</a>
+      <a class="tab" href="AdminMobileTables.dc.html">Tables</a>
+      <a class="tab" href="AdminMobileSettings.dc.html">Settings</a>
+      <a class="tab" href="AdminMobileFeedback.dc.html">Feedback</a>
+    </nav>
+  </header>
+
+  <div style="padding: 14px 16px 8px">
+    <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -.02em">Menu</h1>
+    <div style="font-size: 12.5px; color: #6F5A4B">Flip a switch to mark an item sold out.</div>
+  </div>
+  <div style="display: flex; gap: 8px; padding: 4px 16px 12px; overflow: hidden">
+    <button class="chip on">Hot Coffee</button>
+    <button class="chip">Cold Coffee</button>
+    <button class="chip">Fresh Juice</button>
+    <button class="chip">Shakes</button>
+  </div>
+
+  <div style="margin: 0 12px; background: #FFFFFF; border-radius: 20px; box-shadow: 0 6px 20px rgba(107,66,38,.08); overflow: hidden">
+    <sc-for list="{{items}}" as="it" hint-placeholder-count="6">
+      <div class="row">
+        <span class="th"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h13v5a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5z"></path><path d="M17 11h1.5a2.5 2.5 0 0 1 0 5H17"></path></svg></span>
+        <div style="flex: 1; min-width: 0">
+          <div style="font-size: 14.5px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{it.en}}</div>
+          <div style="font-size: 12px; font-weight: 600; color: {{it.subColor}}">{{it.sub}}</div>
+        </div>
+        <button class="{{it.swCls}}" role="switch" aria-checked="{{it.on}}" aria-label="{{it.swLabel}}" onClick="{{it.toggle}}"><span></span></button>
+        <a href="AdminMobileEdit.dc.html" aria-label="{{it.editLabel}}" style="width: 36px; height: 44px; display: flex; align-items: center; justify-content: center; color: #8C7767; flex: none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+        </a>
+      </div>
+    </sc-for>
+  </div>
+
+  <a href="AdminMobileEdit.dc.html" style="text-decoration: none; position: absolute; right: 16px; bottom: 24px; height: 54px; padding: 0 22px; border: none; border-radius: 999px; background: #F2C27D; color: #24170F; font-size: 15px; font-weight: 800; display: flex; align-items: center; gap: 8px; box-shadow: 0 8px 24px rgba(227,166,81,.45)">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+    Add item
+  </a>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { off: { mocha: true } };
+  }
+  renderVals() {
+    const defs = [
+      ['espresso', 'Espresso', 180, 2], ['americano', 'Americano', 200, 3], ['cappuccino', 'Cappuccino', 250, 4],
+      ['latte', 'Café Latte', 260, 4], ['macchiato', 'Caramel Macchiato', 300, 6], ['mocha', 'Mocha', 290, 6]
+    ];
+    const items = defs.map(([id, en, price, prep]) => {
+      const on = !this.state.off[id];
+      return {
+        en,
+        sub: on ? '৳' + price + ' · ~' + prep + ' min' : 'Sold out',
+        subColor: on ? '#6F5A4B' : '#B83B30',
+        swCls: on ? 'sw on' : 'sw off', on: on ? 'true' : 'false',
+        swLabel: en + ' available', editLabel: 'Edit ' + en,
+        toggle: () => this.setState({ off: Object.assign({}, this.state.off, { [id]: on }) })
+      };
+    });
+    return { items };
+  }
+}
+</script>
+</body>
+</html>

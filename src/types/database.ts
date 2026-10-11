@@ -616,7 +616,100 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      _check_rate: { Args: { p_session_id: string }; Returns: undefined }
+      _create_request: {
+        Args: {
+          p_ctx_restaurant: string
+          p_device: string
+          p_items: Json
+          p_note: string
+          p_session: string
+          p_table: string
+          p_type: Database["public"]["Enums"]["request_type"]
+        }
+        Returns: string
+      }
+      _ensure_session: {
+        Args: { p_table_id: string }
+        Returns: {
+          approved_at: string | null
+          approved_by: string | null
+          closed_at: string | null
+          closed_by: string | null
+          id: string
+          opened_at: string
+          restaurant_id: string
+          status: Database["public"]["Enums"]["session_status"]
+          table_id: string
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "table_sessions"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      _session_json: { Args: { p_session_id: string }; Returns: Json }
+      _table_ctx: {
+        Args: { p_token: string }
+        Returns: {
+          package: number
+          restaurant_id: string
+          session_id: string
+          session_status: Database["public"]["Enums"]["session_status"]
+          table_id: string
+          table_number: number
+        }[]
+      }
+      call_waiter: {
+        Args: {
+          p_device_id: string
+          p_items?: Json
+          p_note?: string
+          p_token: string
+        }
+        Returns: Json
+      }
+      get_bill: { Args: { p_token: string }; Returns: Json }
+      get_session_status: {
+        Args: { p_session_id: string; p_token: string }
+        Returns: Json
+      }
+      get_table_context: { Args: { p_token: string }; Returns: Json }
+      is_admin: { Args: { rid: string }; Returns: boolean }
+      is_staff: { Args: { rid: string }; Returns: boolean }
+      my_restaurant_id: { Args: never; Returns: string }
+      place_order: {
+        Args: {
+          p_device_id: string
+          p_items: Json
+          p_note?: string
+          p_token: string
+        }
+        Returns: Json
+      }
+      price_cart: {
+        Args: { p_items: Json; p_restaurant_id: string }
+        Returns: {
+          line_total: number
+          menu_item_id: string
+          name_bn: string
+          name_en: string
+          note: string
+          options: Json
+          quantity: number
+          unit_price: number
+        }[]
+      }
+      request_bill: {
+        Args: { p_device_id: string; p_token: string }
+        Returns: Json
+      }
+      submit_feedback: {
+        Args: { p_comment?: string; p_rating: number; p_token: string }
+        Returns: Json
+      }
     }
     Enums: {
       request_status:

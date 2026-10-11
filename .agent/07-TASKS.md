@@ -50,11 +50,11 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
   - Migration `rls` = §2 (+ storage bucket & policies). Run advisors; fix warnings.
   - **Tests:** `supabase/tests/01_rls_anon.sql`, `08_staff_rls.sql`.
 
-- [ ] **T1.3 Guest RPCs** · Depends on: T1.2
+- [x] **T1.3 Guest RPCs** · Depends on: T1.2 (Applied rpc and realtime migrations, types refreshed, tests 02-07 passing)
   - Migration `rpc` = §3 incl. grants; migration `realtime` = §4. Regenerate types.
   - **Tests:** `02_rpc_grants.sql` … `07_feedback.sql` all pass.
 
-- [ ] **T1.4 Seed + staff accounts** · Depends on: T1.3
+- [x] **T1.4 Seed + staff accounts** · Depends on: T1.3 (Applied seed.sql, created admin + counter Auth users, linked staff rows, 28 items and get_table_context verified)
   - `supabase/seed.sql` = §6 + test table 99 (06-TESTING.md). Run it.
   - Create 2 Auth users (admin + counter) — via MCP/Dashboard or a one-off local script using the secret key that is **not committed**. Link with `staff` rows. Put credentials only in `.env.local` (`TEST_STAFF_*`) and tell the human where they are.
   - **AC:** anon `select` on `menu_items` returns 28 items; `get_table_context(<table 1 token>)` returns a session.

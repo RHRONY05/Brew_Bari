@@ -10,15 +10,15 @@
 |---|---|
 | **Phase** | Phase 1 — Foundation (M1 in progress) |
 | **Current milestone** | M1 — Database & API |
-| **Next task(s) to pick** | T1.3 Guest RPCs + Realtime |
+| **Next task(s) to pick** | T1.5 Typed client layer |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (T1.2 done, starting T1.3) |
+| **Last updated** | 2026-10-12 by Antigravity (T1.4 done, starting T1.5) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
-| A — DB & API | Antigravity | T1.3 Guest RPCs | main | in progress |
+| A — DB & API | Antigravity | T1.5 Typed client layer | main | in progress |
 | B — Guest UI | — | — | — | waiting on M1 |
 | C — Staff UI | — | — | — | waiting on M1 |
 
@@ -130,6 +130,36 @@ Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) SQL tests ✅ (01_rls_anon, 0
 Commits / branch / PR: branch `main`
 Problems / surprises: None.
 Next: T1.3 Guest RPCs + Realtime (M1 Lane A).
+
+### 2026-10-12 05:04 — Antigravity — T1.3 Guest RPCs + Realtime
+Did:
+- Created migration `supabase/migrations/20261012000003_rpc.sql` with internal helpers (`_table_ctx`, `_ensure_session`, `_check_rate`, `price_cart`, `_create_request`, `_session_json`), 7 customer RPCs (`get_table_context`, `get_session_status`, `call_waiter`, `place_order`, `request_bill`, `get_bill`, `submit_feedback`), blanket function execution revoke, and precise grants. Applied via MCP `apply_migration`.
+- Created migration `supabase/migrations/20261012000004_realtime.sql` enabling Realtime publication on `service_requests` and `table_sessions`. Applied via MCP `apply_migration`.
+- Regenerated 26 KB TypeScript database types via MCP `generate_typescript_types` into `src/types/database.ts`.
+- Created and executed SQL test suites `02_rpc_grants.sql` through `07_feedback.sql` covering:
+  • `02_rpc_grants.sql` (internal helpers blocked for anon, 7 RPCs callable).
+  • `03_call_waiter.sql` (creates session, first call creates request, duplicate call updates nudge_count).
+  • `04_place_order.sql` (price tampering ignored, sold-out error, required option error, unknown choice error, package 2 restriction).
+  • `05_bill.sql` (excludes cancelled orders, VAT 5% rounding: 250 -> 13 -> 263).
+  • `06_rate_limit.sql` (16th request in 10m raises RATE_LIMITED).
+  • `07_feedback.sql` (validates rating range 1-5, upserts on duplicate session submission).
+  All SQL test suites passed with 0 errors via MCP `execute_sql`.
+- Verified advisors via MCP `get_advisors`.
+Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) SQL tests ✅ (02 through 07 passed)
+Commits / branch / PR: branch `main`
+Problems / surprises: None.
+Next: T1.4 Seed + staff accounts (M1 Lane A).
+
+### 2026-10-12 05:08 — Antigravity — T1.4 Seed + staff accounts
+Did:
+- Populated `supabase/seed.sql` with Brew Bari restaurant record, 7 categories, 28 menu items (with full options, Bengali translations, prep times, and Baked Cheesecake marked sold out), 3 live offers, tables 1-8, and test table 99. Executed via MCP `execute_sql`.
+- Created authenticated staff Auth users (`admin@brewbari.com` and `counter@brewbari.com`), configured `auth.identities` records and empty-token constraints, and linked to `public.staff` with roles `admin` and `counter`.
+- Verified credentials with Supabase client (`signInWithPassword` returned SUCCESS for both staff users). Stored credentials safely in `.env.local` (`TEST_STAFF_ADMIN_EMAIL`, etc.).
+- Verified Acceptance Criteria: anon `select` on `menu_items` returns 28 items; `get_table_context` on table 1 returns an active session with table details and package 3.
+Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) Auth login ✅ (admin + counter)
+Commits / branch / PR: branch `main`
+Problems / surprises: Fixed GoTrue schema scan requirement for empty-string token columns in `auth.users`.
+Next: T1.5 Typed client layer (M1 Lane A).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

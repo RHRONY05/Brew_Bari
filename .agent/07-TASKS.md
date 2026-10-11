@@ -42,11 +42,11 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
 
 ## M1 — Database & API (Lane A)
 
-- [ ] **T1.1 Schema migration** · Depends on: T0.2
+- [x] **T1.1 Schema migration** · Depends on: T0.2 (Applied init_schema migration via MCP, generated src/types/database.ts, schema advisors clean)
   - Migration `init_schema` = 03-DATABASE.md §1. Apply via MCP. Generate types → `src/types/database.ts`.
   - **AC:** advisors show no errors for schema.
 
-- [ ] **T1.2 RLS + storage policies** · Depends on: T1.1
+- [x] **T1.2 RLS + storage policies** · Depends on: T1.1 (Applied 20261012000002_rls.sql, menu-images bucket created, 01_rls_anon.sql & 08_staff_rls.sql passing)
   - Migration `rls` = §2 (+ storage bucket & policies). Run advisors; fix warnings.
   - **Tests:** `supabase/tests/01_rls_anon.sql`, `08_staff_rls.sql`.
 

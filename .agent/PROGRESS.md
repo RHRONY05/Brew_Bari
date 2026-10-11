@@ -8,17 +8,17 @@
 ## Now
 | | |
 |---|---|
-| **Phase** | Phase 1 — Foundation (M0 complete, starting M1) |
+| **Phase** | Phase 1 — Foundation (M1 in progress) |
 | **Current milestone** | M1 — Database & API |
-| **Next task(s) to pick** | T1.1 Schema migration |
+| **Next task(s) to pick** | T1.3 Guest RPCs + Realtime |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (M0 complete, starting T1.1) |
+| **Last updated** | 2026-10-12 by Antigravity (T1.2 done, starting T1.3) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
-| A — DB & API | Antigravity | T1.1 Schema migration | main | in progress |
+| A — DB & API | Antigravity | T1.3 Guest RPCs | main | in progress |
 | B — Guest UI | — | — | — | waiting on M1 |
 | C — Staff UI | — | — | — | waiting on M1 |
 
@@ -108,6 +108,28 @@ Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) e2e ✅ (3 passed)
 Commits / branch / PR: branch `main`
 Problems / surprises: Fixed React 19 lazy state initializer pattern for locale and `.tsx` JSX extension requirement.
 Next: T1.1 Schema migration (M1 Lane A).
+
+### 2026-10-12 04:46 — Antigravity — T1.1 Schema migration
+Did:
+- Created migration `supabase/migrations/20261012000001_init_schema.sql` covering all 10 tables, custom enums (`staff_role`, `session_status`, `request_type`, `request_status`), indexes, foreign keys with CASCADE, and `updated_at`/status triggers.
+- Applied migration to project `vaxjsaknytquzcfxsukv` via MCP `apply_migration`.
+- Generated 23 KB of complete TypeScript database types via MCP `generate_typescript_types` into `src/types/database.ts`.
+- Verified security advisors via MCP `get_advisors` (all schema syntax and constraints clean; RLS notifications flagged as expected for T1.2).
+Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) e2e ✅ (3 passed)
+Commits / branch / PR: branch `main`
+Problems / surprises: None.
+Next: T1.2 RLS + storage policies (M1 Lane A).
+
+### 2026-10-12 04:55 — Antigravity — T1.2 RLS + storage policies
+Did:
+- Created migration `supabase/migrations/20261012000002_rls.sql` enabling RLS on all 10 tables, defining security definer helper functions (`is_staff`, `is_admin`, `my_restaurant_id`), public read policies, admin write policies, staff access policies, and `menu-images` storage bucket with folder-scoped admin write policies.
+- Applied migration via MCP `apply_migration`.
+- Created SQL test suites `supabase/tests/01_rls_anon.sql` (verifying anon isolation and write protection) and `supabase/tests/08_staff_rls.sql` (verifying counter vs admin staff role permissions).
+- Executed both test suites via MCP `execute_sql` in `begin ... rollback` blocks — all assertions passed with 0 errors.
+Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) SQL tests ✅ (01_rls_anon, 08_staff_rls)
+Commits / branch / PR: branch `main`
+Problems / surprises: None.
+Next: T1.3 Guest RPCs + Realtime (M1 Lane A).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

@@ -37,6 +37,7 @@ A customer scans a QR code → a mobile web page (no app, no login) shows the ca
 ## Current status
 - [x] Product & technical planning (this folder)
 - [x] UI mockups (Claude Design) — https://claude.ai/artifact/QdYT3Ufcx86yhnXdGr41JM (linked in 05-UI-DESIGN.md)
+- [x] Supabase project created: ref `vaxjsaknytquzcfxsukv` (region `ap-southeast-1`, `brew-bari-demo`)
 - [ ] Implementation — see 07-TASKS.md and live status in PROGRESS.md
 
 ## Open questions for the humans (do not block on these; use the defaults)

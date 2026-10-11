@@ -8,25 +8,25 @@
 ## Now
 | | |
 |---|---|
-| **Phase** | M0 — Setup |
-| **Current milestone** | M0 — Setup |
-| **Next task(s) to pick** | T0.1 Scaffold the app |
+| **Phase** | Phase 1 — Foundation (M0 complete, starting M1) |
+| **Current milestone** | M1 — Database & API |
+| **Next task(s) to pick** | T1.1 Schema migration |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity |
+| **Last updated** | 2026-10-12 by Antigravity (M0 complete, starting T1.1) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
-| Setup (M0) | Antigravity | T0.1 Scaffold the app | main | ready to build |
-| A — DB & API | — | — | — | waiting on M0 |
-| B — Guest UI | — | — | — | waiting on M0 |
-| C — Staff UI | — | — | — | waiting on M0 |
+| Setup (M0) | Antigravity | — | main | complete ✅ |
+| A — DB & API | Antigravity | T1.1 Schema migration | main | in progress |
+| B — Guest UI | — | — | — | waiting on M1 |
+| C — Staff UI | — | — | — | waiting on M1 |
 
 ## Environment facts (no secrets here!)
 | Item | Value |
 |---|---|
 | GitHub repo | https://github.com/RHRONY05/Brew_Bari.git |
-| Supabase project ref / region | _(set in T0.2)_ |
+| Supabase project ref / region | vaxjsaknytquzcfxsukv / ap-southeast-1 |
 | Vercel URL | _(set in T7.4)_ |
 | Staff test accounts | stored in `.env.local` only — names of the env vars: `TEST_STAFF_ADMIN_EMAIL`, … |
 | Node / package manager | Node v20.19.2, npm 10.8.2 |
@@ -70,7 +70,44 @@ Did: Ran environment & toolchain preflight checks:
 Tests: typecheck ⏭ lint ⏭ unit ⏭ e2e ⏭ (preflight verification only)
 Commits / branch / PR: branch `main` (no commits yet)
 Problems / surprises: None blocking. All existing Supabase projects are paused/inactive.
-Next: Stop and wait for human confirmation before scaffolding in T0.1.
+Next: Pick up T0.2 Supabase project and T0.3 Design system foundation.
+
+### 2026-10-12 04:33 — Antigravity — T0.1 Scaffold the app
+Did:
+- Scaffolded Next.js 16 with Turbopack, React 19, TypeScript strict, Tailwind CSS v4, shadcn/ui.
+- Installed all dependencies from 02-ARCHITECTURE.md: `@supabase/supabase-js`, `@supabase/ssr`, `zod`, `lucide-react`, `qrcode`, `embla-carousel-react`, `sonner`, `vaul`, `clsx`, `tailwind-merge`, `class-variance-authority`.
+- Configured Vitest + Testing Library + jsdom and Playwright (`guest` Pixel 7, `staff` Desktop 1280x800, `staff-phone`). Downloaded Playwright Chromium browser.
+- Created complete folder skeleton matching 02-ARCHITECTURE.md: route placeholders for `/m/[slug]`, `/t/[token]`, `/staff/*`, Supabase client/server/middleware utilities, `middleware.ts`, design tokens in `globals.css`, and root `README.md`.
+- Created initial commit `103b956` and pushed `main` to `https://github.com/RHRONY05/Brew_Bari.git`.
+Tests: typecheck ✅ lint ✅ unit ✅ (1 passed) e2e ✅ (3 passed: guest, staff, staff-phone)
+Commits / branch / PR: `103b956` on branch `main` pushed to remote origin.
+Problems / surprises: Next.js 16 PPR required wrapping dynamic route params in `<Suspense>`. Fixed and confirmed production build passes cleanly.
+Next: T0.2 Supabase project creation via Supabase MCP.
+
+### 2026-10-12 04:36 — Antigravity — T0.2 Supabase project
+Did:
+- Confirmed zero cost with `get_cost` and confirmed understanding with `confirm_cost` on free tier.
+- Created Supabase project `brew-bari-demo` (ref `vaxjsaknytquzcfxsukv`) in region `ap-southeast-1` under `RHRONY05's Org`.
+- Retrieved project URL (`https://vaxjsaknytquzcfxsukv.supabase.co`) and anon publishable key via MCP tools.
+- Created `.env.local` with Supabase URL & anon key, verified git-ignored.
+- Recorded project ref in `.agent/agent.md` and `PROGRESS.md`.
+- Verified client initialization in Node environment.
+Tests: typecheck ✅ lint ✅ unit ✅ e2e ⏭ (MCP project creation)
+Commits / branch / PR: branch `main`
+Problems / surprises: None. Project provisioned with status `ACTIVE_HEALTHY` in ap-southeast-1.
+Next: T0.3 Design system foundation (Lane B).
+
+### 2026-10-12 04:42 — Antigravity — T0.3 Design system foundation
+Did:
+- Configured tokens in `globals.css` (cream background `--bg`, surface, line, ink, brand, accent, status soft backgrounds) and mapped to Tailwind v4 `@theme`. Added `:lang(bn)` typography rule.
+- Created UI variants in `src/components/ui/`: `Button` (primary/secondary/brand/bar), `Chip` (40px category pill), `Badge` (bestseller/new/seasonal/soldout), `PrepPill` (22px estimated time pill), `StatusPill` (icon + colored badge per state), `QtyStepper` (40px stepper), `BottomSheet` (vaul Drawer + desktop modal dialog), and `ItemCardSkeleton`.
+- Created temporary `/dev/ui` page demonstrating all components and states.
+- Implemented `src/lib/money.ts` (`formatTaka` with English and Bengali numerals), `src/lib/features.ts` (`features(1|2|3)`), and `src/lib/i18n/*` (full English and Bengali dictionaries, typed `TranslationDictionary`, `useT` hook, and `pick` row helper).
+- Added unit tests in `tests/unit/` for `features`, `money`, and `i18n` — all 14 tests passing.
+Tests: typecheck ✅ lint ✅ unit ✅ (14 passed) e2e ✅ (3 passed)
+Commits / branch / PR: branch `main`
+Problems / surprises: Fixed React 19 lazy state initializer pattern for locale and `.tsx` JSX extension requirement.
+Next: T1.1 Schema migration (M1 Lane A).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

@@ -21,19 +21,19 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
   - Ask the human for anything missing (GitHub repo URL, Supabase org, permissions). **Do not continue until answered.**
   - **AC:** a "Preflight" entry in PROGRESS.md listing each check ✅/❌.
 
-- [ ] **T0.1 Scaffold the app** · Lane — · Depends on: —
+- [x] **T0.1 Scaffold the app** · Lane — · Depends on: — (Scaffolded Next.js 16, React 19, Tailwind v4, shadcn, Vitest, Playwright, pushed to main)
   - `create-next-app` (TypeScript, App Router, Tailwind, ESLint, `src/`, import alias `@/*`), add shadcn/ui, and every dependency listed in 02-ARCHITECTURE.md. Folder skeleton from 02-ARCHITECTURE.md (empty files with TODO-free placeholders are fine).
   - Vitest (+ jsdom, Testing Library) and Playwright (projects `guest` Pixel 7, `staff` Desktop 1280×800) configured; scripts from 06-TESTING.md.
   - `.env.example`, `.gitignore` (incl. `.env*.local`, `playwright-report`, `test-results`), root `README.md` (what it is, how to run, link to `.agent/agent.md`).
   - `git init`, first commit. Push to the GitHub remote if the human has provided one.
   - **AC:** `npm run build`, `lint`, `typecheck`, `test` pass; one trivial Playwright test loads `/`.
 
-- [ ] **T0.2 Supabase project** · Lane A · Depends on: —
+- [x] **T0.2 Supabase project** · Lane A · Depends on: — (Created brew-bari-demo in RHRONY05's Org, ref vaxjsaknytquzcfxsukv, URL & anon key saved to .env.local)
   - Via Supabase MCP: list projects; create a **free-tier** project named `brew-bari-demo` in the region closest to Bangladesh (e.g. Singapore `ap-southeast-1`) — ask the human before anything with a cost.
   - Put URL + anon key into `.env.local` (not committed). Record project ref (not keys) in `.agent/agent.md` → "Current status".
   - **AC:** `get_project_url` works; app can create a client with env vars.
 
-- [ ] **T0.3 Design system foundation** · Lane B · Depends on: T0.1
+- [x] **T0.3 Design system foundation** · Lane B · Depends on: T0.1 (Tokens, Button, Chip, Badge, BottomSheet, QtyStepper, StatusPill, PrepPill, /dev/ui page, unit tests pass)
   - Tokens from 05-UI-DESIGN.md as CSS variables + Tailwind theme + shadcn theme; fonts (Plus Jakarta Sans, Hind Siliguri) with `:lang(bn)` rule.
   - Variants: Button (primary/secondary/brand), Chip, Badge set, BottomSheet (shadcn Drawer), QtyStepper, StatusPill, ItemCard skeleton.
   - A temporary `/dev/ui` page showing all components (delete in T7.4).

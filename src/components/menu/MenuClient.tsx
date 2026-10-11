@@ -31,6 +31,9 @@ interface MenuClientProps {
     sessionId?: string | null;
   } | null;
   packageOverride?: number;
+  activeStatusText?: string | null;
+  onCallWaiter?: () => void;
+  onOpenStatus?: () => void;
 }
 
 export function MenuClient({
@@ -38,7 +41,11 @@ export function MenuClient({
   initialLocale = 'en',
   tableContext = null,
   packageOverride,
+  activeStatusText = null,
+  onCallWaiter,
+  onOpenStatus,
 }: MenuClientProps) {
+
   const [locale, setLocale] = useState<'en' | 'bn'>(initialLocale);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeCategoryId, setActiveCategoryId] = useState<string>('quick');
@@ -411,12 +418,18 @@ export function MenuClient({
         locale={locale}
         cartCount={cartCount}
         cartSubtotal={cartSubtotal}
+        activeStatusText={activeStatusText}
         onCallWaiter={() => {
-          // If on a table, triggers waiter call; or opens cart
-          setIsCartOpen(true);
+          if (onCallWaiter) {
+            onCallWaiter();
+          } else {
+            setIsCartOpen(true);
+          }
         }}
         onOpenCart={() => setIsCartOpen(true)}
+        onOpenStatus={onOpenStatus}
       />
     </div>
   );
 }
+

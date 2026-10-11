@@ -84,14 +84,15 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
 
 ## M3 — Table service, P2 (Lane B)
 
-- [ ] **T3.1 Table entry + TableProvider** · Depends on: T2.2, T1.5 · Stories: US-10
+- [x] **T3.1 Table entry + TableProvider** · Depends on: T2.2, T1.5 · Stories: US-10 (Implemented /t/[token] with get_table_context RPC, G8 invalid-token page, TableProvider with polling and visibility detection, Table N chip)
   - `/t/[token]`: server calls `get_table_context`; invalid → not-found page (G8); P1 → plain menu. `TableProvider` (client): session id storage, change detection, polling rules from 04-API.md, "Table N" chip.
-- [ ] **T3.2 Cart** · Depends on: T2.3, T3.1 · Stories: US-11
+- [x] **T3.2 Cart** · Depends on: T2.3, T3.1 · Stories: US-11 (Cart store with session-keyed localStorage persistence, CartSheet drawer matching Cart.dc.html, item sheet add, action bar integration, 6 unit tests passing)
   - Cart context (reducer + localStorage keyed by session), "+" on cards, Add in item sheet, ActionBar, CartSheet (G3).
   - **Tests:** `cart` unit tests.
-- [ ] **T3.3 Call waiter + status sheet** · Depends on: T3.2 · Stories: US-12
+- [x] **T3.3 Call waiter + status sheet** · Depends on: T3.2 · Stories: US-12 (Call waiter RPC with device ID, nudge count detection, TableStatusSheet matching Status.dc.html, e2e p2-call-waiter spec passing)
   - Call waiter (with or without cart), duplicate/nudge handling, G4 status sheet for calls, error handling via `errors.ts`, button debouncing.
   - **Tests:** e2e `p2-call-waiter.spec.ts` (guest half; full after T4.2).
+
 
 ## M4 — Counter board (Lane C)
 

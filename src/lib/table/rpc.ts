@@ -192,3 +192,14 @@ export async function submitFeedback(
 
   return { data: data as unknown as { ok: boolean }, error: null };
 }
+
+export {
+  getTableContext as getTableContextRpc,
+  callWaiter as callWaiterRpc,
+  getSessionStatus as getSessionStatusRpc,
+  placeOrder as placeOrderRpc,
+  requestBill as requestBillRpc,
+  getBill as getBillRpc,
+  submitFeedback as submitFeedbackRpc,
+};
+

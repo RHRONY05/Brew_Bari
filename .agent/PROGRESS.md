@@ -9,18 +9,19 @@
 | | |
 |---|---|
 | **Phase** | Phase 2 — Parallel lanes |
-| **Current milestone** | M3 (Table service, P2) & M4 (Counter board) |
-| **Next task(s) to pick** | T3.1 Table entry + TableProvider (Lane B), T4.1 Counter shell + live feed (Lane C) |
+| **Current milestone** | M5 (Ordering, Bill & Review, P3) & M4 (Counter board) |
+| **Next task(s) to pick** | T5.1 Place order + order status (Lane B), T4.1 Counter shell + live feed (Lane C) |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (M2 complete on lane/b) |
+| **Last updated** | 2026-10-12 by Antigravity (M3 complete on lane/b) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | — | main | complete ✅ |
 | A — DB & API | Antigravity | T1.5 Typed client layer | main | complete ✅ |
-| B — Guest UI | Antigravity | M2 complete ✅, starting T3.1 Table entry | lane/b | in progress |
+| B — Guest UI | Antigravity | M2 & M3 complete ✅, starting M5 | lane/b | in progress |
 | C — Staff UI | Antigravity | T4.1 Counter shell + live feed | lane/c | ready / starting |
+
 
 
 
@@ -186,13 +187,20 @@ Did:
 - Added comprehensive unit and component tests: `menu-sort.test.ts`, `options.test.ts`, `cart.test.ts`, `item-card.test.tsx`, `language-toggle.test.tsx`, `item-sheet.test.tsx`, `action-bar.test.tsx` (69 unit tests all passing).
 - Added e2e specs: `p1-menu.spec.ts` (testing search, item detail, sold-out cheesecake ordering, quick section, Bengali language toggle and reload persistence on Pixel 7) and `responsive.spec.ts` (testing 768px tablet and 1440px desktop no horizontal overflow). All e2e specs passing.
 Tests: typecheck ✅ lint ✅ unit ✅ (69 passed) e2e ✅ (p1-menu guest Pixel 7, responsive staff desktop & tablet)
+### 2026-10-12 05:35 — Antigravity — M3 Table service, P2 (T3.1–T3.3, Lane B)
+Did:
+- T3.1: Implemented `/t/[token]/page.tsx` table entry calling `getTableContextRpc`, handled G8 invalid QR code page with warm message and menu fallback link, built `TableProvider.tsx` with dynamic polling (5s active, 30s idle, visibilitychange pauses/resumes), session change detection, and table header chip.
+- T3.2: Integrated cart into table service flow, connected `ItemCard` +, `ItemDetailSheet` Add, `CartSheet.tsx`, and `ActionBar.tsx`. Verified unit tests in `cart.test.ts`.
+- T3.3: Built `callWaiter` with device ID generation and duplicate/nudge count tracking (`Called again xN`), built `TableStatusSheet.tsx` matching `Status.dc.html` with order progress stepper (Received -> Preparing -> Ready -> Served) and waiter call statuses. Added e2e spec `p2-call-waiter.spec.ts` (guest half passing on Pixel 7).
+Tests: typecheck ✅ lint ✅ unit ✅ (69 passed) e2e ✅ (p2-call-waiter guest Pixel 7: 2/2 passed)
 Commits / branch / PR: branch `lane/b`
-Problems / surprises: Turbopack requires actual `node_modules` instead of symlink junction on Windows; ran `npm install` in `coffe-lane-b` cleanly.
-Next: M3 Table service, P2 (Tasks T3.1–T3.3 on Lane B).
+Problems / surprises: Added WebSocket polyfill in test helper for Node 20 Playwright run.
+Next: M5 Premium, P3 (Tasks T5.1–T5.3 on Lane B).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | — | | | |
+
 
 

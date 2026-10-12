@@ -381,6 +381,25 @@ export default function CounterBoardPage() {
       .update({ status: nextStatus })
       .eq('id', request.id);
 
+    // Broadcast instant update to guest table channel
+    try {
+      const channel = supabase.channel(`table-${request.table_id}`);
+      channel.subscribe((status) => {
+        if (status === 'SUBSCRIBED') {
+          channel.send({
+            type: 'broadcast',
+            event: 'status_changed',
+            payload: { requestId: request.id, status: nextStatus },
+          });
+          setTimeout(() => {
+            supabase.removeChannel(channel);
+          }, 500);
+        }
+      });
+    } catch {
+      // Non-critical broadcast failure
+    }
+
     // Refresh state
     await fetchData();
   };

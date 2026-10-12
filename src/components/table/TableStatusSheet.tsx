@@ -84,11 +84,38 @@ export function TableStatusSheet({
                   key={order.id}
                   className="p-4 rounded-2xl bg-white border border-[#F0DFCB] shadow-xs flex flex-col gap-3"
                 >
-                  <div className="flex justify-between items-center">
-                    <span className="font-extrabold text-[15.5px] text-[#24170F]">
-                      {locale === 'bn' ? `অর্ডার #${orderNum}` : `Order #${orderNum}`}
-                    </span>
-                    <span className="text-[12.5px] font-bold text-[#8C7767] tabular-nums">
+                  <div className="flex justify-between items-center gap-2">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="font-extrabold text-[15.5px] text-[#24170F]">
+                        {locale === 'bn' ? `অর্ডার #${orderNum}` : `Order #${orderNum}`}
+                      </span>
+                      {order.status === 'new' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FBE3E0] text-[#9A2F25]">
+                          {locale === 'bn' ? 'অপেক্ষমাণ' : 'Received'}
+                        </span>
+                      )}
+                      {order.status === 'acknowledged' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FDEBD2] text-[#8A4D06]">
+                          {locale === 'bn' ? 'গৃহীত · সারিবদ্ধ' : 'Accepted · In queue'}
+                        </span>
+                      )}
+                      {order.status === 'preparing' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FBEBD7] text-[#8A5A37] animate-pulse">
+                          {locale === 'bn' ? 'তৈরি হচ্ছে ☕' : 'Preparing ☕'}
+                        </span>
+                      )}
+                      {order.status === 'ready' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#E7F3EC] text-[#1F5C3F]">
+                          {locale === 'bn' ? 'প্রস্তুত 🎉' : 'Ready 🎉'}
+                        </span>
+                      )}
+                      {order.status === 'done' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#E7F3EC] text-[#1F5C3F]">
+                          {locale === 'bn' ? 'পরিবেশিত ✅' : 'Served ✅'}
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[12.5px] font-bold text-[#8C7767] tabular-nums shrink-0">
                       {order.subtotal ? formatTaka(order.subtotal, locale) : ''}
                     </span>
                   </div>
@@ -98,7 +125,12 @@ export function TableStatusSheet({
                     {[1, 2, 3, 4].map((step) => {
                       const isComplete = currentStep > step;
                       const isCurrent = currentStep === step;
-                      const label = labels[step - 1];
+                      const label =
+                        step === 1 && order.status === 'acknowledged'
+                          ? locale === 'bn'
+                            ? 'গৃহীত'
+                            : 'Accepted'
+                          : labels[step - 1];
 
                       return (
                         <React.Fragment key={step}>

@@ -5,6 +5,8 @@ import { toast } from 'sonner';
 import { callWaiterRpc, getSessionStatusRpc, placeOrderRpc } from '@/lib/table/rpc';
 import { getDeviceId } from '@/lib/device-id';
 import { getErrorMessage } from '@/lib/errors';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { playChime } from '@/lib/audio';
 import type { TableContextResult, SessionRequestJson, SessionStatus } from '@/lib/schemas';
 import type { CartLineType } from '@/lib/schemas';
 
@@ -143,6 +145,11 @@ export function TableProvider({
         }
 
         if (res.data) {
+          if (res.data.session) {
+            setSession({ id: res.data.session.id, status: res.data.session.status });
+            setRequests(res.data.session.requests);
+            sessionIdRef.current = res.data.session.id;
+          }
           if (res.data.duplicate) {
             setNudgeCount((n) => n + 1);
             toast.info(
@@ -155,7 +162,6 @@ export function TableProvider({
               locale === 'bn' ? 'ওয়েটার ডাকা হয়েছে!' : 'Waiter called!'
             );
           }
-          await refreshStatus();
           return true;
         }
         return false;
@@ -166,7 +172,7 @@ export function TableProvider({
         setIsCallingWaiter(false);
       }
     },
-    [token, locale, nudgeCount, refreshStatus]
+    [token, locale, nudgeCount]
   );
 
   // Place order handler
@@ -194,10 +200,14 @@ export function TableProvider({
         }
 
         if (res.data) {
+          if (res.data.session) {
+            setSession({ id: res.data.session.id, status: res.data.session.status });
+            setRequests(res.data.session.requests);
+            sessionIdRef.current = res.data.session.id;
+          }
           toast.success(
             locale === 'bn' ? 'অর্ডার সফলভাবে গ্রহণ করা হয়েছে!' : 'Order placed successfully!'
           );
-          await refreshStatus();
           return { success: true };
         }
 
@@ -209,10 +219,64 @@ export function TableProvider({
         setIsPlacingOrder(false);
       }
     },
-    [token, locale, refreshStatus]
+    [token, locale]
   );
 
-  // Polling logic per 04-API.md
+  // Watch for status changes to notify customer with toast & chime
+  const prevStatusesRef = useRef<Record<string, string>>({});
+  const initialLoadRef = useRef(true);
+
+  useEffect(() => {
+    if (initialLoadRef.current) {
+      requests.forEach((r) => {
+        prevStatusesRef.current[r.id] = r.status;
+      });
+      if (requests.length > 0) {
+        initialLoadRef.current = false;
+      }
+      return;
+    }
+
+    requests.forEach((r) => {
+      const prev = prevStatusesRef.current[r.id];
+      if (prev && prev !== r.status) {
+        if (r.type === 'order') {
+          if (r.status === 'acknowledged') {
+            toast.info(locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে!' : 'Order accepted by staff!');
+            playChime();
+          } else if (r.status === 'preparing') {
+            toast.info(locale === 'bn' ? 'আপনার অর্ডার তৈরি হচ্ছে! ☕' : 'Your order is being prepared! ☕');
+            playChime();
+          } else if (r.status === 'ready') {
+            toast.success(locale === 'bn' ? 'আপনার অর্ডার প্রস্তুত! 🎉' : 'Your order is ready! 🎉');
+            playChime();
+          } else if (r.status === 'done') {
+            toast.success(locale === 'bn' ? 'অর্ডার পরিবেশন করা হয়েছে! ✨' : 'Order served! Enjoy your brew! ✨');
+            playChime();
+          }
+        }
+      }
+      prevStatusesRef.current[r.id] = r.status;
+    });
+  }, [requests, locale]);
+
+  // Realtime channel subscription for instant status update broadcasts
+  useEffect(() => {
+    if (!table?.id) return;
+    const supabase = getSupabaseBrowserClient();
+    const channel = supabase.channel(`table-${table.id}`);
+    channel
+      .on('broadcast', { event: 'status_changed' }, () => {
+        refreshStatus();
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [table?.id, refreshStatus]);
+
+  // Polling logic per 04-API.md: 2s while active requests exist, 10s otherwise
   useEffect(() => {
     let timer: NodeJS.Timeout | null = null;
 
@@ -220,7 +284,7 @@ export function TableProvider({
       ['new', 'acknowledged', 'preparing', 'ready'].includes(r.status)
     );
 
-    const interval = hasActiveRequests ? 3000 : 15000;
+    const interval = hasActiveRequests ? 2000 : 10000;
 
     const poll = async () => {
       if (typeof document !== 'undefined' && document.hidden) return;

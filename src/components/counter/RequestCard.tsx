@@ -84,6 +84,9 @@ export function RequestCard({
     if (request.status === 'new') {
       typeTitle = `New order ${num}`;
       flag = { text: 'NEW', style: 'bg-[#FBE3E0] text-[#9A2F25]' };
+    } else if (request.status === 'acknowledged') {
+      typeTitle = `Order ${num} · Accepted`;
+      flag = { text: 'Accepted', style: 'bg-[#FDEBD2] text-[#8A4D06]' };
     } else if (request.status === 'preparing') {
       typeTitle = `Order ${num} · Preparing`;
       flag = { text: 'Preparing', style: 'bg-[#FBEBD7] text-[#8A5A37]' };
@@ -202,7 +205,7 @@ export function RequestCard({
               onClick={() => onTransition(request, 'preparing')}
               className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
             >
-              Preparing
+              Start preparing
             </button>
             <button
               type="button"

@@ -91,12 +91,12 @@ export function TableStatusSheet({
                       </span>
                       {order.status === 'new' && (
                         <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-danger-soft text-danger">
-                          {locale === 'bn' ? 'অপেক্ষমাণ' : 'Received'}
+                          {locale === 'bn' ? 'জমা দেওয়া হয়েছে (অপেক্ষমাণ)' : 'Submitted · Pending'}
                         </span>
                       )}
                       {order.status === 'acknowledged' && (
                         <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-warning-soft text-warning">
-                          {locale === 'bn' ? 'গৃহীত · সারিবদ্ধ' : 'Accepted · In queue'}
+                          {locale === 'bn' ? 'অনুমোদিত · সারিবদ্ধ' : 'Approved · In queue'}
                         </span>
                       )}
                       {order.status === 'preparing' && (
@@ -143,8 +143,8 @@ export function TableStatusSheet({
                         const label =
                           step === 1 && order.status === 'acknowledged'
                             ? locale === 'bn'
-                              ? 'গৃহীত'
-                              : 'Accepted'
+                              ? 'অনুমোদিত'
+                              : 'Approved'
                             : labels[step - 1];
 
                         return (

@@ -82,6 +82,12 @@ describe('requests utility and state machine', () => {
     });
 
     it('returns standard status labels in en and bn', () => {
+      expect(getGuestStatusLabel('order', 'new', 'en')).toBe('Submitted');
+      expect(getGuestStatusLabel('order', 'new', 'bn')).toBe('জমা দেওয়া হয়েছে');
+
+      expect(getGuestStatusLabel('order', 'acknowledged', 'en')).toBe('Approved');
+      expect(getGuestStatusLabel('order', 'acknowledged', 'bn')).toBe('অনুমোদিত');
+
       expect(getGuestStatusLabel('order', 'preparing', 'en')).toBe('Preparing');
       expect(getGuestStatusLabel('order', 'preparing', 'bn')).toBe('তৈরি হচ্ছে');
 

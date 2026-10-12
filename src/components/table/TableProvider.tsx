@@ -74,10 +74,10 @@ export function TableProvider({
     const latestOrder = requests.find((r) => r.type === 'order');
     if (latestOrder && latestOrder.status !== 'cancelled') {
       if (latestOrder.status === 'new') {
-        return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order received';
+        return locale === 'bn' ? 'অর্ডার জমা দেওয়া হয়েছে' : 'Order submitted';
       }
       if (latestOrder.status === 'acknowledged') {
-        return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order accepted';
+        return locale === 'bn' ? 'অর্ডার অনুমোদিত হয়েছে' : 'Order approved';
       }
       if (latestOrder.status === 'preparing') {
         return locale === 'bn' ? 'অর্ডার তৈরি হচ্ছে' : 'Order preparing';
@@ -204,7 +204,9 @@ export function TableProvider({
             sessionIdRef.current = res.data.session.id;
           }
           toast.success(
-            locale === 'bn' ? 'অর্ডার সফলভাবে গ্রহণ করা হয়েছে!' : 'Order placed successfully!'
+            locale === 'bn'
+              ? 'অর্ডার সফলভাবে জমা দেওয়া হয়েছে! অনুমোদনের অপেক্ষায়...'
+              : 'Order submitted! Awaiting staff confirmation...'
           );
           return { success: true };
         }
@@ -240,7 +242,11 @@ export function TableProvider({
       if (prev && prev !== r.status) {
         if (r.type === 'order') {
           if (r.status === 'acknowledged') {
-            toast.info(locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে!' : 'Order accepted by staff!');
+            toast.success(
+              locale === 'bn'
+                ? 'আপনার অর্ডার অনুমোদিত হয়েছে! ☕'
+                : 'Order approved & accepted by staff! ☕'
+            );
             playChime();
           } else if (r.status === 'preparing') {
             toast.info(locale === 'bn' ? 'আপনার অর্ডার তৈরি হচ্ছে! ☕' : 'Your order is being prepared! ☕');

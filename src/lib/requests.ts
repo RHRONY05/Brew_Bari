@@ -78,8 +78,8 @@ export function getGuestStatusLabel(
   }
 
   const labels: Record<RequestStatus, { en: string; bn: string }> = {
-    new: { en: 'Received', bn: 'গ্রহণ করা হয়েছে' },
-    acknowledged: { en: 'Confirmed', bn: 'নিশ্চিত' },
+    new: { en: 'Submitted', bn: 'জমা দেওয়া হয়েছে' },
+    acknowledged: { en: 'Approved', bn: 'অনুমোদিত' },
     preparing: { en: 'Preparing', bn: 'তৈরি হচ্ছে' },
     ready: { en: 'Ready', bn: 'রেডি' },
     done: { en: 'Served', bn: 'পরিবেশিত' },

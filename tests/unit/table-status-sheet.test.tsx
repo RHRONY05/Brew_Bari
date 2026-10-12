@@ -105,4 +105,51 @@ describe('TableStatusSheet Component', () => {
     expect(screen.getByText('Waiter call cancelled')).toBeDefined();
     expect(screen.getByText('Staff cancelled this request')).toBeDefined();
   });
+
+  it('renders submitted and approved badges for new and acknowledged orders', () => {
+    const requests: SessionRequestJson[] = [
+      {
+        id: 'req-new',
+        type: 'order',
+        status: 'new',
+        subtotal: 200,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+      {
+        id: 'req-ack',
+        type: 'order',
+        status: 'acknowledged',
+        subtotal: 300,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ];
+
+    const { rerender } = render(
+      <TableStatusSheet
+        tableNumber={3}
+        requests={requests}
+        isOpen={true}
+        locale="en"
+        onClose={() => {}}
+      />
+    );
+
+    expect(screen.getByText('Submitted · Pending')).toBeDefined();
+    expect(screen.getByText('Approved · In queue')).toBeDefined();
+
+    rerender(
+      <TableStatusSheet
+        tableNumber={3}
+        requests={requests}
+        isOpen={true}
+        locale="bn"
+        onClose={() => {}}
+      />
+    );
+
+    expect(screen.getByText('জমা দেওয়া হয়েছে (অপেক্ষমাণ)')).toBeDefined();
+    expect(screen.getByText('অনুমোদিত · সারিবদ্ধ')).toBeDefined();
+  });
 });

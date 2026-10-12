@@ -291,6 +291,7 @@ export function MenuClient({
           <div className="pb-3">
             <OfferCarousel
               offers={menu.offers}
+              items={menu.items}
               locale={locale}
               onSelectOffer={handleOfferSelect}
             />

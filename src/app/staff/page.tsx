@@ -1,25 +1,38 @@
-import { redirect } from 'next/navigation';
-import { createSupabaseServerClient } from '@/lib/supabase/server';
+'use client';
 
-export default async function StaffRootPage() {
-  const supabase = await createSupabaseServerClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { getSupabaseBrowserClient } from '@/lib/supabase/client';
+import { Loader2 } from 'lucide-react';
 
-  if (!user) {
-    redirect('/staff/login');
-  }
+export default function StaffRootPage() {
+  const router = useRouter();
 
-  const { data: staffMember } = await supabase
-    .from('staff')
-    .select('role')
-    .eq('user_id', user.id)
-    .single();
+  useEffect(() => {
+    const supabase = getSupabaseBrowserClient();
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (!user) {
+        router.replace('/staff/login');
+        return;
+      }
+      supabase
+        .from('staff')
+        .select('role')
+        .eq('user_id', user.id)
+        .single()
+        .then(({ data: staffMember }) => {
+          if (staffMember?.role === 'admin') {
+            router.replace('/staff/admin');
+          } else {
+            router.replace('/staff/counter');
+          }
+        });
+    });
+  }, [router]);
 
-  if (staffMember?.role === 'admin') {
-    redirect('/staff/admin');
-  } else {
-    redirect('/staff/counter');
-  }
+  return (
+    <div className="min-h-screen bg-[#FFF7EE] flex items-center justify-center">
+      <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+    </div>
+  );
 }

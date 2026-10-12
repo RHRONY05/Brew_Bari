@@ -28,6 +28,7 @@ function getStaffClient() {
 }
 
 test.describe('M5: Sold-out Race Condition (sold-out-race.spec.ts)', () => {
+  test.describe.configure({ mode: 'serial' });
   let table99Token: string;
   let supabase: ReturnType<typeof getStaffClient>;
   let americanoId: string;

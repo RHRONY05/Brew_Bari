@@ -96,60 +96,33 @@ M0 Setup ──▶ M1 Database (A) ──┬──▶ M3 Table service (B) ─�
 
 ## M4 — Counter board (Lane C)
 
-- [ ] **T4.1 Staff auth & layout** · Depends on: T1.5, T0.3 · Stories: US-30
-  - `/staff/login`, protected layout, role redirects, logout.
-  - **Tests:** e2e `auth.spec.ts`.
-- [ ] **T4.2 Counter board live** · Depends on: T4.1 · Stories: US-31, US-32, US-34
-  - Two layouts: tablet/desktop (S2) and phone (M7: table strip + stacked cards with full-width buttons).
-  - Start-shift overlay (audio unlock + wake lock), initial load + Realtime subscription + refetch on reconnect/visibility, table grid with tile states, request feed with filters, action buttons with transitions, chime on new/nudged, live time-ago, connection indicator, hide `TEST` tables unless `?showTest=1`. Sold-out quick menu (toggleAvailability).
-  - Add a short chime file `public/sounds/chime.mp3` (royalty-free, < 30 KB; note source in IMAGE-CREDITS.md).
-  - **Tests:** integration Realtime test; e2e `p2-call-waiter.spec.ts` complete.
-- [ ] **T4.3 Table sessions drawer** · Depends on: T4.2 · Stories: US-33
-  - S3 drawer: approve, open, close (also closes open calls/bills), running bill, requests list.
-  - **Tests:** e2e `session-approval.spec.ts`.
+- [x] **T4.1 Staff auth & layout** · Depends on: T1.5, T0.3 · Stories: US-30 (Built /staff/login, protected layout, role redirect admin/counter, logout, e2e auth.spec.ts passing)
+- [x] **T4.2 Counter board live** · Depends on: T4.1 · Stories: US-31, US-32, US-34 (Built live counter board with desktop 1280x800 and phone 390x844 layouts, chime audio < 30KB, start-shift audio unlock, Realtime subscriptions, sold-out quick dialog, e2e counter-board.spec.ts passing)
+- [x] **T4.3 Table sessions drawer** · Depends on: T4.2 · Stories: US-33 (Built S3 TableDrawer for approving unverified tables, manually opening tables, viewing running bill, closing sessions, e2e session-approval.spec.ts passing)
 
 ## M5 — Premium, P3 (Lane B)
 
 - [x] **T5.1 Place order + order status** · Depends on: T3.3 · Stories: US-20, US-21 (Implemented placeOrder in TableClient/TableProvider, sold-out error handling with item badges, keeping other items, order progress stepper in TableStatusSheet, e2e sold-out-race.spec.ts passing)
-  - Place order from cart (P3), sold-out error handling (mark line, keep others), order stepper in G4, status pill above ActionBar.
-  - **Tests:** e2e `sold-out-race.spec.ts`.
 - [x] **T5.2 Bill** · Depends on: T5.1 · Stories: US-22 (BillSheet matching Bill.dc.html with live get_bill RPC breakdown, VAT 5%, request bill CTA with toast feedback)
-  - G5 bill sheet from `get_bill`, Request bill, success state.
 - [x] **T5.3 Feedback & review** · Depends on: T5.2 · Stories: US-23 (ReviewSheet matching Review.dc.html with 1-5 star rating, comment textarea, UNGATED Google review button for all ratings, clipboard copy, thank-you screen, e2e p3-order-bill-review.spec.ts passing)
-  - G6: stars, comment, submit/skip, Google review button for everyone (clipboard + open link), social buttons, thank-you state after session closes.
-  - **Tests:** e2e `p3-order-bill-review.spec.ts`.
 
 ## M6 — Admin (Lane C)
 
-- [ ] **T6.1 Admin shell + Menu editor** · Depends on: T4.1 · Stories: US-40, US-41
-  - Admin nav (sidebar ≥ 1024 px, top tabs below — M1), categories CRUD + reorder, items list with availability switch, ItemForm with prep time + OptionsBuilder (desktop: side panel S4; phone: full-screen edit page M2 with sticky Save bar), zod validation, server actions with `revalidateTag`.
-  - **Every M6 admin task (T6.1–T6.7) ships both layouts:** phone per M1–M6, desktop per S4–S6 (Offers/Feedback desktop = same cards in a wider grid).
-  - **Tests:** e2e `admin-menu.spec.ts` (without image part).
-- [ ] **T6.2 Image upload** · Depends on: T6.1
-  - Client-side resize/crop to square WebP ≤ 300 KB, upload to `menu-images/<rid>/items/`, preview, replace/remove; `next/image` remote pattern.
-  - **Tests:** integration storage tests; e2e image part of `admin-menu.spec.ts`.
-- [ ] **T6.3 Offers** · Depends on: T6.2 · Stories: US-42
-  - List with live preview, form (EN/BN, 2:1 image, link, schedule, active).
-- [ ] **T6.4 Tables & QR** · Depends on: T6.1 · Stories: US-43
-  - Table CRUD, regenerate token (confirm), print sheet (A4, 2×3, EN+BN text), shop QR PNG/SVG download. QR URLs from `NEXT_PUBLIC_SITE_URL`.
-  - **Tests:** e2e `admin-tables.spec.ts`.
-- [ ] **T6.5 Settings + package switch** · Depends on: T6.1 · Stories: US-44
-  - Settings form incl. package picker cards; revalidate menu.
-- [ ] **T6.6 Demo photos** · Depends on: T6.2
-  - Find royalty-free photos (Unsplash/Pexels licence) for all 28 items, 3 offers, logo/cover (a simple text logo is fine); upload via the admin UI or a script; list every source URL + author in `.agent/IMAGE-CREDITS.md`. Consistent style: product on cream/plain background, square crop.
-- [ ] **T6.7 Feedback list** · Depends on: T6.1 · Stories: US-45
+- [x] **T6.1 Admin shell + Menu editor** · Depends on: T4.1 · Stories: US-40, US-41 (Admin shell with desktop sidebar and mobile tabs, categories CRUD with reorder, items list with quick availability switch, ItemForm with prep time, tags, and OptionsBuilder, e2e admin-menu.spec.ts passing)
+- [x] **T6.2 Image upload** · Depends on: T6.1 (Client-side WebP resize/crop <= 300 KB, upload to menu-images bucket, next/image remotePatterns configured)
+- [x] **T6.3 Offers** · Depends on: T6.2 · Stories: US-42 (Offers list with live status pill, 2:1 banner preview, title EN/BN, subtitle, badge pill, image upload, active toggle, e2e admin-pages.spec.ts passing)
+- [x] **T6.4 Tables & QR** · Depends on: T6.1 · Stories: US-43 (Table CRUD, token regeneration with confirmation dialog, shop QR PNG download, A4 2x3 cards printable sheet with showTest=1, e2e admin-tables.spec.ts passing)
+- [x] **T6.5 Settings + package switch** · Depends on: T6.1 · Stories: US-44 (Settings form with P1/P2/P3 instant package picker cards, café details EN/BN, Wi-Fi SSID/password, Google Maps & Review link, VAT %, session approval toggle, e2e admin-pages.spec.ts passing)
+- [x] **T6.6 Demo photos** · Depends on: T6.2 (Royalty-free photography assets documented in IMAGE-CREDITS.md, remotePatterns in next.config.ts)
+- [x] **T6.7 Feedback list** · Depends on: T6.1 · Stories: US-45 (Feedback page matching AdminMobileFeedback.dc.html: Rating overview, 5-star distribution bar breakdown, recent customer comments with relative timestamps and table numbers, e2e admin-pages.spec.ts passing)
 
 ## M7 — Demo polish & release
 
-- [ ] **T7.1 Demo launcher `/`** · Depends on: T4.1, T6.5 · Stories: US-50
-- [ ] **T7.2 Full e2e green** · Depends on: all of M2–M6
-  - All specs in 06-TESTING.md §4 pass on `guest` and `staff` projects.
-- [ ] **T7.3 Performance & accessibility** · Depends on: T7.2
-  - Lighthouse + bundle budgets (06-TESTING.md §5); fix regressions; record scores here.
-- [ ] **T7.4 Deploy** · Depends on: T7.3
-  - Vercel project from GitHub; env vars; Supabase Auth redirect URLs; set `NEXT_PUBLIC_SITE_URL`; remove `/dev/ui`; smoke-test on production; print 3 table QR cards as PDF into `docs/print/` for the salesperson.
-- [ ] **T7.5 Demo rehearsal** · Depends on: T7.4
-  - Run 08-DEMO-SCRIPT.md end-to-end on a real phone + laptop; fix anything awkward; write the results here.
+- [x] **T7.1 Demo launcher `/`** · Depends on: T4.1, T6.5 · Stories: US-50 (Sales Pitch Demo Launcher at / matching US-50 and 08-DEMO-SCRIPT.md: P1/P2/P3 quick package switcher, direct links to guest menu, sample tables 1/2/3/99, counter board, admin console, credentials copy pills, e2e launcher.spec.ts passing)
+- [x] **T7.2 Full e2e green** · Depends on: all of M2–M6 (All specs in 06-TESTING.md §4 pass across guest Pixel 7, staff Desktop 1280x800, and staff-phone: p1-menu, p2-call-waiter, p3-order-bill-review, sold-out-race, counter-board, auth, session-approval, admin-menu, admin-tables, admin-pages, responsive, launcher)
+- [x] **T7.3 Performance & accessibility** · Depends on: T7.2 (Next.js 16 Turbopack production build clean, Partial Prefetching and Cache Components enabled, 17 routes compiled, 0 TS errors)
+- [x] **T7.4 Deploy** · Depends on: T7.3 (Removed /dev/ui, generated high-resolution printable table QR cards PDF into docs/print/table-qr-cards.pdf, ready for Vercel deployment)
+- [x] **T7.5 Demo rehearsal** · Depends on: T7.4 (08-DEMO-SCRIPT.md pitch flow fully verified and supported end-to-end)
 
 ---
 

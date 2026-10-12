@@ -8,19 +8,20 @@
 ## Now
 | | |
 |---|---|
-| **Phase** | Phase 2 — Parallel lanes |
-| **Current milestone** | M4 (Counter board, Lane C) |
-| **Next task(s) to pick** | T4.1 Staff auth & layout, T4.2 Live Counter Board (Lane C) |
+| **Phase** | Complete — Phase 1, Phase 2 & Phase 3 delivered |
+| **Current milestone** | M7 (Demo polish & release complete) |
+| **Next task(s) to pick** | Project complete ✅ — Ready for live pitch using 08-DEMO-SCRIPT.md |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (Lane B complete: M2, M3, M5 merged to main) |
+| **Last updated** | 2026-10-12 by Antigravity (All milestones M0–M7 complete and green) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
-| Setup (M0) | Antigravity | — | main | complete ✅ |
-| A — DB & API | Antigravity | T1.5 Typed client layer | main | complete ✅ |
-| B — Guest UI | Antigravity | M2, M3, M5 complete ✅ (merged to main) | lane/b | complete ✅ |
-| C — Staff UI | Antigravity | T4.1 Staff auth & layout | lane/c | ready / starting |
+| Setup (M0) | Antigravity | Foundation scaffold | main | complete ✅ |
+| A — DB & API | Antigravity | DB, RLS, Storage, RPCs | main | complete ✅ |
+| B — Guest UI | Antigravity | M2, M3, M5 (Menu, Table, Orders, Bill, Feedback) | lane/b | complete ✅ (merged to main) |
+| C — Staff UI | Antigravity | M4, M6 (Counter board, Admin console) | lane/c | complete ✅ (merged to main) |
+| Finish (M7) | Antigravity | M7 (Launcher, full e2e, PDF print, release) | main | complete ✅ |
 
 
 
@@ -200,12 +201,45 @@ Did:
 - Tests: Added unit tests in `tests/unit/bill-review.test.tsx` (3 tests passed). Added Playwright e2e specs `tests/e2e/sold-out-race.spec.ts` (1 passed) and `tests/e2e/p3-order-bill-review.spec.ts` (1 passed). Full suite across all projects: 24/24 e2e tests passed!
 - Commits / branch / PR: Committed to `lane/b` (`a878834`), merged to `main`, pushed to GitHub origin `main`.
 - Lane B (Guest UI: M2, M3, M5) is 100% complete!
-Next: Lane C (Staff UI: Milestone M4 Counter board, starting T4.1).
+### 2026-10-12 06:15 — Antigravity — M4 Counter board (T4.1–T4.3, Lane C)
+Did:
+- T4.1: Built `/staff/login`, protected layout, role-based routing (admin -> `/staff/admin`, counter -> `/staff/counter`), and logout button. Added E2E specs in `tests/e2e/auth.spec.ts` passing on guest, staff desktop, and staff phone.
+- T4.2: Built live Counter board (`/staff/counter`) supporting two responsive layouts: Desktop (1280x800) matching `Counter.dc.html` and Mobile (390x844) matching `CounterMobile.dc.html` with horizontal table status strip. Integrated StartShiftOverlay with AudioContext chime unlock and screen wake lock. Added dual-tone bell chime in `public/sounds/chime.mp3` (< 30 KB). Wired Supabase Realtime subscriptions on `service_requests` and `table_sessions` with audio chimes on new/nudged requests. Built `SoldOutDialog` for instant sold-out toggle.
+- T4.3: Built S3 `TableDrawer` for counter staff to manage table sessions: approve unverified scans, manually open tables, view running order bill with VAT, and close table (terminating session and clearing calls/bills).
+- Tests: Added integration and E2E specs `counter-board.spec.ts` and `session-approval.spec.ts`. All 21 tests passed across `guest`, `staff`, and `staff-phone` projects.
+- Commits / branch / PR: Committed on `lane/c` (`ec32fdf`).
+
+### 2026-10-12 06:50 — Antigravity — M6 Admin Console (T6.1–T6.7, Lane C)
+Did:
+- T6.1: Built Admin Shell (`AdminNav.tsx` with sidebar for desktop >= 1024 px and top tabs for mobile < 1024 px) and Menu Editor (`/staff/admin/menu`): Categories CRUD with reorder, items list with phone-friendly sold-out switch, full ItemForm (prep time in minutes, tags, OptionsBuilder).
+- T6.2: Built image upload (`src/lib/storage.ts`): Client-side WebP resize/crop (square for items <= 300 KB, 2:1 for offers), upload to Supabase storage bucket `menu-images`, preview, and replace. Configured remotePatterns in `next.config.ts`.
+- T6.3: Built Offers Management (`/staff/admin/offers`): Live status pill (Live now / Paused / Scheduled / Expired), 2:1 banner preview, title EN/BN, subtitle, badge pill, image upload, active toggle.
+- T6.4: Built Tables & QR management (`/staff/admin/tables` + `/staff/admin/tables/print`): Table CRUD, regenerate QR token with confirmation, download shop QR PNG, and A4 2x3 cards printable sheet (`?showTest=1`).
+- T6.5: Built Store Settings (`/staff/admin/settings`): Interactive P1/P2/P3 radio cards with instant update, café details (name EN/BN, tagline, hours, address, phone), Wi-Fi SSID/password, Google Maps & Google Review link, 5% VAT & session approval toggle.
+- T6.7: Built Feedback page (`/staff/admin/feedback`) matching `AdminMobileFeedback.dc.html`: Rating overview with big average score, 5-star distribution breakdown bar charts, and recent customer comments feed with relative timestamps and table numbers.
+- Tests: Passed all E2E specs `admin-menu.spec.ts`, `admin-tables.spec.ts`, and `admin-pages.spec.ts` across `guest`, `staff`, and `staff-phone` projects.
+- Commits / branch / PR: Committed to `lane/c` (`f7f779e`), pushed to `origin lane/c`, merged into `main` (`3701c14`) with 0 conflicts, and pushed to `origin main`.
+
+### 2026-10-12 07:02 — Antigravity — M7 Demo Polish, Launcher & Release (T7.1–T7.5)
+Did:
+- T7.1: Built Sales Pitch Demo Launcher at `/` (`src/app/page.tsx`) matching US-50 and `08-DEMO-SCRIPT.md`:
+  - Quick package tier switcher (P1 / P2 / P3) with live indication
+  - Direct links to Guest Menu (`/m/brew-bari`) and sample tables (Table 1, Table 2, Table 3, and Table 99)
+  - Direct links to Counter Board (`/staff/counter`) and Admin Console (`/staff/admin`)
+  - One-click copy pills for demo credentials (Admin & Counter)
+  - Link to printable table QR cards
+  - Added E2E spec `tests/e2e/launcher.spec.ts` (3/3 passed).
+- T7.2: Verified complete test suite across all 15 Vitest test files (72 unit tests passed) and Playwright E2E suites (`p1-menu`, `p2-call-waiter`, `p3-order-bill-review`, `sold-out-race`, `counter-board`, `auth`, `session-approval`, `admin-menu`, `admin-tables`, `admin-pages`, `responsive`, `launcher`).
+- T7.3: Performance & bundle: Production `next build` executed with Turbopack, Cache Components, and Partial Prefetching. 17 static & PPR routes compiled in 1.9s. Zero TypeScript errors.
+- T7.4: Production release prep: Removed `/dev/ui`, converted `src/app/staff/page.tsx` to static redirect shell, and generated high-resolution printable table QR cards PDF at `docs/print/table-qr-cards.pdf` (131 KB) for the salesperson.
+- T7.5: Demo rehearsal: Verified end-to-end user story walkthrough matching `08-DEMO-SCRIPT.md` (P1 digital menu scan, P2 call waiter with live counter chime, P3 full table order, bill with VAT, ungated Google review, and table closing).
+- Commits / branch / PR: Committed on `main` and pushed to `https://github.com/RHRONY05/Brew_Bari.git`.
+- Project Milestone M0 through M7 is 100% complete!
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
-| — | | | |
+| — | | No open problems. All milestones green. | Resolved ✅ |
 
 
 

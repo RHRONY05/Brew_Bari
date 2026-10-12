@@ -1,11 +1,12 @@
 'use client';
 
 import React, { useState, useMemo, useRef } from 'react';
-import { Search, Info, Coffee } from 'lucide-react';
+import { Search, Info, Coffee, ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react';
 import type { MenuData, MenuItem, Offer } from '@/lib/menu/data';
 
 import { ItemCard } from './ItemCard';
 import { CategoryNav } from './CategoryNav';
+import { CategorySection } from './CategorySection';
 import { OfferCarousel } from './OfferCarousel';
 import { LanguageToggle } from './LanguageToggle';
 import { CafeInfoSheet } from './CafeInfoSheet';
@@ -77,6 +78,14 @@ export function MenuClient({
   }, [menu.items]);
 
   const hasQuick = quickItems.length > 0;
+  const [isQuickExpanded, setIsQuickExpanded] = useState(false);
+  const quickSliderRef = useRef<HTMLDivElement>(null);
+
+  const scrollQuick = (direction: 'left' | 'right') => {
+    if (!quickSliderRef.current) return;
+    const scrollAmount = direction === 'left' ? -260 : 260;
+    quickSliderRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  };
 
   // Search filtering
   const filteredItems = useMemo(() => {
@@ -344,61 +353,64 @@ export function MenuClient({
                   ref={(el) => {
                     sectionRefs.current['quick'] = el;
                   }}
-                  className="flex flex-col gap-3.5"
+                  className="flex flex-col gap-3.5 scroll-mt-20"
+                  data-testid="category-section-quick"
                 >
-                  <div className="flex items-center gap-2">
-                    <h2 className="text-[20px] font-extrabold text-[#24170F] tracking-tight">
-                      {locale === 'bn' ? 'ঝটপট · ৫ মিনিটে তৈরি' : 'Quick · ready in ≤5 min'}
-                    </h2>
-                    <span className="text-[13px] font-bold text-[#8C7767]">
-                      {quickItems.length}
-                    </span>
-                  </div>
-
-                  <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x -mx-4 px-4">
-                    {quickItems.map((item) => (
-                      <div key={item.id} className="w-[165px] sm:w-[185px] shrink-0 snap-start">
-                        <ItemCard
-                          item={item}
-                          locale={locale}
-                          packageTier={packageTier}
-                          onSelect={handleItemSelect}
-                          onAddDirectly={handleItemSelect}
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
-
-              {/* Category Sections */}
-              {menu.categories.map((cat) => {
-                const catItems = menu.items.filter((it) => it.category_id === cat.id);
-                if (catItems.length === 0) return null; // hide empty categories
-
-                const sortedCatItems = sortForGuest(catItems);
-                const catTitle = pick(cat, 'name', locale);
-
-                return (
-                  <section
-                    key={cat.id}
-                    id={`section-${cat.id}`}
-                    ref={(el) => {
-                      sectionRefs.current[cat.id] = el;
-                    }}
-                    className="flex flex-col gap-3.5"
-                  >
-                    <div className="flex items-center gap-2">
-                      <h2 className="text-[20px] font-extrabold text-[#24170F] tracking-tight">
-                        {catTitle}
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <h2 className="text-[20px] font-extrabold text-[#24170F] tracking-tight truncate">
+                        {locale === 'bn' ? 'ঝটপট · ৫ মিনিটে তৈরি' : 'Quick · ready in ≤5 min'}
                       </h2>
-                      <span className="text-[13px] font-bold text-[#8C7767]">
-                        {sortedCatItems.length}
+                      <span className="h-5.5 px-2.5 rounded-full bg-[#FBEBD7] text-[#8A5A37] text-[12px] font-extrabold flex items-center justify-center shrink-0">
+                        {locale === 'bn' ? `${quickItems.length}টি` : `${quickItems.length}`}
                       </span>
                     </div>
 
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
-                      {sortedCatItems.map((item) => (
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      {!isQuickExpanded && quickItems.length > 2 && (
+                        <div className="flex items-center gap-1">
+                          <button
+                            type="button"
+                            aria-label="Previous quick items"
+                            onClick={() => scrollQuick('left')}
+                            className="w-7.5 h-7.5 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] flex items-center justify-center hover:bg-[#FFF7EE] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs cursor-pointer"
+                          >
+                            <ChevronLeft className="w-4 h-4 stroke-[2.2]" />
+                          </button>
+                          <button
+                            type="button"
+                            aria-label="Next quick items"
+                            onClick={() => scrollQuick('right')}
+                            className="w-7.5 h-7.5 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] flex items-center justify-center hover:bg-[#FFF7EE] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs cursor-pointer"
+                          >
+                            <ChevronRight className="w-4 h-4 stroke-[2.2]" />
+                          </button>
+                        </div>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => setIsQuickExpanded((prev) => !prev)}
+                        className="h-7.5 px-2.5 rounded-full bg-[#FBEBD7] border border-[#F0DFCB]/60 text-[#8A5A37] hover:bg-[#F2C27D] hover:text-[#24170F] text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
+                      >
+                        {isQuickExpanded ? (
+                          <>
+                            <SlidersHorizontal className="w-3.5 h-3.5 stroke-[2.2]" />
+                            <span>{locale === 'bn' ? 'স্লাইডার' : 'Slider'}</span>
+                          </>
+                        ) : (
+                          <>
+                            <span>{locale === 'bn' ? 'সবগুলো' : 'View all'}</span>
+                            <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
+                          </>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+
+                  {isQuickExpanded ? (
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 animate-in fade-in duration-200">
+                      {quickItems.map((item) => (
                         <ItemCard
                           key={item.id}
                           item={item}
@@ -409,7 +421,61 @@ export function MenuClient({
                         />
                       ))}
                     </div>
-                  </section>
+                  ) : (
+                    <div
+                      ref={quickSliderRef}
+                      className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x -mx-4 px-4"
+                    >
+                      {quickItems.map((item) => (
+                        <div key={item.id} className="w-[165px] sm:w-[185px] shrink-0 snap-start">
+                          <ItemCard
+                            item={item}
+                            locale={locale}
+                            packageTier={packageTier}
+                            onSelect={handleItemSelect}
+                            onAddDirectly={handleItemSelect}
+                          />
+                        </div>
+                      ))}
+
+                      {quickItems.length > 3 && (
+                        <button
+                          type="button"
+                          onClick={() => setIsQuickExpanded(true)}
+                          className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-[#F0DFCB] hover:border-[#8A5A37] bg-white/70 hover:bg-[#FFF7EE] p-4 flex flex-col items-center justify-center text-center gap-2 text-[#8A5A37] transition-all cursor-pointer shadow-2xs"
+                        >
+                          <div className="w-10 h-10 rounded-full bg-[#FBEBD7] flex items-center justify-center text-[#8A5A37] font-extrabold text-[13px]">
+                            +{quickItems.length}
+                          </div>
+                          <span className="text-[12px] font-extrabold text-[#24170F]">
+                            {locale === 'bn' ? 'সবগুলো দেখুন' : 'View all'}
+                          </span>
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </section>
+              )}
+
+              {/* Category Sections with Slider & Expand Controls */}
+              {menu.categories.map((cat) => {
+                const catItems = menu.items.filter((it) => it.category_id === cat.id);
+                if (catItems.length === 0) return null; // hide empty categories
+                const sortedCatItems = sortForGuest(catItems);
+
+                return (
+                  <CategorySection
+                    key={cat.id}
+                    category={cat}
+                    items={sortedCatItems}
+                    locale={locale}
+                    packageTier={packageTier}
+                    onSelect={handleItemSelect}
+                    onAddDirectly={handleItemSelect}
+                    sectionRef={(el) => {
+                      sectionRefs.current[cat.id] = el;
+                    }}
+                  />
                 );
               })}
             </>

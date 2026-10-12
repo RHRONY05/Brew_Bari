@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect, useCallback } from 'react';
 import Image from 'next/image';
-import { Sparkles } from 'lucide-react';
+import { Sparkles, ArrowRight } from 'lucide-react';
 import type { Offer, MenuItem } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
 
@@ -16,15 +16,13 @@ interface OfferCarouselProps {
 export function OfferCarousel({ offers, items, locale, onSelectOffer }: OfferCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
-  const nextSlide = useCallback(() => {
-    setActiveIndex((prev) => (prev + 1) % offers.length);
-  }, [offers.length]);
-
   useEffect(() => {
     if (offers.length <= 1) return;
-    const timer = setInterval(nextSlide, 5000);
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % offers.length);
+    }, 5500);
     return () => clearInterval(timer);
-  }, [offers.length, nextSlide]);
+  }, [offers.length, activeIndex]);
 
   if (!offers || offers.length === 0) {
     return null;
@@ -44,55 +42,67 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer }: OfferCar
       {/* Active offer card */}
       <div
         onClick={() => onSelectOffer?.(current)}
-        className="relative h-[172px] rounded-3xl bg-[#6B4226] overflow-hidden flex shadow-[0_8px_24px_rgba(107,66,38,0.18)] cursor-pointer group"
+        className="relative min-h-[178px] h-[178px] sm:h-[188px] rounded-3xl bg-gradient-to-r from-[#4A2814] via-[#543019] to-[#3D2010] border border-[#F0DFCB]/15 overflow-hidden flex shadow-[0_10px_28px_rgba(59,34,19,0.22)] cursor-pointer group"
       >
-        {/* Background decorative circles & image frame */}
-        <div className="absolute right-[-40px] top-[-30px] w-[230px] h-[230px] rounded-full bg-[#8A5A37] pointer-events-none" />
+        {/* Ambient Color Spray Glows */}
+        <div className="absolute -right-6 -top-8 w-48 h-48 rounded-full bg-[#F2C27D]/30 blur-2xl pointer-events-none" />
+        <div className="absolute right-6 -bottom-8 w-40 h-40 rounded-full bg-[#D97706]/20 blur-2xl pointer-events-none" />
+        <div className="absolute right-28 top-6 w-24 h-24 rounded-full bg-[#FFF7EE]/10 blur-xl pointer-events-none" />
+
+        {/* Ambient Organic Aura / Backplate Blob */}
+        <div className="absolute right-2 top-1/2 -translate-y-1/2 w-[138px] h-[138px] sm:w-[152px] sm:h-[152px] rounded-[44%_56%_65%_35%/38%_62%_38%_62%] bg-gradient-to-tr from-[#8A5A37]/80 via-[#C48858]/40 to-[#F2C27D]/50 blur-[3px] pointer-events-none" />
+
+        {/* Foreground Organic Blob Image Container */}
         {imageUrl ? (
-          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[124px] h-[124px] sm:w-[136px] sm:h-[136px] rounded-full overflow-hidden border-[3.5px] border-[#F2C27D] shadow-[0_8px_24px_rgba(36,23,15,0.4)] bg-[#24170F] pointer-events-none">
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[124px] h-[124px] sm:w-[138px] sm:h-[138px] rounded-[48%_52%_58%_42%/42%_58%_42%_58%] overflow-hidden border-2 border-[#F2C27D]/85 shadow-[0_12px_28px_rgba(20,10,5,0.45)] bg-[#1F120A] pointer-events-none transition-transform duration-500 group-hover:scale-105">
             <Image
               src={imageUrl}
               alt={title}
               fill
-              sizes="(max-width: 640px) 130px, 150px"
-              className="object-cover transition-transform duration-500 group-hover:scale-105"
+              sizes="(max-width: 640px) 140px, 160px"
+              className="object-cover scale-105"
               priority={activeIndex === 0}
             />
+            {/* Top specular highlight sheen */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/25 via-transparent to-white/20 pointer-events-none" />
           </div>
         ) : (
-          <div className="absolute right-[18px] top-[26px] w-[120px] h-[120px] rounded-full bg-[#F2C27D] flex items-center justify-center text-[#6B4226] shadow-md pointer-events-none">
-            <Sparkles className="w-14 h-14 stroke-[1.5]" />
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[124px] h-[124px] sm:w-[138px] sm:h-[138px] rounded-[48%_52%_58%_42%/42%_58%_42%_58%] bg-gradient-to-tr from-[#6B4226] to-[#F2C27D] flex items-center justify-center text-[#24170F] shadow-lg pointer-events-none">
+            <Sparkles className="w-12 h-12 stroke-[1.8]" />
           </div>
         )}
 
-        {/* Content */}
-        <div className="relative p-5 flex flex-col justify-between max-w-[210px] sm:max-w-[240px] z-10">
-          <div className="flex flex-col gap-1.5">
+        {/* Content (Left Column) */}
+        <div className="relative p-5 pr-2 flex flex-col justify-between flex-1 min-w-0 max-w-[calc(100%-144px)] sm:max-w-[calc(100%-160px)] z-10">
+          <div className="flex flex-col gap-1.5 min-w-0">
             {badge && (
-              <span className="self-start h-[22px] px-2.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[10.5px] font-extrabold uppercase tracking-wider flex items-center">
+              <span className="self-start h-5 px-2.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[10px] font-extrabold uppercase tracking-wider flex items-center shadow-xs">
                 {badge}
               </span>
             )}
-            <h3 className="font-extrabold text-[20px] leading-tight text-[#FFF7EE] tracking-tight">
+            <h3 className="font-extrabold text-[18.5px] sm:text-[21px] leading-tight text-[#FFF7EE] tracking-tight [text-wrap:balance] break-normal line-clamp-2">
               {title}
             </h3>
             {subtitle && (
-              <p className="text-[12.5px] leading-snug text-[#F3E3CF] line-clamp-1">
+              <p className="text-[12px] sm:text-[13px] leading-snug text-[#F3E3CF]/90 line-clamp-1 break-normal">
                 {subtitle}
               </p>
             )}
           </div>
 
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSelectOffer?.(current);
-            }}
-            className="self-start h-9 px-4 rounded-full bg-[#FFF7EE] text-[#24170F] text-[13px] font-bold flex items-center hover:bg-white active:scale-95 transition-all shadow-xs"
-          >
-            {ctaText}
-          </button>
+          <div className="pt-2">
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelectOffer?.(current);
+              }}
+              className="h-8.5 px-3.5 rounded-full bg-[#F2C27D] hover:bg-[#ffe0ad] text-[#24170F] text-[12.5px] font-extrabold flex items-center gap-1.5 active:scale-95 transition-all shadow-xs"
+            >
+              <span>{ctaText}</span>
+              <ArrowRight className="w-3.5 h-3.5 stroke-[2.5]" />
+            </button>
+          </div>
         </div>
       </div>
 

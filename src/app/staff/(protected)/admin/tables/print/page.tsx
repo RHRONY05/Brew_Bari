@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import type { Database } from '@/types/database';
 import QRCode from 'qrcode';
-import { Printer, ArrowLeft, Loader2 } from 'lucide-react';
+import { Printer, ArrowLeft, Loader2, Download, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
 type TableRow = Database['public']['Tables']['tables']['Row'];
@@ -14,12 +14,16 @@ interface TableWithQr extends TableRow {
   qrDataUrl: string;
 }
 
+const LIVE_PRODUCTION_URL = 'https://brew-bari.vercel.app';
+
 export default function PrintTableCardsPage() {
   const searchParams = useSearchParams();
   const showTest = searchParams.get('showTest') === '1';
 
   const [loading, setLoading] = useState(true);
   const [tablesWithQr, setTablesWithQr] = useState<TableWithQr[]>([]);
+  const [baseUrl, setBaseUrl] = useState<string>(LIVE_PRODUCTION_URL);
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   useEffect(() => {
     async function load() {
@@ -50,14 +54,18 @@ export default function PrintTableCardsPage() {
       const filtered = tablesData.filter((t) => showTest || t.number !== 99);
       const origin =
         typeof window !== 'undefined'
-          ? window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+          ? window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
+            ? LIVE_PRODUCTION_URL
+            : window.location.origin
+          : process.env.NEXT_PUBLIC_SITE_URL || LIVE_PRODUCTION_URL;
+
+      setBaseUrl(origin);
 
       const withQr: TableWithQr[] = await Promise.all(
         filtered.map(async (t) => {
           const url = `${origin}/t/${t.qr_token}`;
           const qrDataUrl = await QRCode.toDataURL(url, {
-            width: 260,
+            width: 320,
             margin: 1,
             color: {
               dark: '#24170F',
@@ -78,6 +86,114 @@ export default function PrintTableCardsPage() {
     load();
   }, [showTest]);
 
+  // Generate and download individual table card PNG
+  const handleDownloadCard = useCallback(async (table: TableWithQr) => {
+    try {
+      const canvas = document.createElement('canvas');
+      canvas.width = 800;
+      canvas.height = 1050;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+
+      // Card Background
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillRect(0, 0, 800, 1050);
+
+      // Card Frame
+      ctx.strokeStyle = '#6B4226';
+      ctx.lineWidth = 10;
+      ctx.strokeRect(18, 18, 764, 1014);
+
+      // Inner Cream surface
+      ctx.fillStyle = '#FAF7F2';
+      ctx.fillRect(24, 24, 752, 1002);
+
+      // Brand Title
+      ctx.fillStyle = '#24170F';
+      ctx.font = 'bold 46px system-ui, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Brew Bari', 400, 110);
+
+      // Bengali Brand Subtitle
+      ctx.fillStyle = '#6B4226';
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.fillText('ব্রু বাড়ি · কফি ও খাবার', 400, 150);
+
+      // Divider
+      ctx.strokeStyle = '#E6DFD5';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(120, 180);
+      ctx.lineTo(680, 180);
+      ctx.stroke();
+
+      // Table Number Title
+      ctx.fillStyle = '#24170F';
+      ctx.font = 'bold 54px system-ui, sans-serif';
+      const title = table.label || `Table ${table.number}`;
+      ctx.fillText(title, 400, 255);
+
+      if (table.label && table.label !== `Table ${table.number}`) {
+        ctx.fillStyle = '#8C7E74';
+        ctx.font = 'bold 24px system-ui, sans-serif';
+        ctx.fillText(`Table #${table.number} · ${table.seats} Seats`, 400, 295);
+      }
+
+      // Draw QR image
+      const img = new Image();
+      img.crossOrigin = 'anonymous';
+      await new Promise<void>((resolve, reject) => {
+        img.onload = () => {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(170, 330, 460, 460);
+          ctx.strokeStyle = '#E6DFD5';
+          ctx.lineWidth = 3;
+          ctx.strokeRect(170, 330, 460, 460);
+          ctx.drawImage(img, 190, 350, 420, 420);
+          resolve();
+        };
+        img.onerror = reject;
+        img.src = table.qrDataUrl;
+      });
+
+      // Call-to-actions
+      ctx.fillStyle = '#24170F';
+      ctx.font = 'bold 30px system-ui, sans-serif';
+      ctx.fillText('Scan to order & call waiter', 400, 850);
+
+      ctx.fillStyle = '#6B4226';
+      ctx.font = 'bold 24px system-ui, sans-serif';
+      ctx.fillText('অর্ডার করতে ও ওয়েটার ডাকতে স্ক্যান করুন', 400, 895);
+
+      // Wi-Fi info footer
+      ctx.fillStyle = '#8C7E74';
+      ctx.font = '500 20px system-ui, sans-serif';
+      ctx.fillText('Wi-Fi: BrewBari_Guest  |  Pass: Coffee2026', 400, 970);
+
+      // Download
+      const dataUrl = canvas.toDataURL('image/png');
+      const a = document.createElement('a');
+      a.href = dataUrl;
+      a.download = `brew-bari-table-${table.number}-card.png`;
+      a.click();
+    } catch {
+      // Fallback: download raw QR
+      const a = document.createElement('a');
+      a.href = table.qrDataUrl;
+      a.download = `brew-bari-table-${table.number}-qr.png`;
+      a.click();
+    }
+  }, []);
+
+  const handleDownloadAllCards = async () => {
+    setIsDownloadingAll(true);
+    for (let i = 0; i < tablesWithQr.length; i++) {
+      await handleDownloadCard(tablesWithQr[i]);
+      await new Promise((res) => setTimeout(res, 250));
+    }
+    setIsDownloadingAll(false);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -89,28 +205,47 @@ export default function PrintTableCardsPage() {
   return (
     <div className="min-h-screen bg-line-soft print:bg-white text-ink p-4 print:p-0">
       {/* Screen action bar (hidden during print) */}
-      <div className="max-w-[210mm] mx-auto mb-4 bg-white p-4 rounded-2xl shadow-sm flex items-center justify-between print:hidden">
+      <div className="max-w-[210mm] mx-auto mb-4 bg-white p-4 rounded-2xl shadow-sm flex flex-wrap items-center justify-between gap-3 print:hidden">
         <div className="flex items-center gap-3">
           <Link
             href="/staff/admin/tables"
-            className="h-10 px-4 rounded-full border border-line text-ink text-[13px] font-bold flex items-center gap-1.5 hover:bg-bg"
+            className="h-10 px-4 rounded-full border border-line text-ink text-[13px] font-bold flex items-center gap-1.5 hover:bg-bg transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to tables
           </Link>
-          <span className="text-[14px] font-bold text-ink-2">
+          <span className="text-[13.5px] font-bold text-ink-2">
             {tablesWithQr.length} printable cards ready
+          </span>
+          <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-surface-2 text-brand">
+            {baseUrl}
           </span>
         </div>
 
-        <button
-          type="button"
-          onClick={() => window.print()}
-          className="h-10 px-5 rounded-full bg-accent text-ink text-[14px] font-extrabold flex items-center gap-2 shadow-xs hover:bg-accent-strong"
-        >
-          <Printer className="w-4 h-4" />
-          Print cards (A4)
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            disabled={isDownloadingAll}
+            onClick={handleDownloadAllCards}
+            className="h-10 px-4 rounded-full border border-line bg-white hover:bg-bg text-ink text-[13px] font-bold flex items-center gap-2 transition-colors cursor-pointer disabled:opacity-50"
+          >
+            {isDownloadingAll ? (
+              <Loader2 className="w-4 h-4 animate-spin text-brand" />
+            ) : (
+              <Download className="w-4 h-4 text-brand-muted" />
+            )}
+            Download all PNGs
+          </button>
+
+          <button
+            type="button"
+            onClick={() => window.print()}
+            className="h-10 px-5 rounded-full bg-accent text-ink text-[14px] font-extrabold flex items-center gap-2 shadow-xs hover:bg-accent-strong cursor-pointer transition-all active:scale-98"
+          >
+            <Printer className="w-4 h-4" />
+            Print cards (A4)
+          </button>
+        </div>
       </div>
 
       {/* A4 Printable Sheet (2 columns x 3 rows grid) */}
@@ -122,7 +257,7 @@ export default function PrintTableCardsPage() {
           <div
             key={table.id}
             data-testid={`qr-card-${table.number}`}
-            className="border-2 border-brand rounded-3xl p-5 flex flex-col items-center text-center gap-2.5 bg-surface-subtle print:break-inside-avoid shadow-xs print:shadow-none"
+            className="border-2 border-brand rounded-3xl p-5 flex flex-col items-center text-center gap-2.5 bg-surface-subtle print:break-inside-avoid shadow-xs print:shadow-none relative group"
           >
             {/* Header */}
             <div className="flex items-center gap-2">
@@ -146,7 +281,7 @@ export default function PrintTableCardsPage() {
               <img
                 src={table.qrDataUrl}
                 alt={`Table ${table.number} QR code`}
-                className="w-36 h-36"
+                className="w-36 h-36 object-contain"
               />
             </div>
 
@@ -162,6 +297,27 @@ export default function PrintTableCardsPage() {
             <div className="mt-2 pt-2 border-t border-line w-full text-[11px] text-ink-3 font-medium flex justify-between px-2">
               <span>Wi-Fi: BrewBari_Guest</span>
               <span>Pass: Coffee2026</span>
+            </div>
+
+            {/* On-screen quick download & open button (hidden during print) */}
+            <div className="print:hidden flex gap-2 w-full pt-1">
+              <button
+                type="button"
+                onClick={() => handleDownloadCard(table)}
+                className="flex-1 h-8 rounded-full border border-line bg-white hover:bg-bg text-[11.5px] font-bold text-ink flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                title="Download this card as PNG"
+              >
+                <Download className="w-3 h-3 text-brand-muted" />
+                <span>Save PNG</span>
+              </button>
+              <Link
+                href={`/t/${table.qr_token}`}
+                target="_blank"
+                className="h-8 px-2.5 rounded-full border border-line bg-white hover:bg-bg text-[11.5px] font-bold text-ink-2 flex items-center justify-center transition-colors"
+                title="Open guest page in browser"
+              >
+                <ExternalLink className="w-3 h-3" />
+              </Link>
             </div>
           </div>
         ))}

@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { Coffee, Lock, Mail, ArrowRight, Loader2, AlertCircle } from 'lucide-react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
@@ -56,18 +57,25 @@ export default function StaffLoginPage() {
   };
 
   return (
-    <main className="min-h-screen bg-[#FFF7EE] flex flex-col justify-center items-center p-4 selection:bg-[#F2C27D] selection:text-[#24170F]">
-      <div className="w-full max-w-md bg-white rounded-3xl border border-[#F0DFCB] shadow-[0_12px_36px_rgba(107,66,38,0.08)] p-8 flex flex-col gap-6">
+    <main className="min-h-screen bg-bg flex flex-col justify-center items-center p-4 selection:bg-accent selection:text-ink">
+      <div className="w-full max-w-md bg-white rounded-3xl border border-line shadow-[0_12px_36px_rgba(107,66,38,0.08)] p-8 flex flex-col gap-6">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center gap-3">
-          <div className="w-14 h-14 rounded-full bg-[#6B4226] text-[#F2C27D] flex items-center justify-center font-extrabold text-xl shadow-xs">
-            BB
+          <div className="relative w-20 h-20 shrink-0">
+            <Image
+              src="/images/brand/concept-1.png"
+              alt="Brew Bari Logo"
+              width={80}
+              height={80}
+              className="w-20 h-20 object-contain"
+              priority
+            />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-[#24170F] tracking-tight">
+            <h1 className="font-heading text-2xl font-extrabold text-ink tracking-tight">
               Brew Bari · Staff Portal
             </h1>
-            <p className="text-[13.5px] text-[#6F5A4B] font-medium mt-0.5">
+            <p className="text-[13.5px] text-ink-2 font-medium mt-0.5">
               Live Counter Board & Management Console
             </p>
           </div>
@@ -77,7 +85,7 @@ export default function StaffLoginPage() {
         {errorMessage && (
           <div
             data-testid="login-error-alert"
-            className="p-3.5 rounded-2xl bg-[#FFF0EE] border border-[#FCD2CD] flex items-start gap-2.5 text-[13px] font-semibold text-[#CE2C31]"
+            className="p-3.5 rounded-2xl bg-danger-soft border border-danger-soft flex items-start gap-2.5 text-[13px] font-semibold text-danger"
           >
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5 stroke-[2.5]" />
             <span>{errorMessage}</span>
@@ -89,9 +97,9 @@ export default function StaffLoginPage() {
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="staff-email"
-              className="text-[13px] font-bold text-[#24170F] flex items-center gap-1.5"
+              className="text-[13px] font-bold text-ink flex items-center gap-1.5"
             >
-              <Mail className="w-3.5 h-3.5 text-[#8A5A37]" />
+              <Mail className="w-3.5 h-3.5 text-brand-muted" />
               Staff Email
             </label>
             <input
@@ -103,16 +111,16 @@ export default function StaffLoginPage() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="e.g. counter@brewbari.com"
-              className="w-full h-12 px-4 rounded-2xl border border-[#F0DFCB] bg-[#FFF7EE] text-[14.5px] text-[#24170F] placeholder:text-[#8C7767] focus:outline-none focus:ring-2 focus:ring-[#6B4226]/20 focus:border-[#6B4226] transition-all"
+              className="w-full h-12 px-4 rounded-2xl border border-line bg-bg text-[14.5px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all"
             />
           </div>
 
           <div className="flex flex-col gap-1.5">
             <label
               htmlFor="staff-password"
-              className="text-[13px] font-bold text-[#24170F] flex items-center gap-1.5"
+              className="text-[13px] font-bold text-ink flex items-center gap-1.5"
             >
-              <Lock className="w-3.5 h-3.5 text-[#8A5A37]" />
+              <Lock className="w-3.5 h-3.5 text-brand-muted" />
               Password
             </label>
             <input
@@ -124,7 +132,7 @@ export default function StaffLoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••••••"
-              className="w-full h-12 px-4 rounded-2xl border border-[#F0DFCB] bg-[#FFF7EE] text-[14.5px] text-[#24170F] placeholder:text-[#8C7767] focus:outline-none focus:ring-2 focus:ring-[#6B4226]/20 focus:border-[#6B4226] transition-all"
+              className="w-full h-12 px-4 rounded-2xl border border-line bg-bg text-[14.5px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all"
             />
           </div>
 
@@ -132,7 +140,7 @@ export default function StaffLoginPage() {
             type="submit"
             data-testid="staff-login-button"
             disabled={isLoading}
-            className="w-full h-13 mt-2 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[15.5px] flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full h-13 mt-2 rounded-full bg-accent text-ink font-extrabold text-[15.5px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isLoading ? (
               <>
@@ -149,15 +157,15 @@ export default function StaffLoginPage() {
         </form>
 
         {/* Demo Fast Fill */}
-        <div className="border-t border-[#F0DFCB]/60 pt-4 flex flex-col gap-2.5">
-          <div className="text-[12px] font-bold text-[#8C7767] uppercase tracking-wider text-center">
+        <div className="border-t border-line/60 pt-4 flex flex-col gap-2.5">
+          <div className="text-[12px] font-bold text-ink-3 uppercase tracking-wider text-center">
             Demo Accounts Quick-Fill
           </div>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={() => handleQuickFill('counter@brewbari.com')}
-              className="flex-1 py-2 px-3 rounded-xl border border-[#F0DFCB] bg-[#FFF7EE] text-[12.5px] font-bold text-[#6B4226] hover:bg-[#FBEBD7] transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 rounded-xl border border-line bg-bg text-[12.5px] font-bold text-brand hover:bg-surface-2 transition-colors flex items-center justify-center gap-1.5"
             >
               <Coffee className="w-3.5 h-3.5 shrink-0" />
               <span>Counter Staff</span>
@@ -165,7 +173,7 @@ export default function StaffLoginPage() {
             <button
               type="button"
               onClick={() => handleQuickFill('admin@brewbari.com')}
-              className="flex-1 py-2 px-3 rounded-xl border border-[#F0DFCB] bg-[#FFF7EE] text-[12.5px] font-bold text-[#6B4226] hover:bg-[#FBEBD7] transition-colors flex items-center justify-center gap-1.5"
+              className="flex-1 py-2 px-3 rounded-xl border border-line bg-bg text-[12.5px] font-bold text-brand hover:bg-surface-2 transition-colors flex items-center justify-center gap-1.5"
             >
               <Lock className="w-3.5 h-3.5 shrink-0" />
               <span>Admin / Owner</span>

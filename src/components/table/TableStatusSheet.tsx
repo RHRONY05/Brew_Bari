@@ -61,10 +61,10 @@ export function TableStatusSheet({
   return (
     <BottomSheet open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }} title={title}>
       <div className="flex flex-col gap-4 pb-6" data-testid="table-status-sheet">
-        <div className="text-[13px] font-semibold text-[#6F5A4B] -mt-2">{subtitle}</div>
+        <div className="text-[13px] font-semibold text-ink-2 -mt-2">{subtitle}</div>
 
         {requests.length === 0 ? (
-          <div className="py-10 text-center text-[#8C7767]">
+          <div className="py-10 text-center text-ink-3">
             <p className="font-semibold">
               {locale === 'bn'
                 ? 'এখনও কোনো অর্ডার বা ওয়েটার রিকোয়েস্ট নেই।'
@@ -82,40 +82,40 @@ export function TableStatusSheet({
               return (
                 <div
                   key={order.id}
-                  className="p-4 rounded-2xl bg-white border border-[#F0DFCB] shadow-xs flex flex-col gap-3"
+                  className="p-4 rounded-2xl bg-white border border-line shadow-xs flex flex-col gap-3"
                 >
                   <div className="flex justify-between items-center gap-2">
                     <div className="flex items-center gap-2 flex-wrap">
-                      <span className="font-extrabold text-[15.5px] text-[#24170F]">
+                      <span className="font-extrabold text-[15.5px] text-ink">
                         {locale === 'bn' ? `অর্ডার #${orderNum}` : `Order #${orderNum}`}
                       </span>
                       {order.status === 'new' && (
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FBE3E0] text-[#9A2F25]">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-danger-soft text-danger">
                           {locale === 'bn' ? 'অপেক্ষমাণ' : 'Received'}
                         </span>
                       )}
                       {order.status === 'acknowledged' && (
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FDEBD2] text-[#8A4D06]">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-warning-soft text-warning">
                           {locale === 'bn' ? 'গৃহীত · সারিবদ্ধ' : 'Accepted · In queue'}
                         </span>
                       )}
                       {order.status === 'preparing' && (
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#FBEBD7] text-[#8A5A37] animate-pulse">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-surface-2 text-brand-muted animate-pulse">
                           {locale === 'bn' ? 'তৈরি হচ্ছে ☕' : 'Preparing ☕'}
                         </span>
                       )}
                       {order.status === 'ready' && (
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#E7F3EC] text-[#1F5C3F]">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-success-soft text-success">
                           {locale === 'bn' ? 'প্রস্তুত 🎉' : 'Ready 🎉'}
                         </span>
                       )}
                       {order.status === 'done' && (
-                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-[#E7F3EC] text-[#1F5C3F]">
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-success-soft text-success">
                           {locale === 'bn' ? 'পরিবেশিত ✅' : 'Served ✅'}
                         </span>
                       )}
                     </div>
-                    <span className="text-[12.5px] font-bold text-[#8C7767] tabular-nums shrink-0">
+                    <span className="text-[12.5px] font-bold text-ink-3 tabular-nums shrink-0">
                       {order.subtotal ? formatTaka(order.subtotal, locale) : ''}
                     </span>
                   </div>
@@ -138,10 +138,10 @@ export function TableStatusSheet({
                             <span
                               className={`w-7 h-7 rounded-full text-xs font-extrabold flex items-center justify-center transition-all ${
                                 isComplete
-                                  ? 'bg-[#2F7D57] text-white'
+                                  ? 'bg-success text-white'
                                   : isCurrent
-                                    ? 'bg-[#6B4226] text-[#FFF7EE] ring-2 ring-[#6B4226]/30'
-                                    : 'bg-[#FBEBD7] text-[#8C7767]'
+                                    ? 'bg-brand text-bg ring-2 ring-brand/30'
+                                    : 'bg-surface-2 text-ink-3'
                               }`}
                             >
                               {isComplete ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : step}
@@ -149,10 +149,10 @@ export function TableStatusSheet({
                             <span
                               className={`text-[11px] font-bold text-center leading-tight truncate w-full px-0.5 ${
                                 isCurrent
-                                  ? 'text-[#24170F]'
+                                  ? 'text-ink'
                                   : isComplete
-                                    ? 'text-[#2F7D57]'
-                                    : 'text-[#8C7767]'
+                                    ? 'text-success'
+                                    : 'text-ink-3'
                               }`}
                             >
                               {label}
@@ -162,7 +162,7 @@ export function TableStatusSheet({
                           {step < 4 && (
                             <span
                               className={`h-[3px] flex-1 mt-3 rounded-full transition-all ${
-                                currentStep > step ? 'bg-[#2F7D57]' : 'bg-[#F0DFCB]'
+                                currentStep > step ? 'bg-success' : 'bg-line'
                               }`}
                             />
                           )}
@@ -181,17 +181,17 @@ export function TableStatusSheet({
               return (
                 <div
                   key={call.id}
-                  className="p-3.5 rounded-2xl bg-white border border-[#F0DFCB] shadow-xs flex items-center gap-3"
+                  className="p-3.5 rounded-2xl bg-white border border-line shadow-xs flex items-center gap-3"
                 >
                   <div
                     className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${
-                      isComing ? 'bg-[#E7F3EC] text-[#2F7D57]' : 'bg-[#FBEBD7] text-[#6B4226]'
+                      isComing ? 'bg-success-soft text-success' : 'bg-surface-2 text-brand'
                     }`}
                   >
                     <Bell className="w-5 h-5 stroke-[2]" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-extrabold text-[15px] text-[#24170F]">
+                    <div className="font-extrabold text-[15px] text-ink">
                       {isComing
                         ? locale === 'bn'
                           ? 'ওয়েটার আসছেন'
@@ -200,7 +200,7 @@ export function TableStatusSheet({
                           ? 'ওয়েটার ডাকা হয়েছে'
                           : 'Waiter called'}
                     </div>
-                    <div className="text-[12.5px] font-medium text-[#6F5A4B]">
+                    <div className="text-[12.5px] font-medium text-ink-2">
                       {isComing
                         ? locale === 'bn'
                           ? 'স্টাফ আপনার ডাক দেখেছেন'
@@ -217,13 +217,13 @@ export function TableStatusSheet({
         )}
 
         {/* Bottom actions */}
-        <div className="flex flex-col gap-2 pt-3 border-t border-[#F6E9DA]">
+        <div className="flex flex-col gap-2 pt-3 border-t border-line-soft">
           <div className="flex gap-2">
             {onViewBill && (
               <button
                 type="button"
                 onClick={onViewBill}
-                className="flex-1 h-12 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#FFF7EE] active:scale-98 transition-all"
+                className="flex-1 h-12 rounded-full border border-line bg-white text-ink font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-bg active:scale-98 transition-all"
               >
                 <Receipt className="w-4 h-4 stroke-[2]" />
                 <span>{locale === 'bn' ? 'বিল দেখুন' : 'View bill'}</span>
@@ -234,7 +234,7 @@ export function TableStatusSheet({
               <button
                 type="button"
                 onClick={onCallWaiter}
-                className="flex-1 h-12 rounded-full bg-[#6B4226] text-[#FFF7EE] font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-[#57351e] active:scale-98 transition-all shadow-sm"
+                className="flex-1 h-12 rounded-full bg-brand text-bg font-bold text-[14.5px] flex items-center justify-center gap-2 hover:bg-brand-dark active:scale-98 transition-all shadow-sm"
               >
                 <Bell className="w-4 h-4 stroke-[2]" />
                 <span>{locale === 'bn' ? 'ওয়েটার ডাকুন' : 'Call waiter'}</span>
@@ -247,7 +247,7 @@ export function TableStatusSheet({
               type="button"
               data-testid="leave-review-button"
               onClick={onLeaveReview}
-              className="w-full h-11 rounded-full border border-[#F0DFCB] bg-[#FFF7EE] text-[#8A5A37] font-bold text-[13.5px] flex items-center justify-center gap-2 hover:bg-[#FBEBD7] active:scale-98 transition-all"
+              className="w-full h-11 rounded-full border border-line bg-bg text-brand-muted font-bold text-[13.5px] flex items-center justify-center gap-2 hover:bg-surface-2 active:scale-98 transition-all"
             >
               <Star className="w-4 h-4 fill-current stroke-[1.5]" />
               <span>{locale === 'bn' ? 'মতামত বা রিভিউ দিন' : 'Leave feedback or review'}</span>

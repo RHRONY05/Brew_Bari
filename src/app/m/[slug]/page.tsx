@@ -51,13 +51,13 @@ export default function GuestMenuPage(props: PageProps) {
   return (
     <Suspense
       fallback={
-        <div className="min-h-screen bg-[#FFF7EE] p-6 max-w-4xl mx-auto flex flex-col gap-6 animate-pulse">
-          <div className="h-12 w-48 bg-[#F0DFCB] rounded-2xl" />
-          <div className="h-[50px] w-full bg-[#F0DFCB] rounded-full" />
-          <div className="h-40 w-full bg-[#F0DFCB] rounded-3xl" />
+        <div className="min-h-screen bg-bg p-6 max-w-4xl mx-auto flex flex-col gap-6 animate-pulse">
+          <div className="h-12 w-48 bg-line rounded-2xl" />
+          <div className="h-[50px] w-full bg-line rounded-full" />
+          <div className="h-40 w-full bg-line rounded-3xl" />
           <div className="grid grid-cols-2 gap-4">
-            <div className="aspect-square bg-[#F0DFCB] rounded-3xl" />
-            <div className="aspect-square bg-[#F0DFCB] rounded-3xl" />
+            <div className="aspect-square bg-line rounded-3xl" />
+            <div className="aspect-square bg-line rounded-3xl" />
           </div>
         </div>
       }

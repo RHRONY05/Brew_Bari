@@ -76,19 +76,19 @@ export function CartSheet({
       <div className="flex flex-col gap-4 pb-6" data-testid="cart-sheet">
         {/* Header subtitle */}
         <div className="flex justify-between items-center -mt-2">
-          <div className="text-[13px] font-semibold text-[#6F5A4B]">{subtitle}</div>
+          <div className="text-[13px] font-semibold text-ink-2">{subtitle}</div>
         </div>
 
         {/* Empty state */}
         {items.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center gap-2">
-            <div className="w-16 h-16 rounded-full bg-[#FBEBD7] flex items-center justify-center text-[#B98A5E]">
+            <div className="w-16 h-16 rounded-full bg-surface-2 flex items-center justify-center text-brand-muted">
               <Coffee className="w-8 h-8 stroke-[1.4]" />
             </div>
-            <div className="font-bold text-[16px] text-[#24170F]">
+            <div className="font-bold text-[16px] text-ink">
               {locale === 'bn' ? 'আপনার কার্ট খালি' : 'Your cart is empty'}
             </div>
-            <div className="text-[13px] text-[#8C7767]">
+            <div className="text-[13px] text-ink-3">
               {locale === 'bn'
                 ? 'মেন্যু থেকে পছন্দের আইটেম যোগ করুন'
                 : 'Add delicious drinks and bites from the menu'}
@@ -96,7 +96,7 @@ export function CartSheet({
           </div>
         ) : (
           /* Cart lines list */
-          <div className="flex flex-col divide-y divide-[#F6E9DA] max-h-[46vh] overflow-y-auto no-scrollbar pr-1">
+          <div className="flex flex-col divide-y divide-line-soft max-h-[46vh] overflow-y-auto no-scrollbar pr-1">
             {items.map((line) => {
               const itemName = pick(line.item, 'name', locale);
               const choicesText = formatChoicesSummary(line);
@@ -104,7 +104,7 @@ export function CartSheet({
               return (
                 <div key={line.id} className="py-3.5 flex gap-3 items-center">
                   {/* Thumbnail */}
-                  <div className="relative w-16 h-16 rounded-2xl bg-[#FBEBD7] flex items-center justify-center overflow-hidden shrink-0 text-[#B98A5E]">
+                  <div className="relative w-16 h-16 rounded-2xl bg-surface-2 flex items-center justify-center overflow-hidden shrink-0 text-brand-muted">
                     {line.item.image_url ? (
                       <Image
                         src={line.item.image_url}
@@ -121,10 +121,10 @@ export function CartSheet({
                   {/* Details */}
                   <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                     <div className="flex justify-between items-baseline gap-2">
-                      <span className="font-bold text-[15px] text-[#24170F] truncate">
+                      <span className="font-bold text-[15px] text-ink truncate">
                         {itemName}
                       </span>
-                      <span className="font-extrabold text-[15px] text-[#24170F] tabular-nums">
+                      <span className="font-extrabold text-[15px] text-ink tabular-nums">
                         {formatTaka(line.lineTotal, locale)}
                       </span>
                     </div>
@@ -132,37 +132,37 @@ export function CartSheet({
                     {soldOutItemIds.includes(line.item.id) && (
                       <span
                         data-testid={`sold-out-badge-${line.item.id}`}
-                        className="inline-block px-2 py-0.5 rounded-md bg-[#FCE8E6] text-[#C5221F] text-[11px] font-extrabold w-fit my-0.5"
+                        className="inline-block px-2 py-0.5 rounded-md bg-danger-soft text-danger text-[11px] font-extrabold w-fit my-0.5"
                       >
                         {locale === 'bn' ? 'শেষ হয়ে গেছে' : 'Sold out'}
                       </span>
                     )}
 
                     {choicesText && (
-                      <span className="text-[12.5px] leading-snug text-[#6F5A4B] line-clamp-1">
+                      <span className="text-[12.5px] leading-snug text-ink-2 line-clamp-1">
                         {choicesText}
                       </span>
                     )}
 
                     {line.note && (
-                      <span className="text-[11.5px] italic text-[#8C7767] line-clamp-1">
+                      <span className="text-[11.5px] italic text-ink-3 line-clamp-1">
                         &quot;{line.note}&quot;
                       </span>
                     )}
 
                     {/* Stepper + Unit Price */}
                     <div className="flex justify-between items-center mt-1.5">
-                      <span className="text-[12px] font-medium text-[#8C7767]">
+                      <span className="text-[12px] font-medium text-ink-3">
                         {formatTaka(line.unitPrice, locale)}{' '}
                         {locale === 'bn' ? 'প্রতিটি' : 'each'}
                       </span>
 
-                      <div className="flex items-center gap-1 bg-[#FFF7EE] rounded-full p-0.5 border border-[#F0DFCB]">
+                      <div className="flex items-center gap-1 bg-bg rounded-full p-0.5 border border-line">
                         <button
                           type="button"
                           aria-label={`Decrease quantity of ${itemName}`}
                           onClick={() => onUpdateQuantity(line.id, line.quantity - 1)}
-                          className="w-8 h-8 rounded-full bg-white text-[#24170F] flex items-center justify-center shadow-xs"
+                          className="w-8 h-8 rounded-full bg-white text-ink flex items-center justify-center shadow-xs"
                         >
                           <Minus className="w-3.5 h-3.5 stroke-[2.5]" />
                         </button>
@@ -173,7 +173,7 @@ export function CartSheet({
                           type="button"
                           aria-label={`Increase quantity of ${itemName}`}
                           onClick={() => onUpdateQuantity(line.id, line.quantity + 1)}
-                          className="w-8 h-8 rounded-full bg-white text-[#24170F] flex items-center justify-center shadow-xs"
+                          className="w-8 h-8 rounded-full bg-white text-ink flex items-center justify-center shadow-xs"
                         >
                           <Plus className="w-3.5 h-3.5 stroke-[2.5]" />
                         </button>
@@ -189,8 +189,8 @@ export function CartSheet({
         {items.length > 0 && (
           <>
             {/* Kitchen note input */}
-            <div className="flex flex-col gap-1.5 pt-2 border-t border-[#F0DFCB]/50">
-              <label htmlFor="kitchen-note" className="text-[13px] font-bold text-[#24170F]">
+            <div className="flex flex-col gap-1.5 pt-2 border-t border-line/50">
+              <label htmlFor="kitchen-note" className="text-[13px] font-bold text-ink">
                 {locale === 'bn' ? 'কিচেনের জন্য বিশেষ নোট' : 'Note for the kitchen'}
               </label>
               <input
@@ -204,21 +204,21 @@ export function CartSheet({
                     ? 'যেমন: কফির সাথে ব্রাউনি একসাথে দিন'
                     : 'e.g. bring the brownie with the coffee'
                 }
-                className="w-full h-11 px-3.5 rounded-xl border border-[#F0DFCB] bg-[#FFF7EE] text-[13.5px] text-[#24170F] placeholder:text-[#8C7767] focus:outline-none focus:ring-1 focus:ring-[#6B4226]"
+                className="w-full h-11 px-3.5 rounded-xl border border-line bg-bg text-[13.5px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-1 focus:ring-brand"
               />
             </div>
 
             {/* Subtotal & tax notice */}
             <div className="pt-2">
               <div className="flex justify-between items-baseline text-[15.5px]">
-                <span className="font-semibold text-[#6F5A4B]">
+                <span className="font-semibold text-ink-2">
                   {locale === 'bn' ? 'সাবটোটাল' : 'Subtotal'}
                 </span>
-                <span className="font-extrabold text-[#24170F] text-lg tabular-nums">
+                <span className="font-extrabold text-ink text-lg tabular-nums">
                   {formatTaka(subtotal, locale)}
                 </span>
               </div>
-              <div className="text-[12px] text-[#8C7767] mt-0.5">
+              <div className="text-[12px] text-ink-3 mt-0.5">
                 {locale === 'bn'
                   ? 'ভ্যাট বিলে যোগ করা হবে। ক্যাফে কর্তৃক দাম নিশ্চিত।'
                   : 'VAT is added on the bill. Prices are confirmed by the café.'}
@@ -229,7 +229,7 @@ export function CartSheet({
             {hasSoldOut && (
               <div
                 data-testid="sold-out-alert"
-                className="p-3 rounded-2xl bg-[#FFF0EE] border border-[#FCD2CD] text-[13px] font-semibold text-[#CE2C31]"
+                className="p-3 rounded-2xl bg-danger-soft border border-danger-soft text-[13px] font-semibold text-danger"
               >
                 {locale === 'bn'
                   ? 'কিছু আইটেম শেষ হয়ে গেছে। অর্ডার দিতে সেগুলো কার্ট থেকে বাদ দিন।'
@@ -238,7 +238,7 @@ export function CartSheet({
             )}
 
             {/* CTAs */}
-            <div className="flex flex-col gap-2 pt-2 border-t border-[#F6E9DA]">
+            <div className="flex flex-col gap-2 pt-2 border-t border-line-soft">
               {/* Place Order CTA */}
               {onPlaceOrder && (
                 <button
@@ -246,7 +246,7 @@ export function CartSheet({
                   data-testid="place-order-button"
                   disabled={hasSoldOut || isPlacingOrder}
                   onClick={onPlaceOrder}
-                  className="w-full h-13 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>
                     {isPlacingOrder
@@ -276,7 +276,7 @@ export function CartSheet({
                   type="button"
                   data-testid="call-waiter-secondary-button"
                   onClick={onCallWaiter}
-                  className="w-full h-11 rounded-full border border-[#F0DFCB] bg-white text-[#6B4226] font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-[#FFF7EE] active:scale-98 transition-all"
+                  className="w-full h-11 rounded-full border border-line bg-white text-brand font-bold text-[14px] flex items-center justify-center gap-2 hover:bg-bg active:scale-98 transition-all"
                 >
                   <Bell className="w-4 h-4 stroke-[2]" />
                   <span>
@@ -287,11 +287,11 @@ export function CartSheet({
 
               {/* Table selection fallback if on public menu without a table */}
               {!onPlaceOrder && (
-                <div className="p-3.5 rounded-2xl bg-[#FFF7EE] border border-[#F0DFCB] text-center flex flex-col items-center gap-2 my-1">
-                  <div className="text-[14px] font-extrabold text-[#24170F]">
+                <div className="p-3.5 rounded-2xl bg-bg border border-line text-center flex flex-col items-center gap-2 my-1">
+                  <div className="text-[14px] font-extrabold text-ink">
                     {locale === 'bn' ? 'অর্ডার দিতে টেবিল নির্বাচন করুন' : 'Ready to place this order?'}
                   </div>
-                  <p className="text-[12px] text-[#6F5A4B] leading-snug">
+                  <p className="text-[12px] text-ink-2 leading-snug">
                     {locale === 'bn'
                       ? 'অর্ডার পাঠাতে আপনার টেবিলের কিউআর কোড স্ক্যান করুন, অথবা নিচের টেস্ট টেবিল বেছে নিন:'
                       : 'You are viewing the digital menu. To send your order to the kitchen, scan your table QR or tap a table below:'}
@@ -299,25 +299,25 @@ export function CartSheet({
                   <div className="grid grid-cols-4 gap-2 w-full pt-1">
                     <a
                       href="/t/cb56e5ef05ab0759602d6481"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
                     >
                       Table 1
                     </a>
                     <a
                       href="/t/b90039ff9153f8d73c622bfe"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
                     >
                       Table 2
                     </a>
                     <a
                       href="/t/b8110d50b8ca25d560837030"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
                     >
                       Table 3
                     </a>
                     <a
                       href="/t/test-table-99"
-                      className="py-2.5 px-1 rounded-xl bg-[#6B4226] text-[#FFF7EE] text-xs font-bold text-center shadow-2xs hover:bg-[#57351e] transition-all"
+                      className="py-2.5 px-1 rounded-xl bg-brand text-bg text-xs font-bold text-center shadow-2xs hover:bg-brand-dark transition-all"
                     >
                       Table 99
                     </a>

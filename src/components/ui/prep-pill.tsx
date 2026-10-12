@@ -30,7 +30,7 @@ export function PrepPill({ prepMinutes, locale = 'en', className }: PrepPillProp
       className={cn(
         'inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11.5px] font-bold tracking-tight h-[22px]',
         isReadyNow
-          ? 'bg-success-soft text-[#1F5C3F]'
+          ? 'bg-success-soft text-success'
           : 'bg-bg text-ink-2 border border-line',
         className
       )}

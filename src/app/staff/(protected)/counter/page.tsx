@@ -469,7 +469,7 @@ export default function CounterBoardPage() {
   }, [selectedTable, sessions]);
 
   return (
-    <div className="w-full min-h-screen bg-[#FFF7EE] text-[#24170F] flex flex-col selection:bg-[#F2C27D]">
+    <div className="w-full min-h-screen bg-bg text-ink flex flex-col selection:bg-accent">
       {/* Start Shift Overlay */}
       {!shiftStarted && <StartShiftOverlay onStartShift={handleStartShift} />}
 
@@ -490,8 +490,8 @@ export default function CounterBoardPage() {
         {/* Mobile Horizontal Table Strip (visible on mobile < 1024px) */}
         <div className="lg:hidden flex flex-col gap-2">
           <div className="flex justify-between items-baseline px-1">
-            <span className="text-[14px] font-extrabold text-[#24170F]">Tables</span>
-            <span className="text-[11.5px] text-[#6F5A4B] font-semibold">Tap for details</span>
+            <span className="text-[14px] font-extrabold text-ink">Tables</span>
+            <span className="text-[11.5px] text-ink-2 font-semibold">Tap for details</span>
           </div>
           <div
             aria-label="Tables"
@@ -516,7 +516,7 @@ export default function CounterBoardPage() {
             <TableGrid
               tables={tablesWithState}
               onSelectTable={(t) => setSelectedTable(t)}
-              className="w-full bg-white p-5 rounded-3xl border border-[#F0DFCB] shadow-xs"
+              className="w-full bg-white p-5 rounded-3xl border border-line shadow-xs"
             />
           </div>
 
@@ -524,7 +524,7 @@ export default function CounterBoardPage() {
           <div className="flex-1 w-full min-w-0 flex flex-col gap-4">
             {/* Filter Tabs */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
-              <h2 className="text-[18px] font-extrabold text-[#24170F] mr-2 shrink-0">
+              <h2 className="text-[18px] font-extrabold text-ink mr-2 shrink-0">
                 Requests
               </h2>
               <button
@@ -533,12 +533,12 @@ export default function CounterBoardPage() {
                 onClick={() => setActiveTab('all')}
                 className={`h-9.5 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-2 shrink-0 border transition-all cursor-pointer ${
                   activeTab === 'all'
-                    ? 'bg-[#24170F] text-[#FFF7EE] border-[#24170F]'
-                    : 'bg-white text-[#24170F] border-[#F0DFCB] hover:bg-[#FFF7EE]'
+                    ? 'bg-ink text-bg border-ink'
+                    : 'bg-white text-ink border-line hover:bg-bg'
                 }`}
               >
                 <span>All</span>
-                <span className="min-w-5 h-5 px-1.5 rounded-full bg-[#FBEBD7] text-[#24170F] text-[11px] font-extrabold flex items-center justify-center">
+                <span className="min-w-5 h-5 px-1.5 rounded-full bg-surface-2 text-ink text-[11px] font-extrabold flex items-center justify-center">
                   {counts.all}
                 </span>
               </button>
@@ -549,12 +549,12 @@ export default function CounterBoardPage() {
                 onClick={() => setActiveTab('calls')}
                 className={`h-9.5 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-2 shrink-0 border transition-all cursor-pointer ${
                   activeTab === 'calls'
-                    ? 'bg-[#24170F] text-[#FFF7EE] border-[#24170F]'
-                    : 'bg-white text-[#24170F] border-[#F0DFCB] hover:bg-[#FFF7EE]'
+                    ? 'bg-ink text-bg border-ink'
+                    : 'bg-white text-ink border-line hover:bg-bg'
                 }`}
               >
                 <span>Calls</span>
-                <span className="min-w-5 h-5 px-1.5 rounded-full bg-[#FBEBD7] text-[#24170F] text-[11px] font-extrabold flex items-center justify-center">
+                <span className="min-w-5 h-5 px-1.5 rounded-full bg-surface-2 text-ink text-[11px] font-extrabold flex items-center justify-center">
                   {counts.calls}
                 </span>
               </button>
@@ -565,12 +565,12 @@ export default function CounterBoardPage() {
                 onClick={() => setActiveTab('orders')}
                 className={`h-9.5 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-2 shrink-0 border transition-all cursor-pointer ${
                   activeTab === 'orders'
-                    ? 'bg-[#24170F] text-[#FFF7EE] border-[#24170F]'
-                    : 'bg-white text-[#24170F] border-[#F0DFCB] hover:bg-[#FFF7EE]'
+                    ? 'bg-ink text-bg border-ink'
+                    : 'bg-white text-ink border-line hover:bg-bg'
                 }`}
               >
                 <span>Orders</span>
-                <span className="min-w-5 h-5 px-1.5 rounded-full bg-[#FBEBD7] text-[#24170F] text-[11px] font-extrabold flex items-center justify-center">
+                <span className="min-w-5 h-5 px-1.5 rounded-full bg-surface-2 text-ink text-[11px] font-extrabold flex items-center justify-center">
                   {counts.orders}
                 </span>
               </button>
@@ -581,12 +581,12 @@ export default function CounterBoardPage() {
                 onClick={() => setActiveTab('bills')}
                 className={`h-9.5 px-3.5 rounded-full text-[13px] font-bold flex items-center gap-2 shrink-0 border transition-all cursor-pointer ${
                   activeTab === 'bills'
-                    ? 'bg-[#24170F] text-[#FFF7EE] border-[#24170F]'
-                    : 'bg-white text-[#24170F] border-[#F0DFCB] hover:bg-[#FFF7EE]'
+                    ? 'bg-ink text-bg border-ink'
+                    : 'bg-white text-ink border-line hover:bg-bg'
                 }`}
               >
                 <span>Bills</span>
-                <span className="min-w-5 h-5 px-1.5 rounded-full bg-[#FBEBD7] text-[#24170F] text-[11px] font-extrabold flex items-center justify-center">
+                <span className="min-w-5 h-5 px-1.5 rounded-full bg-surface-2 text-ink text-[11px] font-extrabold flex items-center justify-center">
                   {counts.bills}
                 </span>
               </button>
@@ -596,15 +596,15 @@ export default function CounterBoardPage() {
             {filteredRequests.length === 0 ? (
               <div
                 data-testid="empty-requests-state"
-                className="w-full bg-white rounded-3xl p-12 border border-[#F0DFCB] flex flex-col items-center justify-center text-center gap-3 shadow-2xs"
+                className="w-full bg-white rounded-3xl p-12 border border-line flex flex-col items-center justify-center text-center gap-3 shadow-2xs"
               >
-                <div className="w-14 h-14 rounded-full bg-[#FFF7EE] flex items-center justify-center text-[#8A5A37]">
+                <div className="w-14 h-14 rounded-full bg-bg flex items-center justify-center text-brand-muted">
                   <Coffee className="w-7 h-7" />
                 </div>
-                <h3 className="text-[17px] font-extrabold text-[#24170F]">
+                <h3 className="text-[17px] font-extrabold text-ink">
                   All calm ☕
                 </h3>
-                <p className="text-[13.5px] text-[#6F5A4B] font-medium max-w-sm">
+                <p className="text-[13.5px] text-ink-2 font-medium max-w-sm">
                   New requests and orders will appear here automatically.
                 </p>
               </div>
@@ -628,11 +628,11 @@ export default function CounterBoardPage() {
 
             {/* Collapsible Done Today Section */}
             {doneTodayRequests.length > 0 && (
-              <div className="mt-4 pt-4 border-t border-[#F0DFCB]">
+              <div className="mt-4 pt-4 border-t border-line">
                 <button
                   type="button"
                   onClick={() => setShowDoneToday((s) => !s)}
-                  className="flex items-center gap-2 text-[13px] font-bold text-[#8C7767] hover:text-[#24170F] transition-colors"
+                  className="flex items-center gap-2 text-[13px] font-bold text-ink-3 hover:text-ink transition-colors"
                 >
                   <span>Completed requests ({doneTodayRequests.length})</span>
                   {showDoneToday ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
@@ -643,17 +643,17 @@ export default function CounterBoardPage() {
                     {doneTodayRequests.map((req) => (
                       <div
                         key={req.id}
-                        className="bg-white/80 p-3.5 rounded-2xl border border-[#F0DFCB] flex items-center justify-between text-[13px]"
+                        className="bg-white/80 p-3.5 rounded-2xl border border-line flex items-center justify-between text-[13px]"
                       >
                         <div className="flex items-center gap-3">
-                          <span className="font-extrabold text-[#6F5A4B]">
+                          <span className="font-extrabold text-ink-2">
                             Table {req.table_number}
                           </span>
-                          <span className="font-bold text-[#24170F] capitalize">
+                          <span className="font-bold text-ink capitalize">
                             {req.type.replace('_', ' ')}
                           </span>
                         </div>
-                        <span className="text-[12px] font-semibold text-[#8C7767]">
+                        <span className="text-[12px] font-semibold text-ink-3">
                           {req.status} · {getTimeAgo(req.created_at)}
                         </span>
                       </div>

@@ -81,24 +81,24 @@ export default function PrintTableCardsPage() {
   if (loading) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-muted" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F6E9DA] print:bg-white text-[#24170F] p-4 print:p-0">
+    <div className="min-h-screen bg-line-soft print:bg-white text-ink p-4 print:p-0">
       {/* Screen action bar (hidden during print) */}
       <div className="max-w-[210mm] mx-auto mb-4 bg-white p-4 rounded-2xl shadow-sm flex items-center justify-between print:hidden">
         <div className="flex items-center gap-3">
           <Link
             href="/staff/admin/tables"
-            className="h-10 px-4 rounded-full border border-[#F0DFCB] text-[#24170F] text-[13px] font-bold flex items-center gap-1.5 hover:bg-[#FFF7EE]"
+            className="h-10 px-4 rounded-full border border-line text-ink text-[13px] font-bold flex items-center gap-1.5 hover:bg-bg"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to tables
           </Link>
-          <span className="text-[14px] font-bold text-[#6F5A4B]">
+          <span className="text-[14px] font-bold text-ink-2">
             {tablesWithQr.length} printable cards ready
           </span>
         </div>
@@ -106,7 +106,7 @@ export default function PrintTableCardsPage() {
         <button
           type="button"
           onClick={() => window.print()}
-          className="h-10 px-5 rounded-full bg-[#F2C27D] text-[#24170F] text-[14px] font-extrabold flex items-center gap-2 shadow-xs hover:bg-[#e0b06c]"
+          className="h-10 px-5 rounded-full bg-accent text-ink text-[14px] font-extrabold flex items-center gap-2 shadow-xs hover:bg-accent-strong"
         >
           <Printer className="w-4 h-4" />
           Print cards (A4)
@@ -122,25 +122,27 @@ export default function PrintTableCardsPage() {
           <div
             key={table.id}
             data-testid={`qr-card-${table.number}`}
-            className="border-2 border-[#6B4226] rounded-3xl p-5 flex flex-col items-center text-center gap-2.5 bg-[#FFFBF7] print:break-inside-avoid shadow-xs print:shadow-none"
+            className="border-2 border-brand rounded-3xl p-5 flex flex-col items-center text-center gap-2.5 bg-surface-subtle print:break-inside-avoid shadow-xs print:shadow-none"
           >
             {/* Header */}
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-[#6B4226] text-[#F2C27D] font-extrabold text-[11px] flex items-center justify-center">
-                BB
-              </div>
-              <span className="text-[16px] font-extrabold tracking-tight text-[#24170F]">
+              <img
+                src="/images/brand/concept-1.png"
+                alt="Brew Bari Logo"
+                className="w-7 h-7 object-contain shrink-0"
+              />
+              <span className="text-[16px] font-extrabold tracking-tight text-ink">
                 Brew Bari
               </span>
             </div>
 
             {/* Table Number */}
-            <div className="text-[26px] font-extrabold text-[#24170F] leading-tight mt-1">
+            <div className="text-[26px] font-extrabold text-ink leading-tight mt-1">
               {table.label || `Table ${table.number}`}
             </div>
 
             {/* QR Code image */}
-            <div className="p-3 bg-white border border-[#F0DFCB] rounded-2xl shadow-2xs my-1">
+            <div className="p-3 bg-white border border-line rounded-2xl shadow-2xs my-1">
               <img
                 src={table.qrDataUrl}
                 alt={`Table ${table.number} QR code`}
@@ -149,15 +151,15 @@ export default function PrintTableCardsPage() {
             </div>
 
             {/* Bilingual instructions */}
-            <div className="text-[13px] font-bold text-[#24170F] leading-tight">
+            <div className="text-[13px] font-bold text-ink leading-tight">
               Scan to order &amp; call waiter
             </div>
-            <div className="text-[12px] font-semibold text-[#6F5A4B] leading-tight">
+            <div className="text-[12px] font-semibold text-ink-2 leading-tight">
               অর্ডার করতে ও ওয়েটার ডাকতে স্ক্যান করুন
             </div>
 
             {/* Wi-Fi footer */}
-            <div className="mt-2 pt-2 border-t border-[#F0DFCB] w-full text-[11px] text-[#8C7767] font-medium flex justify-between px-2">
+            <div className="mt-2 pt-2 border-t border-line w-full text-[11px] text-ink-3 font-medium flex justify-between px-2">
               <span>Wi-Fi: BrewBari_Guest</span>
               <span>Pass: Coffee2026</span>
             </div>

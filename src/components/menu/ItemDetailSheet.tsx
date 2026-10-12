@@ -113,7 +113,7 @@ function ItemDetailContent({
   return (
     <div className="flex flex-col gap-4 pb-6" data-testid="item-detail-sheet">
       {/* Item Hero / Image */}
-      <div className="relative h-[180px] rounded-2xl bg-[#FBEBD7] flex items-center justify-center overflow-hidden text-[#B98A5E]">
+      <div className="relative h-[180px] rounded-2xl bg-surface-2 flex items-center justify-center overflow-hidden text-brand-muted">
         {item.image_url ? (
           <Image
             src={item.image_url}
@@ -131,7 +131,7 @@ function ItemDetailContent({
           type="button"
           aria-label="Close"
           onClick={onClose}
-          className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-white/90 text-[#24170F] shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all"
+          className="absolute top-2.5 right-2.5 w-10 h-10 rounded-full bg-white/90 text-ink shadow-md flex items-center justify-center hover:bg-white active:scale-95 transition-all"
         >
           <X className="w-5 h-5 stroke-[2.2]" />
         </button>
@@ -140,12 +140,12 @@ function ItemDetailContent({
       {/* Title, Base Price, Description */}
       <div className="flex flex-col gap-1">
         <div className="flex justify-between items-baseline gap-2">
-          <h2 className="text-2xl font-extrabold text-[#24170F] tracking-tight">{name}</h2>
-          <span className="text-lg font-extrabold text-[#24170F] tabular-nums">
+          <h2 className="text-2xl font-extrabold text-ink tracking-tight">{name}</h2>
+          <span className="text-lg font-extrabold text-ink tabular-nums">
             {formatTaka(item.price, locale)}
           </span>
         </div>
-        {desc && <p className="text-[13.5px] leading-relaxed text-[#6F5A4B]">{desc}</p>}
+        {desc && <p className="text-[13.5px] leading-relaxed text-ink-2">{desc}</p>}
       </div>
 
       {/* Option Groups */}
@@ -154,19 +154,19 @@ function ItemDetailContent({
         const isMissing = missingGroupIds.includes(group.id);
 
         return (
-          <div key={group.id} className="flex flex-col gap-2 pt-2 border-t border-[#F0DFCB]/50">
+          <div key={group.id} className="flex flex-col gap-2 pt-2 border-t border-line/50">
             <div className="flex justify-between items-baseline">
-              <span className="text-[14.5px] font-bold text-[#24170F]">{groupName}</span>
+              <span className="text-[14.5px] font-bold text-ink">{groupName}</span>
               {group.required ? (
                 <span
                   className={`text-[11px] font-extrabold px-2 py-0.5 rounded-full ${
-                    isMissing ? 'bg-[#B83B30] text-white' : 'bg-[#FBEBD7] text-[#8A5A37]'
+                    isMissing ? 'bg-danger text-white' : 'bg-surface-2 text-brand-muted'
                   }`}
                 >
                   {locale === 'bn' ? 'আবশ্যক' : 'Required'}
                 </span>
               ) : (
-                <span className="text-[11px] font-semibold text-[#8C7767]">
+                <span className="text-[11px] font-semibold text-ink-3">
                   {group.type === 'single'
                     ? locale === 'bn'
                       ? 'ঐচ্ছিক · ১টি বাছুন'
@@ -199,13 +199,13 @@ function ItemDetailContent({
                     }
                     className={`h-10 px-3.5 rounded-full text-[13.5px] font-bold flex items-center gap-1.5 transition-all ${
                       isSelected
-                        ? 'bg-[#6B4226] text-[#FFF7EE] shadow-sm'
-                        : 'bg-white border border-[#F0DFCB] text-[#24170F] hover:border-[#6B4226]/40'
+                        ? 'bg-brand text-bg shadow-sm'
+                        : 'bg-white border border-line text-ink hover:border-brand/40'
                     }`}
                   >
                     <span>{choiceName}</span>
                     {choice.price_delta > 0 && (
-                      <span className={`text-[12px] font-extrabold opacity-80 ${isSelected ? 'text-[#F2C27D]' : 'text-[#6F5A4B]'}`}>
+                      <span className={`text-[12px] font-extrabold opacity-80 ${isSelected ? 'text-accent' : 'text-ink-2'}`}>
                         +{formatTaka(choice.price_delta, locale)}
                       </span>
                     )}
@@ -218,8 +218,8 @@ function ItemDetailContent({
       })}
 
       {/* Special instructions note */}
-      <div className="flex flex-col gap-1.5 pt-2 border-t border-[#F0DFCB]/50">
-        <label htmlFor="special-note" className="text-[13px] font-bold text-[#6F5A4B]">
+      <div className="flex flex-col gap-1.5 pt-2 border-t border-line/50">
+        <label htmlFor="special-note" className="text-[13px] font-bold text-ink-2">
           {locale === 'bn' ? 'বিশেষ অনুরোধ (ঐচ্ছিক)' : 'Special instructions (optional)'}
         </label>
         <textarea
@@ -231,21 +231,21 @@ function ItemDetailContent({
           placeholder={
             locale === 'bn' ? 'যেমন: কম চিনি, বেশি গরম…' : 'e.g. less sweet, extra hot…'
           }
-          className="w-full p-2.5 rounded-xl border border-[#F0DFCB] bg-white text-[13.5px] text-[#24170F] placeholder:text-[#8C7767] focus:outline-none focus:ring-1 focus:ring-[#6B4226] resize-none"
+          className="w-full p-2.5 rounded-xl border border-line bg-white text-[13.5px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-1 focus:ring-brand resize-none"
         />
       </div>
 
       {/* Bottom Bar: Stepper + Add Button */}
       {canAdd && (
-        <div className="pt-3 border-t border-[#F0DFCB] flex items-center gap-3">
+        <div className="pt-3 border-t border-line flex items-center gap-3">
           {/* Quantity Stepper */}
-          <div className="flex items-center gap-1 bg-[#FFF7EE] rounded-full p-1 border border-[#F0DFCB]">
+          <div className="flex items-center gap-1 bg-bg rounded-full p-1 border border-line">
             <button
               type="button"
               aria-label="Decrease quantity"
               disabled={quantity <= 1}
               onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-              className="w-9 h-9 rounded-full bg-[#FBEBD7] text-[#24170F] flex items-center justify-center disabled:opacity-40"
+              className="w-9 h-9 rounded-full bg-surface-2 text-ink flex items-center justify-center disabled:opacity-40"
             >
               <Minus className="w-4 h-4 stroke-[2.5]" />
             </button>
@@ -257,7 +257,7 @@ function ItemDetailContent({
               aria-label="Increase quantity"
               disabled={quantity >= 20}
               onClick={() => setQuantity((q) => Math.min(20, q + 1))}
-              className="w-9 h-9 rounded-full bg-[#FBEBD7] text-[#24170F] flex items-center justify-center disabled:opacity-40"
+              className="w-9 h-9 rounded-full bg-surface-2 text-ink flex items-center justify-center disabled:opacity-40"
             >
               <Plus className="w-4 h-4 stroke-[2.5]" />
             </button>
@@ -269,7 +269,7 @@ function ItemDetailContent({
             data-testid="item-sheet-add-button"
             disabled={!isValid}
             onClick={handleAdd}
-            className="flex-1 h-12 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all disabled:opacity-45 disabled:cursor-not-allowed shadow-[0_4px_12px_rgba(227,166,81,0.3)]"
+            className="flex-1 h-12 rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all disabled:opacity-45 disabled:cursor-not-allowed shadow-[0_4px_12px_rgba(227,166,81,0.3)]"
           >
             <span>{locale === 'bn' ? 'যোগ করুন' : 'Add'}</span>
             <span>·</span>

@@ -1,4 +1,4 @@
-# Brew Bari (ব্রিউ বাড়ি)
+# Brew Bari (ব্রু বাড়ি)
 
 A high-performance QR-menu and table-service web application for a modern coffee & juice shop in Chattogram, Bangladesh.
 

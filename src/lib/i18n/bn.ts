@@ -2,7 +2,7 @@ import type { TranslationDictionary } from './en'
 
 export const bn: TranslationDictionary = {
   common: {
-    appName: 'ব্রিউ বাড়ি',
+    appName: 'ব্রু বাড়ি',
     loading: 'লোড হচ্ছে...',
     error: 'কিছু ভুল হয়েছে',
     retry: 'আবার চেষ্টা করুন',
@@ -78,10 +78,10 @@ export const bn: TranslationDictionary = {
     submitRating: 'মতামত পাঠান',
     reviewOnGoogle: 'গুগলে রিভিউ দিন',
     copiedToClipboard: 'মতামত ক্লিপবোর্ডে কপি করা হয়েছে!',
-    thankYou: 'ব্রিউ বাড়িতে আসার জন্য ধন্যবাদ!',
+    thankYou: 'ব্রু বাড়িতে আসার জন্য ধন্যবাদ!',
   },
   info: {
-    title: 'ব্রিউ বাড়ি সম্পর্কে',
+    title: 'ব্রু বাড়ি সম্পর্কে',
     address: 'চট্টগ্রাম, বাংলাদেশ',
     hours: 'প্রতিদিন: সকাল ৮:০০ – রাত ১১:০০',
     wifi: 'ওয়াই-ফাই নেটওয়ার্ক',

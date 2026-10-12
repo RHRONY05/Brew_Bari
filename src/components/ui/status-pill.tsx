@@ -33,7 +33,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-pending-soft text-[#6E5500]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-pending-soft text-warning',
             className
           )}
         >
@@ -45,7 +45,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-warning-soft text-[#8A4D06] animate-pulse',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-warning-soft text-warning animate-pulse',
             className
           )}
         >
@@ -57,7 +57,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-danger-soft text-[#9A2F25]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-danger-soft text-danger',
             className
           )}
         >
@@ -69,7 +69,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-warning-soft text-[#8A4D06]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-warning-soft text-warning',
             className
           )}
         >
@@ -81,7 +81,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-success-soft text-[#1F5C3F]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-success-soft text-success',
             className
           )}
         >
@@ -93,7 +93,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-success-soft text-[#1F5C3F]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-success-soft text-success',
             className
           )}
         >
@@ -105,7 +105,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
       return (
         <span
           className={cn(
-            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-info-soft text-[#22508F]',
+            'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold bg-info-soft text-info',
             className
           )}
         >

@@ -14,7 +14,7 @@ const badgeVariants = cva(
         surface2: 'bg-surface-2 text-ink-2',
         outline: 'border border-line text-ink-2',
         warning: 'bg-warning text-white',
-        info: 'bg-info-soft text-[#22508F]',
+        info: 'bg-info-soft text-info',
       },
     },
     defaultVariants: {

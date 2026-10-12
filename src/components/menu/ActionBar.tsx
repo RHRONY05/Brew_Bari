@@ -44,22 +44,22 @@ export function ActionBar({
           type="button"
           onClick={onOpenStatus}
           data-testid="floating-status-pill"
-          className="pointer-events-auto self-center h-[34px] px-3.5 rounded-full bg-white shadow-[0_6px_20px_rgba(107,66,38,0.14)] border border-[#F0DFCB]/60 flex items-center gap-2 text-[13px] font-bold text-[#24170F] hover:bg-[#FFF7EE] active:scale-95 transition-all"
+          className="pointer-events-auto self-center h-[34px] px-3.5 rounded-full bg-white shadow-[0_6px_20px_rgba(107,66,38,0.14)] border border-line/60 flex items-center gap-2 text-[13px] font-bold text-ink hover:bg-bg active:scale-95 transition-all"
         >
-          <span className="w-2 h-2 rounded-full bg-[#C77C0E] animate-pulse" />
+          <span className="w-2 h-2 rounded-full bg-warning animate-pulse" />
           <span>{activeStatusText}</span>
           <ChevronRight className="w-3.5 h-3.5 stroke-[2.5]" />
         </button>
       )}
 
       {/* Main bar container */}
-      <div className="pointer-events-auto bg-white/95 backdrop-blur-md rounded-[28px] p-2 shadow-[0_-4px_24px_rgba(36,23,15,0.12)] border border-[#F0DFCB]/80 flex gap-2">
+      <div className="pointer-events-auto bg-white/95 backdrop-blur-md rounded-[28px] p-2 shadow-[0_-4px_24px_rgba(36,23,15,0.12)] border border-line/80 flex gap-2">
         {/* Call waiter button */}
         <button
           type="button"
           data-testid="action-call-waiter"
           onClick={onCallWaiter}
-          className="h-[52px] px-4.5 rounded-full bg-[#6B4226] text-[#FFF7EE] text-[14.5px] font-bold flex items-center gap-2 hover:bg-[#57351e] active:scale-95 transition-all shrink-0 shadow-sm"
+          className="h-[52px] px-4.5 rounded-full bg-brand text-bg text-[14.5px] font-bold flex items-center gap-2 hover:bg-brand-dark active:scale-95 transition-all shrink-0 shadow-sm"
         >
           <Bell className="w-5 h-5 stroke-[2]" />
           <span>{callWaiterLabel}</span>
@@ -71,11 +71,11 @@ export function ActionBar({
             type="button"
             data-testid="action-view-order"
             onClick={onOpenCart}
-            className="flex-1 h-[52px] rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-sm min-w-0"
+            className="flex-1 h-[52px] rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-sm min-w-0"
           >
             <div className="relative flex items-center shrink-0">
               <ShoppingBag className="w-5 h-5 stroke-[2.2]" />
-              <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] rounded-full bg-[#24170F] text-[#FFF7EE] text-[10.5px] font-extrabold flex items-center justify-center px-1">
+              <span className="absolute -top-1.5 -right-2 min-w-[18px] h-[18px] rounded-full bg-ink text-bg text-[10.5px] font-extrabold flex items-center justify-center px-1">
                 {cartCount}
               </span>
             </div>
@@ -88,7 +88,7 @@ export function ActionBar({
             type="button"
             data-testid="action-empty-cart"
             onClick={onOpenCart}
-            className="flex-1 h-[52px] rounded-full bg-[#FFF7EE] text-[#8C7767] text-[14px] font-bold flex items-center justify-center gap-2 hover:bg-[#FBEBD7] transition-all"
+            className="flex-1 h-[52px] rounded-full bg-bg text-ink-3 text-[14px] font-bold flex items-center justify-center gap-2 hover:bg-surface-2 transition-all"
           >
             <ShoppingBag className="w-5 h-5 stroke-[2]" />
             <span>{locale === 'bn' ? 'অর্ডার খালি' : 'Cart empty'}</span>

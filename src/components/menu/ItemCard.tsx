@@ -39,22 +39,22 @@ export function ItemCard({
   if (isSoldOut) {
     badge = {
       label: locale === 'bn' ? 'শেষ' : 'Sold out',
-      className: 'bg-[#B83B30] text-white',
+      className: 'bg-danger text-white',
     };
   } else if (item.tags.includes('bestseller')) {
     badge = {
       label: locale === 'bn' ? 'জনপ্রিয়' : 'Bestseller',
-      className: 'bg-[#F2C27D] text-[#24170F]',
+      className: 'bg-accent text-ink',
     };
   } else if (item.tags.includes('new')) {
     badge = {
       label: locale === 'bn' ? 'নতুন' : 'New',
-      className: 'bg-[#2F7D57] text-white',
+      className: 'bg-success text-white',
     };
   } else if (item.tags.includes('seasonal')) {
     badge = {
       label: locale === 'bn' ? 'মৌসুমি' : 'Seasonal',
-      className: 'bg-[#6B4226] text-[#FFF7EE]',
+      className: 'bg-brand text-bg',
     };
   }
 
@@ -77,13 +77,13 @@ export function ItemCard({
     <article
       data-testid={`item-card-${item.id}`}
       onClick={handleCardClick}
-      className={`card group cursor-pointer bg-white rounded-3xl p-2.5 flex flex-col gap-2 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border border-[#F0DFCB]/50 transition-all hover:shadow-[0_8px_24px_rgba(107,66,38,0.12)] min-w-0 ${
+      className={`card group cursor-pointer bg-white rounded-3xl p-2.5 flex flex-col gap-2 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border border-line/50 transition-all hover:shadow-[0_8px_24px_rgba(107,66,38,0.12)] min-w-0 ${
         isSoldOut ? 'opacity-85' : ''
       }`}
     >
       {/* Thumbnail */}
       <div
-        className={`thumb relative aspect-square rounded-2xl bg-[#FBEBD7] flex items-center justify-center overflow-hidden text-[#B98A5E] ${
+        className={`thumb relative aspect-square rounded-2xl bg-surface-2 flex items-center justify-center overflow-hidden text-brand-muted ${
           isSoldOut ? 'grayscale opacity-75' : ''
         }`}
       >
@@ -113,30 +113,30 @@ export function ItemCard({
 
       {/* Info */}
       <div className="px-1 flex flex-col gap-1 min-h-[72px]">
-        <h3 className="font-extrabold text-[15px] leading-snug text-[#24170F] line-clamp-1">
+        <h3 className="font-extrabold text-[15px] leading-snug text-ink line-clamp-1">
           {name}
         </h3>
         {desc && (
-          <p className="text-[12.5px] leading-tight text-[#6F5A4B] line-clamp-1">
+          <p className="text-[12.5px] leading-tight text-ink-2 line-clamp-1">
             {desc}
           </p>
         )}
         {prepFormatted && (
-          <span className="mt-auto inline-flex items-center gap-1 text-[11px] font-semibold text-[#8C7767]">
-            <Clock className="w-3 h-3 stroke-[2.2] text-[#B98A5E]" />
+          <span className="mt-auto inline-flex items-center gap-1 text-[11px] font-semibold text-ink-3">
+            <Clock className="w-3 h-3 stroke-[2.2] text-brand-muted" />
             {prepFormatted}
           </span>
         )}
       </div>
 
       {/* Price & Action */}
-      <div className="px-1 flex items-center justify-between gap-1 pt-1 border-t border-[#F0DFCB]/40">
+      <div className="px-1 flex items-center justify-between gap-1 pt-1 border-t border-line/40">
         <div className="flex items-baseline gap-1.5 min-w-0">
-          <span className="text-base font-extrabold text-[#24170F] tabular-nums">
+          <span className="text-base font-extrabold text-ink tabular-nums">
             {priceFormatted}
           </span>
           {compareAtFormatted && (
-            <span className="text-xs text-[#8C7767] line-through font-medium tabular-nums">
+            <span className="text-xs text-ink-3 line-through font-medium tabular-nums">
               {compareAtFormatted}
             </span>
           )}
@@ -148,7 +148,7 @@ export function ItemCard({
             data-testid="item-card-add-button"
             aria-label={`Add ${name}`}
             onClick={handlePlusClick}
-            className="w-9 h-9 rounded-full bg-[#F2C27D] text-[#24170F] flex items-center justify-center shadow-[0_4px_10px_rgba(227,166,81,0.35)] transition-transform hover:scale-105 active:scale-95 shrink-0"
+            className="w-9 h-9 rounded-full bg-accent text-ink flex items-center justify-center shadow-[0_4px_10px_rgba(227,166,81,0.35)] transition-transform hover:scale-105 active:scale-95 shrink-0"
           >
             <Plus className="w-[18px] h-[18px] stroke-[2.5]" />
           </button>

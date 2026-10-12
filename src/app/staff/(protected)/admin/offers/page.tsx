@@ -209,7 +209,7 @@ export default function AdminOffersPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-muted" />
       </div>
     );
   }
@@ -219,8 +219,8 @@ export default function AdminOffersPage() {
       {/* Header */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div>
-          <h1 className="text-[24px] font-extrabold text-[#24170F] tracking-tight">Offers</h1>
-          <p className="text-[13px] text-[#6F5A4B] font-medium">
+          <h1 className="text-[24px] font-extrabold text-ink tracking-tight">Offers</h1>
+          <p className="text-[13px] text-ink-2 font-medium">
             Live offers appear in the carousel banner at the top of the guest menu.
           </p>
         </div>
@@ -228,7 +228,7 @@ export default function AdminOffersPage() {
           type="button"
           data-testid="add-offer-button"
           onClick={handleAddNew}
-          className="h-11 px-5 rounded-full bg-[#F2C27D] text-[#24170F] text-[14px] font-extrabold flex items-center gap-1.5 shadow-xs hover:bg-[#e0b06c] active:scale-98 transition-all"
+          className="h-11 px-5 rounded-full bg-accent text-ink text-[14px] font-extrabold flex items-center gap-1.5 shadow-xs hover:bg-accent-strong active:scale-98 transition-all"
         >
           <Plus className="w-4 h-4" />
           New offer
@@ -241,29 +241,29 @@ export default function AdminOffersPage() {
           const isActive = Boolean(offer.is_active);
           const now = new Date().toISOString();
           let statusText = 'Live now';
-          let statusBadgeClass = 'bg-[#E7F3EC] text-[#1F5C3F]';
+          let statusBadgeClass = 'bg-success-soft text-success';
 
           if (!isActive) {
             statusText = 'Paused';
-            statusBadgeClass = 'bg-[#F0E6DA] text-[#6F5A4B]';
+            statusBadgeClass = 'bg-surface-2 text-ink-2';
           } else if (offer.starts_at && offer.starts_at > now) {
             statusText = 'Scheduled';
-            statusBadgeClass = 'bg-[#E3EDFA] text-[#22508F]';
+            statusBadgeClass = 'bg-info-soft text-info';
           } else if (offer.ends_at && offer.ends_at < now) {
             statusText = 'Expired';
-            statusBadgeClass = 'bg-[#FBE3E0] text-[#9A2F25]';
+            statusBadgeClass = 'bg-danger-soft text-danger';
           }
 
           return (
             <article
               key={offer.id}
               data-testid={`offer-card-${offer.id}`}
-              className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-[#F0DFCB]/60 flex flex-col transition-all hover:shadow-md"
+              className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-line/60 flex flex-col transition-all hover:shadow-md"
             >
               {/* Banner Header (2:1 aspect) */}
               <div
                 className={`h-36 relative overflow-hidden p-4 flex flex-col justify-between text-white transition-all ${
-                  isActive ? 'bg-[#6B4226]' : 'bg-[#6B4226]/60 grayscale'
+                  isActive ? 'bg-brand' : 'bg-brand/60 grayscale'
                 }`}
                 style={
                   offer.image_url
@@ -276,17 +276,17 @@ export default function AdminOffersPage() {
                 }
               >
                 <div className="flex justify-between items-start">
-                  <span className="h-5 px-2 rounded-full bg-[#F2C27D] text-[#24170F] text-[10px] font-extrabold uppercase tracking-wider flex items-center">
+                  <span className="h-5 px-2 rounded-full bg-accent text-ink text-[10px] font-extrabold uppercase tracking-wider flex items-center">
                     {offer.badge_en || 'Offer'}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="text-[18px] font-extrabold leading-tight text-[#FFF7EE]">
+                  <h3 className="text-[18px] font-extrabold leading-tight text-bg">
                     {offer.title_en}
                   </h3>
                   {offer.subtitle_en && (
-                    <p className="text-[12px] text-[#F3E3CF] line-clamp-1 mt-0.5">
+                    <p className="text-[12px] text-surface-2 line-clamp-1 mt-0.5">
                       {offer.subtitle_en}
                     </p>
                   )}
@@ -301,7 +301,7 @@ export default function AdminOffersPage() {
                   >
                     {statusText}
                   </span>
-                  <span className="text-[11.5px] text-[#6F5A4B] font-semibold">
+                  <span className="text-[11.5px] text-ink-2 font-semibold">
                     {offer.title_bn}
                   </span>
                 </div>
@@ -315,7 +315,7 @@ export default function AdminOffersPage() {
                     data-testid={`toggle-offer-${offer.id}`}
                     onClick={() => handleToggleActive(offer)}
                     className={`w-[52px] h-[30px] rounded-full p-[3px] flex shrink-0 transition-colors cursor-pointer ${
-                      isActive ? 'bg-[#2F7D57] justify-end' : 'bg-[#D9C7B4] justify-start'
+                      isActive ? 'bg-success justify-end' : 'bg-line justify-start'
                     }`}
                   >
                     <span className="w-6 h-6 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)]" />
@@ -326,7 +326,7 @@ export default function AdminOffersPage() {
                     aria-label={`Edit ${offer.title_en}`}
                     data-testid={`edit-offer-${offer.id}`}
                     onClick={() => handleEdit(offer)}
-                    className="w-9 h-9 rounded-full text-[#6F5A4B] hover:bg-[#FBEBD7] flex items-center justify-center shrink-0 transition-all"
+                    className="w-9 h-9 rounded-full text-ink-2 hover:bg-surface-2 flex items-center justify-center shrink-0 transition-all"
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
@@ -341,24 +341,24 @@ export default function AdminOffersPage() {
       {isEditorOpen && editingOffer && (
         <div
           data-testid="offer-editor-modal"
-          className="fixed inset-0 z-50 bg-[#24170F]/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4"
         >
-          <div className="w-full max-w-md bg-white rounded-3xl p-5 shadow-2xl flex flex-col gap-4 border border-[#F0DFCB] max-h-[90vh] overflow-y-auto">
-            <div className="flex justify-between items-center pb-2 border-b border-[#F6E9DA]">
-              <h3 className="text-[17px] font-extrabold text-[#24170F]">
+          <div className="w-full max-w-md bg-white rounded-3xl p-5 shadow-2xl flex flex-col gap-4 border border-line max-h-[90vh] overflow-y-auto">
+            <div className="flex justify-between items-center pb-2 border-b border-line-soft">
+              <h3 className="text-[17px] font-extrabold text-ink">
                 {editingOffer.id ? `Edit · ${editingOffer.title_en}` : 'New Offer'}
               </h3>
               <button
                 type="button"
                 onClick={() => setIsEditorOpen(false)}
-                className="w-8 h-8 rounded-full text-[#6F5A4B] hover:bg-[#FFF7EE] flex items-center justify-center"
+                className="w-8 h-8 rounded-full text-ink-2 hover:bg-bg flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
             </div>
 
             {errorMessage && (
-              <div className="p-3 bg-[#FBE3E0] text-[#9A2F25] rounded-xl text-[13px] font-bold flex items-center gap-2">
+              <div className="p-3 bg-danger-soft text-danger rounded-xl text-[13px] font-bold flex items-center gap-2">
                 <AlertCircle className="w-4 h-4 shrink-0" />
                 <span>{errorMessage}</span>
               </div>
@@ -366,9 +366,9 @@ export default function AdminOffersPage() {
 
             {/* Banner preview & upload */}
             <div className="flex flex-col gap-1.5">
-              <label className="text-[12px] font-bold text-[#6F5A4B]">Banner Image (2:1)</label>
+              <label className="text-[12px] font-bold text-ink-2">Banner Image (2:1)</label>
               <div
-                className="h-32 rounded-2xl bg-[#FBEBD7] border border-[#F0DFCB] flex items-center justify-center overflow-hidden relative"
+                className="h-32 rounded-2xl bg-surface-2 border border-line flex items-center justify-center overflow-hidden relative"
                 style={
                   editingOffer.image_url
                     ? {
@@ -380,7 +380,7 @@ export default function AdminOffersPage() {
                 }
               >
                 {!editingOffer.image_url && (
-                  <span className="text-[12px] text-[#8C7767] font-semibold">
+                  <span className="text-[12px] text-ink-3 font-semibold">
                     No image uploaded
                   </span>
                 )}
@@ -390,8 +390,8 @@ export default function AdminOffersPage() {
                   </div>
                 )}
               </div>
-              <label className="h-8.5 px-3.5 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] text-[12.5px] font-bold flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#FFF7EE] active:scale-98 transition-all w-fit mt-1">
-                <Upload className="w-3.5 h-3.5 text-[#8A5A37]" />
+              <label className="h-8.5 px-3.5 rounded-full border border-line bg-white text-ink text-[12.5px] font-bold flex items-center justify-center gap-1.5 cursor-pointer hover:bg-bg active:scale-98 transition-all w-fit mt-1">
+                <Upload className="w-3.5 h-3.5 text-brand-muted" />
                 Upload 2:1 banner image
                 <input
                   type="file"
@@ -405,96 +405,96 @@ export default function AdminOffersPage() {
             {/* Form Fields */}
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Title (English)</label>
+                <label className="text-[12px] font-bold text-ink-2">Title (English)</label>
                 <input
                   data-testid="offer-title-en-input"
                   value={editingOffer.title_en || ''}
                   onChange={(e) =>
                     setEditingOffer({ ...editingOffer, title_en: e.target.value })
                   }
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink"
                   placeholder="e.g. Morning Combo"
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Title (বাংলা)</label>
+                <label className="text-[12px] font-bold text-ink-2">Title (বাংলা)</label>
                 <input
                   data-testid="offer-title-bn-input"
                   value={editingOffer.title_bn || ''}
                   onChange={(e) =>
                     setEditingOffer({ ...editingOffer, title_bn: e.target.value })
                   }
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink"
                   placeholder="e.g. সকালের কম্বো"
                 />
               </div>
 
               <div className="grid grid-cols-2 gap-2.5">
                 <div className="flex flex-col gap-1">
-                  <label className="text-[12px] font-bold text-[#6F5A4B]">Badge (English)</label>
+                  <label className="text-[12px] font-bold text-ink-2">Badge (English)</label>
                   <input
                     value={editingOffer.badge_en || ''}
                     onChange={(e) =>
                       setEditingOffer({ ...editingOffer, badge_en: e.target.value })
                     }
-                    className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[13px] font-semibold text-[#24170F]"
+                    className="h-10 rounded-xl border border-line px-3 text-[13px] font-semibold text-ink"
                     placeholder="e.g. Save ৳50"
                   />
                 </div>
                 <div className="flex flex-col gap-1">
-                  <label className="text-[12px] font-bold text-[#6F5A4B]">Badge (বাংলা)</label>
+                  <label className="text-[12px] font-bold text-ink-2">Badge (বাংলা)</label>
                   <input
                     value={editingOffer.badge_bn || ''}
                     onChange={(e) =>
                       setEditingOffer({ ...editingOffer, badge_bn: e.target.value })
                     }
-                    className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[13px] font-semibold text-[#24170F]"
+                    className="h-10 rounded-xl border border-line px-3 text-[13px] font-semibold text-ink"
                     placeholder="e.g. ৳৫০ ছাড়"
                   />
                 </div>
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Subtitle (English)</label>
+                <label className="text-[12px] font-bold text-ink-2">Subtitle (English)</label>
                 <input
                   value={editingOffer.subtitle_en || ''}
                   onChange={(e) =>
                     setEditingOffer({ ...editingOffer, subtitle_en: e.target.value })
                   }
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[13px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[13px] font-semibold text-ink"
                   placeholder="e.g. Cappuccino + Croissant"
                 />
               </div>
 
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Subtitle (বাংলা)</label>
+                <label className="text-[12px] font-bold text-ink-2">Subtitle (বাংলা)</label>
                 <input
                   value={editingOffer.subtitle_bn || ''}
                   onChange={(e) =>
                     setEditingOffer({ ...editingOffer, subtitle_bn: e.target.value })
                   }
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[13px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[13px] font-semibold text-ink"
                   placeholder="e.g. ক্যাপুচিনো + ক্রোসাঁ"
                 />
               </div>
             </div>
 
             {/* Actions */}
-            <div className="flex gap-2 pt-2 border-t border-[#F6E9DA] mt-1">
+            <div className="flex gap-2 pt-2 border-t border-line-soft mt-1">
               <button
                 type="button"
                 data-testid="save-offer-button"
                 disabled={isSaving}
                 onClick={handleSave}
-                className="flex-1 h-11 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold flex items-center justify-center shadow-xs hover:bg-[#e0b06c] active:scale-98 transition-all disabled:opacity-50"
+                className="flex-1 h-11 rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center shadow-xs hover:bg-accent-strong active:scale-98 transition-all disabled:opacity-50"
               >
                 {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save offer'}
               </button>
               <button
                 type="button"
                 onClick={() => setIsEditorOpen(false)}
-                className="h-11 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE]"
+                className="h-11 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg"
               >
                 Cancel
               </button>
@@ -503,7 +503,7 @@ export default function AdminOffersPage() {
                   type="button"
                   data-testid="delete-offer-button"
                   onClick={handleDelete}
-                  className="w-11 h-11 rounded-full border border-[#FBE3E0] bg-[#FBE3E0]/40 text-[#B83B30] flex items-center justify-center hover:bg-[#FBE3E0] active:scale-98 transition-all shrink-0"
+                  className="w-11 h-11 rounded-full border border-danger-soft bg-danger-soft/40 text-danger flex items-center justify-center hover:bg-danger-soft active:scale-98 transition-all shrink-0"
                 >
                   <Trash2 className="w-4 h-4" />
                 </button>

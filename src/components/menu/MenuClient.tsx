@@ -1,7 +1,8 @@
 'use client';
 
 import React, { useState, useMemo, useRef } from 'react';
-import { Search, Info, Coffee, ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react';
+import Image from 'next/image';
+import { Search, Info, Coffee, ChevronLeft, ChevronRight, SlidersHorizontal, Zap } from 'lucide-react';
 import type { MenuData, MenuItem, Offer } from '@/lib/menu/data';
 
 import { ItemCard } from './ItemCard';
@@ -197,20 +198,31 @@ export function MenuClient({
   const tagline = pick(menu.restaurant, 'tagline', locale);
 
   return (
-    <div className="min-h-screen bg-[#FFF7EE] text-[#24170F] font-['Plus_Jakarta_Sans',sans-serif] antialiased selection:bg-[#F2C27D] selection:text-[#24170F] pb-24">
+    <div
+      lang={locale}
+      data-lang={locale}
+      className="min-h-screen bg-bg text-ink antialiased selection:bg-accent selection:text-ink pb-24"
+    >
       <div className="max-w-4xl mx-auto flex flex-col">
         {/* Header */}
         <header className="p-4 pt-5 pb-3 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="w-12 h-12 rounded-full bg-[#6B4226] text-[#F2C27D] font-extrabold text-[17px] tracking-tight flex items-center justify-center shrink-0 shadow-sm">
-              BB
+            <div className="relative w-12 h-12 shrink-0">
+              <Image
+                src="/images/brand/concept-1.png"
+                alt="Brew Bari Logo"
+                width={48}
+                height={48}
+                className="w-12 h-12 object-contain"
+                priority
+              />
             </div>
             <div className="min-w-0">
-              <h1 className="font-extrabold text-2xl leading-tight tracking-tight text-[#24170F] truncate">
+              <h1 className="font-heading font-extrabold text-2xl leading-tight tracking-tight text-ink truncate">
                 {restaurantName}
               </h1>
               {tagline && (
-                <p className="text-[13px] text-[#6F5A4B] leading-snug truncate">
+                <p className="text-[13px] text-ink-2 leading-snug truncate">
                   {tagline}
                 </p>
               )}
@@ -223,7 +235,7 @@ export function MenuClient({
               type="button"
               aria-label="Café info"
               onClick={() => setIsInfoOpen(true)}
-              className="w-11 h-11 rounded-full bg-white text-[#6B4226] shadow-[0_6px_20px_rgba(107,66,38,0.1)] flex items-center justify-center hover:bg-[#FFF7EE] active:scale-95 transition-all"
+              className="w-11 h-11 rounded-full bg-white text-brand shadow-[0_6px_20px_rgba(107,66,38,0.1)] flex items-center justify-center hover:bg-bg active:scale-95 transition-all"
             >
               <Info className="w-5 h-5 stroke-[2]" />
             </button>
@@ -234,13 +246,13 @@ export function MenuClient({
         {tableContext?.tableNumber && (
           <div className="px-4 pb-3 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <div className="h-8 px-3 rounded-full bg-[#6B4226] text-[#FFF7EE] text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
+              <div className="h-8 px-3 rounded-full bg-brand text-bg text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
                 <Coffee className="w-4 h-4 stroke-[2]" />
                 <span>
                   {locale === 'bn' ? `টেবিল ${tableContext.tableNumber}` : `Table ${tableContext.tableNumber}`}
                 </span>
               </div>
-              <span className="text-[12px] font-medium text-[#6F5A4B] hidden sm:inline">
+              <span className="text-[12px] font-medium text-ink-2 hidden sm:inline">
                 {locale === 'bn' ? 'আপনার টেবিল সংযুক্ত' : 'Table connected'}
               </span>
             </div>
@@ -250,7 +262,7 @@ export function MenuClient({
                 type="button"
                 onClick={onOpenStatus}
                 data-testid="header-track-order-button"
-                className="h-8 px-3.5 rounded-full bg-[#FBEBD7] border border-[#F0DFCB] text-[#8A5A37] text-[12px] font-extrabold flex items-center gap-1.5 hover:bg-[#F2C27D] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs"
+                className="h-8 px-3.5 rounded-full bg-surface-2 border border-line text-brand-muted text-[12px] font-extrabold flex items-center gap-1.5 hover:bg-accent hover:text-ink active:scale-95 transition-all shadow-2xs"
               >
                 <span>{locale === 'bn' ? 'অর্ডার ট্র্যাকার / বিল' : 'Track Order / Bill'}</span>
               </button>
@@ -260,8 +272,8 @@ export function MenuClient({
 
         {/* Search Bar */}
         <div className="px-4 pb-4">
-          <div className="h-[50px] rounded-full bg-white border border-[#F0DFCB] shadow-xs px-4 flex items-center gap-2.5 text-[#8C7767] focus-within:border-[#6B4226] focus-within:ring-1 focus-within:ring-[#6B4226] transition-all">
-            <Search className="w-[18px] h-[18px] stroke-[2.2] text-[#8C7767] shrink-0" />
+          <div className="h-[50px] rounded-full bg-white border border-line shadow-xs px-4 flex items-center gap-2.5 text-ink-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand transition-all">
+            <Search className="w-[18px] h-[18px] stroke-[2.2] text-ink-3 shrink-0" />
             <input
               id="search-menu"
               type="search"
@@ -272,13 +284,13 @@ export function MenuClient({
                   ? 'কফি, জুস, স্ন্যাকস খুঁজুন…'
                   : 'Search coffee, juice, bites…'
               }
-              className="flex-1 bg-transparent text-[15px] font-medium text-[#24170F] placeholder:text-[#8C7767] outline-none min-w-0"
+              className="flex-1 bg-transparent text-[15px] font-medium text-ink placeholder:text-ink-3 outline-none min-w-0"
             />
             {searchQuery && (
               <button
                 type="button"
                 onClick={() => setSearchQuery('')}
-                className="text-xs font-bold text-[#8C7767] hover:text-[#24170F] px-1"
+                className="text-xs font-bold text-ink-3 hover:text-ink px-1"
               >
                 Clear
               </button>
@@ -314,15 +326,15 @@ export function MenuClient({
           {/* SEARCH RESULTS VIEW */}
           {filteredItems !== null ? (
             <section className="flex flex-col gap-3">
-              <h2 className="text-xl font-extrabold text-[#24170F] flex items-center gap-2">
+              <h2 className="text-xl font-extrabold text-ink flex items-center gap-2">
                 <span>{locale === 'bn' ? 'অনুসন্ধানের ফলাফল' : 'Search Results'}</span>
-                <span className="text-sm font-semibold text-[#8C7767]">
+                <span className="text-sm font-semibold text-ink-3">
                   ({filteredItems.length})
                 </span>
               </h2>
 
               {filteredItems.length === 0 ? (
-                <div className="py-12 text-center text-[#8C7767]">
+                <div className="py-12 text-center text-ink-3">
                   <p className="font-semibold">
                     {locale === 'bn'
                       ? 'কোনো আইটেম পাওয়া যায়নি।'
@@ -359,22 +371,23 @@ export function MenuClient({
                 >
                   <div className="flex items-center justify-between gap-2">
                     <div className="flex items-center gap-2 min-w-0">
-                      <h2 className="text-[20px] font-extrabold text-[#24170F] tracking-tight truncate">
+                      <Zap className="w-5 h-5 text-brand stroke-[2.2] fill-accent shrink-0" />
+                      <h2 className="text-[17px] sm:text-[20px] font-extrabold text-ink tracking-tight truncate">
                         {locale === 'bn' ? 'ঝটপট · ৫ মিনিটে তৈরি' : 'Quick · ready in ≤5 min'}
                       </h2>
-                      <span className="h-5.5 px-2.5 rounded-full bg-[#FBEBD7] text-[#8A5A37] text-[12px] font-extrabold flex items-center justify-center shrink-0">
+                      <span className="h-5.5 px-2.5 rounded-full bg-surface-2 text-brand-muted text-[12px] font-extrabold flex items-center justify-center shrink-0">
                         {locale === 'bn' ? `${quickItems.length}টি` : `${quickItems.length}`}
                       </span>
                     </div>
 
                     <div className="flex items-center gap-1.5 shrink-0">
                       {!isQuickExpanded && quickItems.length > 2 && (
-                        <div className="flex items-center gap-1">
+                        <div className="hidden sm:flex items-center gap-1">
                           <button
                             type="button"
                             aria-label="Previous quick items"
                             onClick={() => scrollQuick('left')}
-                            className="w-7.5 h-7.5 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] flex items-center justify-center hover:bg-[#FFF7EE] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs cursor-pointer"
+                            className="w-7.5 h-7.5 rounded-full border border-line bg-white text-ink-2 flex items-center justify-center hover:bg-bg hover:text-ink active:scale-95 transition-all shadow-2xs cursor-pointer"
                           >
                             <ChevronLeft className="w-4 h-4 stroke-[2.2]" />
                           </button>
@@ -382,7 +395,7 @@ export function MenuClient({
                             type="button"
                             aria-label="Next quick items"
                             onClick={() => scrollQuick('right')}
-                            className="w-7.5 h-7.5 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] flex items-center justify-center hover:bg-[#FFF7EE] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs cursor-pointer"
+                            className="w-7.5 h-7.5 rounded-full border border-line bg-white text-ink-2 flex items-center justify-center hover:bg-bg hover:text-ink active:scale-95 transition-all shadow-2xs cursor-pointer"
                           >
                             <ChevronRight className="w-4 h-4 stroke-[2.2]" />
                           </button>
@@ -392,7 +405,7 @@ export function MenuClient({
                       <button
                         type="button"
                         onClick={() => setIsQuickExpanded((prev) => !prev)}
-                        className="h-7.5 px-2.5 rounded-full bg-[#FBEBD7] border border-[#F0DFCB]/60 text-[#8A5A37] hover:bg-[#F2C27D] hover:text-[#24170F] text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
+                        className="h-7.5 px-2.5 rounded-full bg-surface-2 border border-line/60 text-brand-muted hover:bg-accent hover:text-ink text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
                       >
                         {isQuickExpanded ? (
                           <>
@@ -443,12 +456,12 @@ export function MenuClient({
                         <button
                           type="button"
                           onClick={() => setIsQuickExpanded(true)}
-                          className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-[#F0DFCB] hover:border-[#8A5A37] bg-white/70 hover:bg-[#FFF7EE] p-4 flex flex-col items-center justify-center text-center gap-2 text-[#8A5A37] transition-all cursor-pointer shadow-2xs"
+                          className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-line hover:border-brand-muted bg-white/70 hover:bg-bg p-4 flex flex-col items-center justify-center text-center gap-2 text-brand-muted transition-all cursor-pointer shadow-2xs"
                         >
-                          <div className="w-10 h-10 rounded-full bg-[#FBEBD7] flex items-center justify-center text-[#8A5A37] font-extrabold text-[13px]">
+                          <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-brand-muted font-extrabold text-[13px]">
                             +{quickItems.length}
                           </div>
-                          <span className="text-[12px] font-extrabold text-[#24170F]">
+                          <span className="text-[12px] font-extrabold text-ink">
                             {locale === 'bn' ? 'সবগুলো দেখুন' : 'View all'}
                           </span>
                         </button>
@@ -483,14 +496,14 @@ export function MenuClient({
           )}
 
           {/* Footer */}
-          <footer className="pt-6 pb-2 text-center text-[12px] leading-relaxed text-[#8C7767] border-t border-[#F0DFCB]/60">
+          <footer className="pt-6 pb-2 text-center text-[12px] leading-relaxed text-ink-3 border-t border-line/60">
             <div>
               {menu.restaurant.address || 'GEC Circle, Chattogram'} ·{' '}
               {pick(menu.restaurant, 'opening_hours', locale) ||
                 menu.restaurant.opening_hours_en ||
                 'Every day 9 AM – 11 PM'}
             </div>
-            <div className="mt-1 text-[11px] font-semibold text-[#B98A5E]">
+            <div className="mt-1 text-[11px] font-semibold text-brand-muted">
               Powered by Brew Bari
             </div>
           </footer>

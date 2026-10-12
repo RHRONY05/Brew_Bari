@@ -4,6 +4,7 @@ import React, { useRef, useEffect } from 'react';
 import { Zap } from 'lucide-react';
 import type { Category } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
+import { CategoryIcon } from '@/components/ui/category-icon';
 
 interface CategoryNavProps {
   categories: Category[];
@@ -40,7 +41,7 @@ export function CategoryNav({
   return (
     <nav
       aria-label="Categories"
-      className="sticky top-0 z-20 w-full bg-[#FFF7EE]/95 backdrop-blur-md py-3 border-b border-[#F0DFCB]/50"
+      className="sticky top-0 z-20 w-full bg-bg/95 backdrop-blur-md py-3 border-b border-line/50"
     >
       <div
         ref={scrollContainerRef}
@@ -55,11 +56,11 @@ export function CategoryNav({
             onClick={() => onSelectCategory('quick')}
             className={`h-10 px-4 rounded-full font-bold text-[14px] whitespace-nowrap flex items-center gap-2 transition-all shrink-0 ${
               activeCategoryId === 'quick'
-                ? 'bg-[#6B4226] text-[#FFF7EE] shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
-                : 'bg-white border border-[#F0DFCB] text-[#24170F] hover:border-[#6B4226]/40'
+                ? 'bg-brand text-bg shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
+                : 'bg-white border border-line text-ink hover:border-brand/40'
             }`}
           >
-            <Zap className={`w-4 h-4 fill-current stroke-[2] ${activeCategoryId === 'quick' ? 'text-[#F2C27D]' : 'text-[#6B4226]'}`} />
+            <Zap className={`w-4 h-4 fill-current stroke-[2] ${activeCategoryId === 'quick' ? 'text-accent' : 'text-brand'}`} />
             <span>{locale === 'bn' ? 'ঝটপট' : 'Quick'}</span>
           </button>
         )}
@@ -78,11 +79,15 @@ export function CategoryNav({
               onClick={() => onSelectCategory(cat.id)}
               className={`h-10 px-4 rounded-full font-bold text-[14px] whitespace-nowrap flex items-center gap-2 transition-all shrink-0 ${
                 isActive
-                  ? 'bg-[#6B4226] text-[#FFF7EE] shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
-                  : 'bg-white border border-[#F0DFCB] text-[#24170F] hover:border-[#6B4226]/40'
+                  ? 'bg-brand text-bg shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
+                  : 'bg-white border border-line text-ink hover:border-brand/40'
               }`}
             >
-              {cat.icon && <span className="text-base leading-none">{cat.icon}</span>}
+              <CategoryIcon
+                icon={cat.icon}
+                name={cat.name_en}
+                className={`w-4 h-4 stroke-[2.2] shrink-0 ${isActive ? 'text-accent' : 'text-brand'}`}
+              />
               <span>{label}</span>
             </button>
           );

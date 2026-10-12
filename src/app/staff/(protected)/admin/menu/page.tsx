@@ -17,7 +17,9 @@ import {
   Upload,
   AlertCircle,
   Loader2,
+  LayoutGrid,
 } from 'lucide-react';
+import { CategoryIcon, CATEGORY_ICON_PRESETS } from '@/components/ui/category-icon';
 
 type MenuItemRow = Database['public']['Tables']['menu_items']['Row'];
 type CategoryRow = Database['public']['Tables']['categories']['Row'];
@@ -55,6 +57,7 @@ export default function AdminMenuPage() {
   const [isCatModalOpen, setIsCatModalOpen] = useState(false);
   const [newCatEn, setNewCatEn] = useState('');
   const [newCatBn, setNewCatBn] = useState('');
+  const [newCatIcon, setNewCatIcon] = useState('☕');
 
   // Fetch initial data
   const fetchData = useCallback(async () => {
@@ -279,6 +282,7 @@ export default function AdminMenuPage() {
         restaurant_id: restaurantId,
         name_en: newCatEn.trim(),
         name_bn: newCatBn.trim() || newCatEn.trim(),
+        icon: newCatIcon || '☕',
         sort_order: categories.length + 1,
         is_active: true,
       });
@@ -286,6 +290,7 @@ export default function AdminMenuPage() {
       if (error) throw error;
       setNewCatEn('');
       setNewCatBn('');
+      setNewCatIcon('☕');
       setIsCatModalOpen(false);
       await fetchData();
     } catch (err: any) {
@@ -360,7 +365,7 @@ export default function AdminMenuPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+        <Loader2 className="w-8 h-8 animate-spin text-brand-muted" />
       </div>
     );
   }
@@ -372,8 +377,8 @@ export default function AdminMenuPage() {
         {/* Header */}
         <div className="flex flex-wrap gap-3 items-center justify-between">
           <div>
-            <h1 className="text-[24px] font-extrabold text-[#24170F] tracking-tight">Menu</h1>
-            <p className="text-[13px] text-[#6F5A4B] font-medium">
+            <h1 className="text-[24px] font-extrabold text-ink tracking-tight">Menu</h1>
+            <p className="text-[13px] text-ink-2 font-medium">
               Changes show on the guest menu right after saving.
             </p>
           </div>
@@ -381,7 +386,7 @@ export default function AdminMenuPage() {
             type="button"
             data-testid="add-item-button"
             onClick={handleAddNewItem}
-            className="h-11 px-5 rounded-full bg-[#F2C27D] text-[#24170F] text-[14px] font-extrabold flex items-center gap-1.5 shadow-xs hover:bg-[#e0b06c] active:scale-98 transition-all"
+            className="h-11 px-5 rounded-full bg-accent text-ink text-[14px] font-extrabold flex items-center gap-1.5 shadow-xs hover:bg-accent-strong active:scale-98 transition-all"
           >
             <Plus className="w-4 h-4" />
             Add item
@@ -393,13 +398,14 @@ export default function AdminMenuPage() {
           <button
             type="button"
             onClick={() => setSelectedCatId('all')}
-            className={`h-9 px-3.5 rounded-full border text-[13px] font-bold whitespace-nowrap transition-all ${
+            className={`h-9 px-3.5 rounded-full border text-[13px] font-bold whitespace-nowrap flex items-center gap-1.5 transition-all ${
               selectedCatId === 'all'
-                ? 'bg-[#6B4226] border-[#6B4226] text-[#FFF7EE]'
-                : 'border-[#F0DFCB] bg-white text-[#24170F] hover:bg-[#FFF7EE]'
+                ? 'bg-brand border-brand text-bg'
+                : 'border-line bg-white text-ink hover:bg-bg'
             }`}
           >
-            All · {items.length}
+            <LayoutGrid className="w-3.5 h-3.5 stroke-[2.2] shrink-0" />
+            <span>All · {items.length}</span>
           </button>
           {categories.map((cat) => {
             const count = items.filter((it) => it.category_id === cat.id).length;
@@ -409,13 +415,18 @@ export default function AdminMenuPage() {
                 key={cat.id}
                 type="button"
                 onClick={() => setSelectedCatId(cat.id)}
-                className={`h-9 px-3.5 rounded-full border text-[13px] font-bold whitespace-nowrap transition-all ${
+                className={`h-9 px-3.5 rounded-full border text-[13px] font-bold whitespace-nowrap flex items-center gap-1.5 transition-all ${
                   isSelected
-                    ? 'bg-[#6B4226] border-[#6B4226] text-[#FFF7EE]'
-                    : 'border-[#F0DFCB] bg-white text-[#24170F] hover:bg-[#FFF7EE]'
+                    ? 'bg-brand border-brand text-bg'
+                    : 'border-line bg-white text-ink hover:bg-bg'
                 }`}
               >
-                {cat.name_en} · {count}
+                <CategoryIcon
+                  icon={cat.icon}
+                  name={cat.name_en}
+                  className={`w-3.5 h-3.5 stroke-[2.2] shrink-0 ${isSelected ? 'text-accent' : 'text-brand'}`}
+                />
+                <span>{cat.name_en} · {count}</span>
               </button>
             );
           })}
@@ -423,20 +434,21 @@ export default function AdminMenuPage() {
             type="button"
             data-testid="add-category-button"
             onClick={() => setIsCatModalOpen(true)}
-            className="h-9 px-3.5 rounded-full border border-dashed border-[#D9C7B4] bg-white text-[#6F5A4B] text-[13px] font-bold whitespace-nowrap hover:bg-[#FFF7EE] transition-all"
+            className="h-9 px-3.5 rounded-full border border-dashed border-line bg-white text-ink-2 text-[13px] font-bold whitespace-nowrap flex items-center gap-1.5 hover:bg-bg transition-all"
           >
-            + Category
+            <Plus className="w-3.5 h-3.5 stroke-[2.2] shrink-0" />
+            <span>Category</span>
           </button>
         </div>
 
         {/* Items List Card */}
-        <div className="bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-[#F0DFCB]/40">
-          <div className="flex justify-between px-4 py-2.5 text-[11.5px] font-extrabold tracking-wider uppercase text-[#8C7767] border-b border-[#F6E9DA]">
+        <div className="bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-line/40">
+          <div className="flex justify-between px-4 py-2.5 text-[11.5px] font-extrabold tracking-wider uppercase text-ink-3 border-b border-line-soft">
             <span>Item</span>
             <span>Price · Available</span>
           </div>
 
-          <div className="divide-y divide-[#F6E9DA]">
+          <div className="divide-y divide-line-soft">
             {filteredItems.map((item) => {
               const isSelected = editingItem?.id === item.id;
               const isAvailable = Boolean(item.is_available);
@@ -450,11 +462,11 @@ export default function AdminMenuPage() {
                   key={item.id}
                   data-testid={`menu-item-row-${item.id}`}
                   className={`flex items-center gap-3 p-3 transition-colors ${
-                    isSelected ? 'bg-[#FFF7EE]' : 'hover:bg-[#FFFBF7]'
+                    isSelected ? 'bg-bg' : 'hover:bg-surface-subtle'
                   }`}
                 >
                   {/* Thumbnail */}
-                  <div className="w-12 h-12 rounded-xl bg-[#FBEBD7] text-[#B98A5E] flex items-center justify-center shrink-0 overflow-hidden">
+                  <div className="w-12 h-12 rounded-xl bg-surface-2 text-brand-muted flex items-center justify-center shrink-0 overflow-hidden">
                     {item.image_url ? (
                       <img
                         src={item.image_url}
@@ -468,15 +480,15 @@ export default function AdminMenuPage() {
 
                   {/* Info */}
                   <div className="flex-1 min-w-0">
-                    <div className="text-[14.5px] font-bold text-[#24170F] truncate">
+                    <div className="text-[14.5px] font-bold text-ink truncate">
                       <span data-testid="item-name-en">{item.name_en}</span>{' '}
                       {item.name_bn && (
-                        <span className="font-normal text-[#6F5A4B]">· {item.name_bn}</span>
+                        <span className="font-normal text-ink-2">· {item.name_bn}</span>
                       )}
                     </div>
                     <div
                       className={`text-[12px] font-semibold truncate ${
-                        isAvailable ? 'text-[#6F5A4B]' : 'text-[#B83B30]'
+                        isAvailable ? 'text-ink-2' : 'text-danger'
                       }`}
                     >
                       {subText}
@@ -484,7 +496,7 @@ export default function AdminMenuPage() {
                   </div>
 
                   {/* Price */}
-                  <span className="text-[15px] font-extrabold text-[#24170F] font-mono shrink-0">
+                  <span className="text-[15px] font-extrabold text-ink font-mono shrink-0">
                     ৳{item.price}
                   </span>
 
@@ -498,8 +510,8 @@ export default function AdminMenuPage() {
                     onClick={() => handleToggleAvailability(item)}
                     className={`w-[52px] h-[30px] rounded-full p-[3px] flex shrink-0 transition-colors cursor-pointer ${
                       isAvailable
-                        ? 'bg-[#2F7D57] justify-end'
-                        : 'bg-[#D9C7B4] justify-start'
+                        ? 'bg-success justify-end'
+                        : 'bg-line justify-start'
                     }`}
                   >
                     <span className="w-6 h-6 rounded-full bg-white shadow-[0_1px_3px_rgba(0,0,0,0.2)]" />
@@ -511,7 +523,7 @@ export default function AdminMenuPage() {
                     aria-label={`Edit ${item.name_en}`}
                     data-testid={`edit-item-${item.id}`}
                     onClick={() => handleEditItem(item)}
-                    className="w-9 h-9 rounded-full text-[#6F5A4B] hover:bg-[#FBEBD7] hover:text-[#24170F] flex items-center justify-center shrink-0 transition-all"
+                    className="w-9 h-9 rounded-full text-ink-2 hover:bg-surface-2 hover:text-ink flex items-center justify-center shrink-0 transition-all"
                   >
                     <Pencil className="w-4 h-4" />
                   </button>
@@ -527,17 +539,17 @@ export default function AdminMenuPage() {
         <aside
           aria-label="Edit item"
           data-testid="item-editor-panel"
-          className="w-full xl:w-[420px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 flex flex-col gap-4 border border-[#F0DFCB]/60 sticky top-4 z-40"
+          className="w-full xl:w-[420px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 flex flex-col gap-4 border border-line/60 sticky top-4 z-40"
         >
           {/* Header */}
-          <div className="flex justify-between items-center pb-2 border-b border-[#F6E9DA]">
-            <h2 className="text-[18px] font-extrabold text-[#24170F]">
+          <div className="flex justify-between items-center pb-2 border-b border-line-soft">
+            <h2 className="text-[18px] font-extrabold text-ink">
               {editingItem.id ? `Edit · ${editingItem.name_en || 'Item'}` : 'Add New Item'}
             </h2>
             <button
               type="button"
               onClick={handleCloseEditor}
-              className="w-8 h-8 rounded-full text-[#6F5A4B] hover:bg-[#FFF7EE] flex items-center justify-center"
+              className="w-8 h-8 rounded-full text-ink-2 hover:bg-bg flex items-center justify-center"
             >
               <X className="w-4 h-4" />
             </button>
@@ -546,7 +558,7 @@ export default function AdminMenuPage() {
           {errorMessage && (
             <div
               data-testid="editor-error-alert"
-              className="p-3 bg-[#FBE3E0] text-[#9A2F25] rounded-xl text-[13px] font-bold flex items-center gap-2"
+              className="p-3 bg-danger-soft text-danger rounded-xl text-[13px] font-bold flex items-center gap-2"
             >
               <AlertCircle className="w-4 h-4 shrink-0" />
               <span>{errorMessage}</span>
@@ -555,7 +567,7 @@ export default function AdminMenuPage() {
 
           {/* Photo upload */}
           <div className="flex gap-3 items-center">
-            <div className="w-20 h-20 rounded-2xl bg-[#FBEBD7] text-[#B98A5E] flex items-center justify-center shrink-0 overflow-hidden relative">
+            <div className="w-20 h-20 rounded-2xl bg-surface-2 text-brand-muted flex items-center justify-center shrink-0 overflow-hidden relative">
               {editingItem.image_url ? (
                 <img
                   src={editingItem.image_url}
@@ -574,9 +586,9 @@ export default function AdminMenuPage() {
             <div className="flex flex-col gap-1.5 flex-1 min-w-0">
               <label
                 htmlFor="photo-upload-input"
-                className="h-9 px-3.5 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] text-[13px] font-bold flex items-center justify-center gap-1.5 cursor-pointer hover:bg-[#FFF7EE] active:scale-98 transition-all w-fit"
+                className="h-9 px-3.5 rounded-full border border-line bg-white text-ink text-[13px] font-bold flex items-center justify-center gap-1.5 cursor-pointer hover:bg-bg active:scale-98 transition-all w-fit"
               >
-                <Upload className="w-3.5 h-3.5 text-[#8A5A37]" />
+                <Upload className="w-3.5 h-3.5 text-brand-muted" />
                 {editingItem.image_url ? 'Change photo' : 'Upload photo'}
               </label>
               <input
@@ -587,7 +599,7 @@ export default function AdminMenuPage() {
                 className="hidden"
                 onChange={handleImageUpload}
               />
-              <span className="text-[11.5px] text-[#8C7767]">
+              <span className="text-[11.5px] text-ink-3">
                 Square WebP cropped automatically
               </span>
             </div>
@@ -596,7 +608,7 @@ export default function AdminMenuPage() {
           {/* Form fields */}
           <div className="grid grid-cols-2 gap-2.5">
             <div className="flex flex-col gap-1">
-              <label htmlFor="ne" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="ne" className="text-[12px] font-bold text-ink-2">
                 Name (English)
               </label>
               <input
@@ -604,12 +616,12 @@ export default function AdminMenuPage() {
                 data-testid="item-name-en-input"
                 value={editingItem.name_en || ''}
                 onChange={(e) => setEditingItem({ ...editingItem, name_en: e.target.value })}
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink focus:outline-brand-muted"
                 placeholder="e.g. Americano"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="nb" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="nb" className="text-[12px] font-bold text-ink-2">
                 Name (বাংলা)
               </label>
               <input
@@ -617,13 +629,13 @@ export default function AdminMenuPage() {
                 data-testid="item-name-bn-input"
                 value={editingItem.name_bn || ''}
                 onChange={(e) => setEditingItem({ ...editingItem, name_bn: e.target.value })}
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink focus:outline-brand-muted"
                 placeholder="e.g. আমেরিকান"
               />
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="pr" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="pr" className="text-[12px] font-bold text-ink-2">
                 Price (৳)
               </label>
               <input
@@ -634,11 +646,11 @@ export default function AdminMenuPage() {
                 onChange={(e) =>
                   setEditingItem({ ...editingItem, price: Number(e.target.value) })
                 }
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-bold text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-bold text-ink focus:outline-brand-muted"
               />
             </div>
             <div className="flex flex-col gap-1">
-              <label htmlFor="wp" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="wp" className="text-[12px] font-bold text-ink-2">
                 Was price (৳)
               </label>
               <input
@@ -653,12 +665,12 @@ export default function AdminMenuPage() {
                   })
                 }
                 placeholder="optional"
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink focus:outline-brand-muted"
               />
             </div>
 
             <div className="col-span-2 flex flex-col gap-1">
-              <label htmlFor="ca" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="ca" className="text-[12px] font-bold text-ink-2">
                 Category
               </label>
               <select
@@ -666,7 +678,7 @@ export default function AdminMenuPage() {
                 data-testid="item-category-select"
                 value={editingItem.category_id || ''}
                 onChange={(e) => setEditingItem({ ...editingItem, category_id: e.target.value })}
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F] focus:outline-[#8A5A37] bg-white"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink focus:outline-brand-muted bg-white"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -677,7 +689,7 @@ export default function AdminMenuPage() {
             </div>
 
             <div className="col-span-2 flex flex-col gap-1">
-              <label htmlFor="pt" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="pt" className="text-[12px] font-bold text-ink-2">
                 Prep time (minutes)
               </label>
               <div className="flex items-center gap-2">
@@ -690,11 +702,11 @@ export default function AdminMenuPage() {
                       prep_minutes: Math.max(1, (editingItem.prep_minutes || 5) - 1),
                     })
                   }
-                  className="w-10 h-10 rounded-xl border border-[#F0DFCB] bg-white text-[#24170F] flex items-center justify-center hover:bg-[#FFF7EE]"
+                  className="w-10 h-10 rounded-xl border border-line bg-white text-ink flex items-center justify-center hover:bg-bg"
                 >
                   <Minus className="w-4 h-4" />
                 </button>
-                <div className="flex-1 h-10 rounded-xl bg-[#FFF7EE] flex items-center justify-center font-bold text-[15px] text-[#24170F]">
+                <div className="flex-1 h-10 rounded-xl bg-bg flex items-center justify-center font-bold text-[15px] text-ink">
                   ~{editingItem.prep_minutes || 5} min
                 </div>
                 <button
@@ -706,12 +718,12 @@ export default function AdminMenuPage() {
                       prep_minutes: Math.min(60, (editingItem.prep_minutes || 5) + 1),
                     })
                   }
-                  className="w-10 h-10 rounded-xl border border-[#F0DFCB] bg-white text-[#24170F] flex items-center justify-center hover:bg-[#FFF7EE]"
+                  className="w-10 h-10 rounded-xl border border-line bg-white text-ink flex items-center justify-center hover:bg-bg"
                 >
                   <Plus className="w-4 h-4" />
                 </button>
               </div>
-              <span className="text-[11.5px] text-[#6F5A4B] mt-0.5">
+              <span className="text-[11.5px] text-ink-2 mt-0.5">
                 {(editingItem.prep_minutes || 5) <= 1
                   ? 'Guests see: Ready now'
                   : (editingItem.prep_minutes || 5) <= 5
@@ -721,7 +733,7 @@ export default function AdminMenuPage() {
             </div>
 
             <div className="col-span-2 flex flex-col gap-1">
-              <label htmlFor="de" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="de" className="text-[12px] font-bold text-ink-2">
                 Description (English)
               </label>
               <input
@@ -731,13 +743,13 @@ export default function AdminMenuPage() {
                 onChange={(e) =>
                   setEditingItem({ ...editingItem, description_en: e.target.value })
                 }
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] text-ink focus:outline-brand-muted"
                 placeholder="e.g. Espresso meets rich steamed milk."
               />
             </div>
 
             <div className="col-span-2 flex flex-col gap-1">
-              <label htmlFor="db" className="text-[12px] font-bold text-[#6F5A4B]">
+              <label htmlFor="db" className="text-[12px] font-bold text-ink-2">
                 Description (বাংলা)
               </label>
               <input
@@ -747,7 +759,7 @@ export default function AdminMenuPage() {
                 onChange={(e) =>
                   setEditingItem({ ...editingItem, description_bn: e.target.value })
                 }
-                className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] text-[#24170F] focus:outline-[#8A5A37]"
+                className="h-10 rounded-xl border border-line px-3 text-[14px] text-ink focus:outline-brand-muted"
                 placeholder="ঐতিহ্যবাহী কফি"
               />
             </div>
@@ -755,7 +767,7 @@ export default function AdminMenuPage() {
 
           {/* Tags */}
           <div className="flex flex-col gap-1.5">
-            <label className="text-[12px] font-bold text-[#6F5A4B]">Tags</label>
+            <label className="text-[12px] font-bold text-ink-2">Tags</label>
             <div className="flex flex-wrap gap-1.5">
               {AVAILABLE_TAGS.map((tag) => {
                 const isSelected = editingItem.tags?.includes(tag);
@@ -772,8 +784,8 @@ export default function AdminMenuPage() {
                     }}
                     className={`h-7.5 px-3 rounded-full text-[12px] font-bold border transition-all ${
                       isSelected
-                        ? 'bg-[#F2C27D] border-[#F2C27D] text-[#24170F]'
-                        : 'bg-white border-[#F0DFCB] text-[#6F5A4B] hover:bg-[#FFF7EE]'
+                        ? 'bg-accent border-accent text-ink'
+                        : 'bg-white border-line text-ink-2 hover:bg-bg'
                     }`}
                   >
                     {tag}
@@ -786,12 +798,12 @@ export default function AdminMenuPage() {
           {/* Options Builder */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between items-center">
-              <label className="text-[12px] font-bold text-[#6F5A4B]">Options &amp; Add-ons</label>
+              <label className="text-[12px] font-bold text-ink-2">Options &amp; Add-ons</label>
               <button
                 type="button"
                 data-testid="add-option-group-button"
                 onClick={handleAddOptionGroup}
-                className="text-[12px] font-bold text-[#8A5A37] hover:underline"
+                className="text-[12px] font-bold text-brand-muted hover:underline"
               >
                 + Add group
               </button>
@@ -800,19 +812,19 @@ export default function AdminMenuPage() {
             {currentOptions.map((group, gIdx) => (
               <div
                 key={group.id || gIdx}
-                className="border border-[#F0DFCB] rounded-xl p-3 bg-[#FFFBF7] flex flex-col gap-2"
+                className="border border-line rounded-xl p-3 bg-surface-subtle flex flex-col gap-2"
               >
                 <div className="flex justify-between items-center gap-2">
                   <input
                     value={group.title}
                     onChange={(e) => handleUpdateOptionGroupTitle(gIdx, e.target.value)}
-                    className="h-8 rounded-lg border border-[#F0DFCB] px-2 text-[13px] font-bold text-[#24170F] bg-white flex-1"
+                    className="h-8 rounded-lg border border-line px-2 text-[13px] font-bold text-ink bg-white flex-1"
                     placeholder="Group title (e.g. Size, Milk)"
                   />
                   <button
                     type="button"
                     onClick={() => handleRemoveOptionGroup(gIdx)}
-                    className="w-7 h-7 rounded-md text-[#B83B30] hover:bg-[#FBE3E0] flex items-center justify-center shrink-0"
+                    className="w-7 h-7 rounded-md text-danger hover:bg-danger-soft flex items-center justify-center shrink-0"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
@@ -826,18 +838,18 @@ export default function AdminMenuPage() {
                         onChange={(e) =>
                           handleUpdateChoice(gIdx, cIdx, 'title', e.target.value)
                         }
-                        className="h-7.5 rounded-md border border-[#F0DFCB] px-2 text-[12px] font-semibold text-[#24170F] bg-white flex-1"
+                        className="h-7.5 rounded-md border border-line px-2 text-[12px] font-semibold text-ink bg-white flex-1"
                         placeholder="Choice (e.g. Regular)"
                       />
                       <div className="flex items-center gap-1 shrink-0">
-                        <span className="text-[11px] text-[#6F5A4B] font-bold">+৳</span>
+                        <span className="text-[11px] text-ink-2 font-bold">+৳</span>
                         <input
                           type="number"
                           value={choice.price}
                           onChange={(e) =>
                             handleUpdateChoice(gIdx, cIdx, 'price', e.target.value)
                           }
-                          className="w-14 h-7.5 rounded-md border border-[#F0DFCB] px-1 text-[12px] font-bold text-[#24170F] bg-white text-right"
+                          className="w-14 h-7.5 rounded-md border border-line px-1 text-[12px] font-bold text-ink bg-white text-right"
                         />
                       </div>
                     </div>
@@ -845,7 +857,7 @@ export default function AdminMenuPage() {
                   <button
                     type="button"
                     onClick={() => handleAddChoice(gIdx)}
-                    className="text-[11.5px] font-bold text-[#8A5A37] hover:underline self-start mt-0.5"
+                    className="text-[11.5px] font-bold text-brand-muted hover:underline self-start mt-0.5"
                   >
                     + Add choice
                   </button>
@@ -855,13 +867,13 @@ export default function AdminMenuPage() {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2 pt-2 border-t border-[#F6E9DA] mt-1">
+          <div className="flex gap-2 pt-2 border-t border-line-soft mt-1">
             <button
               type="button"
               data-testid="save-item-button"
               disabled={isSaving}
               onClick={handleSaveItem}
-              className="flex-1 h-11 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold flex items-center justify-center gap-2 shadow-xs hover:bg-[#e0b06c] active:scale-98 transition-all disabled:opacity-50"
+              className="flex-1 h-11 rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center gap-2 shadow-xs hover:bg-accent-strong active:scale-98 transition-all disabled:opacity-50"
             >
               {isSaving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save'}
             </button>
@@ -869,7 +881,7 @@ export default function AdminMenuPage() {
               type="button"
               data-testid="cancel-item-button"
               onClick={handleCloseEditor}
-              className="h-11 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[14px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+              className="h-11 px-4 rounded-full border border-line bg-white text-ink-2 text-[14px] font-bold hover:bg-bg active:scale-98 transition-all"
             >
               Cancel
             </button>
@@ -878,7 +890,7 @@ export default function AdminMenuPage() {
                 type="button"
                 data-testid="delete-item-button"
                 onClick={handleDeleteItem}
-                className="w-11 h-11 rounded-full border border-[#FBE3E0] bg-[#FBE3E0]/40 text-[#B83B30] flex items-center justify-center hover:bg-[#FBE3E0] active:scale-98 transition-all shrink-0"
+                className="w-11 h-11 rounded-full border border-danger-soft bg-danger-soft/40 text-danger flex items-center justify-center hover:bg-danger-soft active:scale-98 transition-all shrink-0"
               >
                 <Trash2 className="w-4 h-4" />
               </button>
@@ -891,15 +903,15 @@ export default function AdminMenuPage() {
       {isCatModalOpen && (
         <div
           data-testid="category-modal"
-          className="fixed inset-0 z-50 bg-[#24170F]/60 backdrop-blur-xs flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-ink/60 backdrop-blur-xs flex items-center justify-center p-4"
         >
-          <div className="w-full max-w-sm bg-white rounded-3xl p-5 shadow-xl flex flex-col gap-4 border border-[#F0DFCB]">
+          <div className="w-full max-w-sm bg-white rounded-3xl p-5 shadow-xl flex flex-col gap-4 border border-line">
             <div className="flex justify-between items-center">
-              <h3 className="text-[17px] font-extrabold text-[#24170F]">Add New Category</h3>
+              <h3 className="text-[17px] font-extrabold text-ink">Add New Category</h3>
               <button
                 type="button"
                 onClick={() => setIsCatModalOpen(false)}
-                className="w-8 h-8 rounded-full text-[#6F5A4B] hover:bg-[#FFF7EE] flex items-center justify-center"
+                className="w-8 h-8 rounded-full text-ink-2 hover:bg-bg flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -907,24 +919,47 @@ export default function AdminMenuPage() {
 
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Name (English)</label>
+                <label className="text-[12px] font-bold text-ink-2">Name (English)</label>
                 <input
                   data-testid="cat-name-en-input"
                   value={newCatEn}
                   onChange={(e) => setNewCatEn(e.target.value)}
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink"
                   placeholder="e.g. Bakery"
                 />
               </div>
               <div className="flex flex-col gap-1">
-                <label className="text-[12px] font-bold text-[#6F5A4B]">Name (বাংলা)</label>
+                <label className="text-[12px] font-bold text-ink-2">Name (বাংলা)</label>
                 <input
                   data-testid="cat-name-bn-input"
                   value={newCatBn}
                   onChange={(e) => setNewCatBn(e.target.value)}
-                  className="h-10 rounded-xl border border-[#F0DFCB] px-3 text-[14px] font-semibold text-[#24170F]"
+                  className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink"
                   placeholder="e.g. বেকারি"
                 />
+              </div>
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[12px] font-bold text-ink-2">Category Icon</label>
+                <div className="flex gap-1.5 flex-wrap">
+                  {CATEGORY_ICON_PRESETS.map((preset) => {
+                    const isSelected = newCatIcon === preset.icon;
+                    return (
+                      <button
+                        key={preset.key}
+                        type="button"
+                        onClick={() => setNewCatIcon(preset.icon)}
+                        className={`h-8 px-2.5 rounded-lg border text-[12px] font-bold flex items-center gap-1.5 transition-all ${
+                          isSelected
+                            ? 'bg-brand text-bg border-brand shadow-xs'
+                            : 'bg-white border-line text-ink hover:bg-bg'
+                        }`}
+                      >
+                        <CategoryIcon icon={preset.icon} name={preset.label} className="w-3.5 h-3.5 shrink-0" />
+                        <span>{preset.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
 
@@ -933,7 +968,7 @@ export default function AdminMenuPage() {
                 type="button"
                 data-testid="save-category-button"
                 onClick={handleSaveCategory}
-                className="flex-1 h-11 rounded-full bg-[#F2C27D] text-[#24170F] text-[14px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all"
+                className="flex-1 h-11 rounded-full bg-accent text-ink text-[14px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all"
               >
                 Create category
               </button>
@@ -941,7 +976,7 @@ export default function AdminMenuPage() {
                 type="button"
                 data-testid="cancel-category-button"
                 onClick={() => setIsCatModalOpen(false)}
-                className="h-11 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE]"
+                className="h-11 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg"
               >
                 Cancel
               </button>

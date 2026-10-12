@@ -39,11 +39,11 @@ export default function AdminProtectedLayout({
   return (
     <>
       {!isAdmin && (
-        <div className="min-h-screen bg-[#FFF7EE] flex items-center justify-center">
-          <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+        <div className="min-h-screen bg-bg flex items-center justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-brand-muted" />
         </div>
       )}
-      <div className={!isAdmin ? 'invisible' : 'min-h-screen bg-[#FFF7EE] flex flex-col lg:flex-row'}>
+      <div className={!isAdmin ? 'invisible' : 'min-h-screen bg-bg flex flex-col lg:flex-row'}>
         <React.Suspense fallback={null}>
           <AdminNav />
           <main className="flex-1 min-w-0 p-4 lg:p-6 overflow-y-auto">

@@ -49,30 +49,30 @@ export function RequestCard({
   const isPendingSession = request.session_status === 'pending';
 
   // Badge background & text color
-  let badgeStyle = 'bg-[#F4ECE2] text-[#6F5A4B]';
+  let badgeStyle = 'bg-surface-2 text-ink-2';
   let cardBorder = 'border-transparent';
 
   if (request.type === 'order') {
     if (request.status === 'new') {
-      badgeStyle = 'bg-[#FBE3E0] text-[#9A2F25]';
-      cardBorder = 'border-[#B83B30]';
+      badgeStyle = 'bg-danger-soft text-danger';
+      cardBorder = 'border-danger';
     } else if (request.status === 'preparing') {
-      badgeStyle = 'bg-[#E7F3EC] text-[#1F5C3F]';
-      cardBorder = 'border-[#9ED1B6]';
+      badgeStyle = 'bg-success-soft text-success';
+      cardBorder = 'border-success-soft';
     } else {
-      badgeStyle = 'bg-[#FBEBD7] text-[#8A5A37]';
+      badgeStyle = 'bg-surface-2 text-brand-muted';
     }
   } else if (request.type === 'call_waiter') {
     if (isPendingSession) {
-      badgeStyle = 'bg-[#FFF4D1] text-[#6E5500]';
-      cardBorder = 'border-[#E9C95A]';
+      badgeStyle = 'bg-pending-soft text-warning';
+      cardBorder = 'border-warning';
     } else {
-      badgeStyle = 'bg-[#FDEBD2] text-[#8A4D06]';
-      cardBorder = 'border-[#C77C0E]';
+      badgeStyle = 'bg-warning-soft text-warning';
+      cardBorder = 'border-warning';
     }
   } else if (request.type === 'bill') {
-    badgeStyle = 'bg-[#E3EDFA] text-[#22508F]';
-    cardBorder = 'border-[#7FA6DE]';
+    badgeStyle = 'bg-info-soft text-info';
+    cardBorder = 'border-info';
   }
 
   // Type title & flag
@@ -83,27 +83,27 @@ export function RequestCard({
     const num = request.order_number ? `#${request.order_number}` : '';
     if (request.status === 'new') {
       typeTitle = `New order ${num}`;
-      flag = { text: 'NEW', style: 'bg-[#FBE3E0] text-[#9A2F25]' };
+      flag = { text: 'NEW', style: 'bg-danger-soft text-danger' };
     } else if (request.status === 'acknowledged') {
       typeTitle = `Order ${num} · Accepted`;
-      flag = { text: 'Accepted', style: 'bg-[#FDEBD2] text-[#8A4D06]' };
+      flag = { text: 'Accepted', style: 'bg-warning-soft text-warning' };
     } else if (request.status === 'preparing') {
       typeTitle = `Order ${num} · Preparing`;
-      flag = { text: 'Preparing', style: 'bg-[#FBEBD7] text-[#8A5A37]' };
+      flag = { text: 'Preparing', style: 'bg-surface-2 text-brand-muted' };
     } else if (request.status === 'ready') {
       typeTitle = `Order ${num} · Ready`;
-      flag = { text: 'Ready', style: 'bg-[#E7F3EC] text-[#1F5C3F]' };
+      flag = { text: 'Ready', style: 'bg-success-soft text-success' };
     } else {
       typeTitle = `Order ${num}`;
     }
   } else if (request.type === 'call_waiter') {
     typeTitle = 'Calling waiter';
     if (isPendingSession) {
-      flag = { text: 'Unverified table', style: 'bg-[#FFF4D1] text-[#6E5500]' };
+      flag = { text: 'Unverified table', style: 'bg-pending-soft text-warning' };
     } else if (request.nudge_count > 0) {
       flag = {
         text: `Called again ×${request.nudge_count}`,
-        style: 'bg-[#FDEBD2] text-[#8A4D06]',
+        style: 'bg-warning-soft text-warning',
       };
     }
   } else if (request.type === 'bill') {
@@ -120,7 +120,7 @@ export function RequestCard({
             type="button"
             data-testid={`action-approve-send-${request.id}`}
             onClick={() => onTransition(request, 'acknowledged')}
-            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
           >
             Approve &amp; send
           </button>
@@ -128,7 +128,7 @@ export function RequestCard({
             type="button"
             data-testid={`action-dismiss-${request.id}`}
             onClick={() => onTransition(request, 'cancelled')}
-            className="h-10 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+            className="h-10 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg active:scale-98 transition-all"
           >
             Dismiss
           </button>
@@ -144,7 +144,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-waiter-sent-${request.id}`}
               onClick={() => onTransition(request, 'acknowledged')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Waiter sent
             </button>
@@ -152,7 +152,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-call-done-${request.id}`}
               onClick={() => onTransition(request, 'done')}
-              className="h-10 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+              className="h-10 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg active:scale-98 transition-all"
             >
               Done
             </button>
@@ -165,7 +165,7 @@ export function RequestCard({
             type="button"
             data-testid={`action-call-done-${request.id}`}
             onClick={() => onTransition(request, 'done')}
-            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
           >
             Done
           </button>
@@ -181,7 +181,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-accept-${request.id}`}
               onClick={() => onTransition(request, 'acknowledged')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Accept
             </button>
@@ -189,7 +189,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-cancel-${request.id}`}
               onClick={() => onTransition(request, 'cancelled')}
-              className="h-10 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+              className="h-10 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg active:scale-98 transition-all"
             >
               Cancel
             </button>
@@ -203,7 +203,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-preparing-${request.id}`}
               onClick={() => onTransition(request, 'preparing')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Start preparing
             </button>
@@ -211,7 +211,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-cancel-${request.id}`}
               onClick={() => onTransition(request, 'cancelled')}
-              className="h-10 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+              className="h-10 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg active:scale-98 transition-all"
             >
               Cancel
             </button>
@@ -225,7 +225,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-ready-${request.id}`}
               onClick={() => onTransition(request, 'ready')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Ready
             </button>
@@ -239,7 +239,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-order-served-${request.id}`}
               onClick={() => onTransition(request, 'done')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Served
             </button>
@@ -256,7 +256,7 @@ export function RequestCard({
               type="button"
               data-testid={`action-bill-sent-${request.id}`}
               onClick={() => onTransition(request, 'acknowledged')}
-              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+              className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
             >
               Bill sent
             </button>
@@ -265,7 +265,7 @@ export function RequestCard({
                 type="button"
                 data-testid={`action-view-bill-${request.id}`}
                 onClick={() => onViewBill(request.table_number)}
-                className="h-10 px-4 rounded-full border border-[#F0DFCB] bg-white text-[#6F5A4B] text-[13px] font-bold hover:bg-[#FFF7EE] active:scale-98 transition-all"
+                className="h-10 px-4 rounded-full border border-line bg-white text-ink-2 text-[13px] font-bold hover:bg-bg active:scale-98 transition-all"
               >
                 View bill
               </button>
@@ -279,7 +279,7 @@ export function RequestCard({
             type="button"
             data-testid={`action-bill-paid-close-${request.id}`}
             onClick={() => onTransition(request, 'done')}
-            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-[#F2C27D] text-[#24170F] text-[15px] font-extrabold hover:bg-[#e0b06c] active:scale-98 transition-all shadow-xs`}
+            className={`${isMobile ? 'flex-1' : ''} h-12 px-5.5 rounded-full bg-accent text-ink text-[15px] font-extrabold hover:bg-accent-strong active:scale-98 transition-all shadow-xs`}
           >
             Paid &amp; close table
           </button>
@@ -294,7 +294,7 @@ export function RequestCard({
     <article
       data-testid={`request-card-${request.id}`}
       className={`bg-white rounded-3xl p-4 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border-2 transition-all ${cardBorder} ${
-        request.isFlashing ? 'animate-pulse ring-4 ring-[#F2C27D]' : ''
+        request.isFlashing ? 'animate-pulse ring-4 ring-accent' : ''
       } ${isMobile ? 'flex flex-col gap-3' : 'flex gap-4'}`}
     >
       {/* Top row on mobile, Left badge on desktop */}
@@ -316,7 +316,7 @@ export function RequestCard({
         {isMobile && (
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-extrabold text-[15px] text-[#24170F]">
+              <span className="font-extrabold text-[15px] text-ink">
                 {typeTitle}
               </span>
               {flag && (
@@ -327,7 +327,7 @@ export function RequestCard({
                 </span>
               )}
             </div>
-            <div className="text-[12px] text-[#6F5A4B] font-semibold mt-0.5">
+            <div className="text-[12px] text-ink-2 font-semibold mt-0.5">
               {timeAgoText}
               {request.total_amount ? ` · ৳${request.total_amount}` : ''}
             </div>
@@ -339,10 +339,10 @@ export function RequestCard({
       <div className="flex-1 min-w-0">
         {!isMobile && (
           <div className="flex flex-wrap justify-between items-baseline gap-2">
-            <div className="flex items-center gap-2 flex-wrap font-extrabold text-[15px] text-[#24170F]">
-              {request.type === 'order' && <ShoppingBag className="w-4 h-4 text-[#8A5A37]" />}
-              {request.type === 'call_waiter' && <Bell className="w-4 h-4 text-[#8A5A37]" />}
-              {request.type === 'bill' && <Receipt className="w-4 h-4 text-[#8A5A37]" />}
+            <div className="flex items-center gap-2 flex-wrap font-extrabold text-[15px] text-ink">
+              {request.type === 'order' && <ShoppingBag className="w-4 h-4 text-brand-muted" />}
+              {request.type === 'call_waiter' && <Bell className="w-4 h-4 text-brand-muted" />}
+              {request.type === 'bill' && <Receipt className="w-4 h-4 text-brand-muted" />}
               <span>{typeTitle}</span>
               {flag && (
                 <span
@@ -352,7 +352,7 @@ export function RequestCard({
                 </span>
               )}
             </div>
-            <span className="text-[12.5px] text-[#6F5A4B] font-semibold">
+            <span className="text-[12.5px] text-ink-2 font-semibold">
               {timeAgoText}
               {request.total_amount ? ` · ৳${request.total_amount}` : ''}
             </span>
@@ -361,16 +361,16 @@ export function RequestCard({
 
         {/* Pending table warning message */}
         {isPendingSession && request.type === 'call_waiter' && (
-          <div className="mt-2 text-[13px] text-[#6F5A4B] font-medium bg-[#FFF7EE] p-2.5 rounded-xl border border-[#F0DFCB]">
+          <div className="mt-2 text-[13px] text-ink-2 font-medium bg-bg p-2.5 rounded-xl border border-line">
             Table {request.table_number} was scanned but not approved yet. Check someone is seated, then approve.
           </div>
         )}
 
         {/* Bill breakdown summary */}
         {request.type === 'bill' && request.total_amount && (
-          <div className="mt-2 text-[14px] text-[#24170F] font-medium bg-[#FFF7EE] p-2.5 rounded-xl">
+          <div className="mt-2 text-[14px] text-ink font-medium bg-bg p-2.5 rounded-xl">
             Total <b>৳{request.total_amount}</b>{' '}
-            <span className="text-[#6F5A4B] text-[12.5px]">
+            <span className="text-ink-2 text-[12.5px]">
               (VAT 5% incl.)
             </span>
           </div>
@@ -378,21 +378,21 @@ export function RequestCard({
 
         {/* Item rows */}
         {request.items && request.items.length > 0 && (
-          <ul className={`mt-2 p-0 list-none flex flex-col gap-1 text-[14px] text-[#24170F] ${isMobile ? 'bg-[#FFF7EE] p-3 rounded-2xl' : ''}`}>
+          <ul className={`mt-2 p-0 list-none flex flex-col gap-1 text-[14px] text-ink ${isMobile ? 'bg-bg p-3 rounded-2xl' : ''}`}>
             {request.items.map((item) => (
               <li key={item.id} className="flex flex-col">
                 <div>
                   <b>{item.quantity}×</b> {item.name}
                 </div>
                 {item.optionsSummary && (
-                  <span className="text-[12px] text-[#6F5A4B] font-medium">
+                  <span className="text-[12px] text-ink-2 font-medium">
                     {item.optionsSummary}
                   </span>
                 )}
               </li>
             ))}
             {request.note && (
-              <li className="mt-1 text-[13px] text-[#8A5A37] font-semibold italic">
+              <li className="mt-1 text-[13px] text-brand-muted font-semibold italic">
                 Note: {request.note}
               </li>
             )}

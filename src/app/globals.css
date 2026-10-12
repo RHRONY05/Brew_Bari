@@ -4,15 +4,19 @@
   --bg: #FFF7EE;
   --surface: #FFFFFF;
   --surface-2: #FBEBD7;
+  --surface-subtle: #FFFBF7;
   --line: #F0DFCB;
+  --line-soft: #F6E9DA;
   --ink: #24170F;
   --ink-2: #6F5A4B;
-  --ink-3: #A08D7E;
+  --ink-3: #8C7767;
   --brand: #6B4226;
+  --brand-muted: #8A5A37;
+  --brand-dark: #57351E;
   --brand-ink: #FFF7EE;
   --accent: #F2C27D;
   --accent-ink: #24170F;
-  --accent-strong: #E3A651;
+  --accent-strong: #E0B06C;
   --success: #2F7D57;
   --success-soft: #E7F3EC;
   --warning: #C77C0E;
@@ -20,6 +24,7 @@
   --pending-soft: #FFF4D1;
   --danger: #B83B30;
   --danger-soft: #FBE3E0;
+  --info: #22508F;
   --info-soft: #E3EDFA;
   --overlay: rgba(36,23,15,.45);
 
@@ -57,11 +62,15 @@
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-surface-2: var(--surface-2);
+  --color-surface-subtle: var(--surface-subtle);
   --color-line: var(--line);
+  --color-line-soft: var(--line-soft);
   --color-ink: var(--ink);
   --color-ink-2: var(--ink-2);
   --color-ink-3: var(--ink-3);
   --color-brand: var(--brand);
+  --color-brand-muted: var(--brand-muted);
+  --color-brand-dark: var(--brand-dark);
   --color-brand-ink: var(--brand-ink);
   --color-accent: var(--accent);
   --color-accent-ink: var(--accent-ink);
@@ -73,6 +82,7 @@
   --color-pending-soft: var(--pending-soft);
   --color-danger: var(--danger);
   --color-danger-soft: var(--danger-soft);
+  --color-info: var(--info);
   --color-info-soft: var(--info-soft);
   
   --color-background: var(--background);
@@ -91,19 +101,27 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-sans), var(--font-bengali), system-ui, sans-serif;
-  --font-bengali: var(--font-bengali), var(--font-sans), system-ui, sans-serif;
+  --font-sans: var(--font-body), var(--font-bengali), Georgia, serif, system-ui, sans-serif;
+  --font-serif: var(--font-body), var(--font-bengali), Georgia, serif;
+  --font-heading: var(--font-heading), var(--font-bengali), serif;
+  --font-cinzel: var(--font-heading), var(--font-bengali), serif;
+  --font-bengali: var(--font-bengali), var(--font-body), serif, system-ui, sans-serif;
 }
 
-:lang(bn) {
-  font-family: var(--font-bengali), var(--font-sans), system-ui, sans-serif;
+html, body, *, *::before, *::after {
+  font-synthesis: none !important;
+  font-synthesis-weight: none !important;
+  font-synthesis-style: none !important;
+}
+
+:lang(bn), [lang="bn"], [data-lang="bn"], [data-locale="bn"], html[lang="bn"], .font-bengali {
   line-height: 1.5;
 }
 
 body {
   background-color: var(--bg);
   color: var(--ink);
-  font-family: var(--font-sans), var(--font-bengali), system-ui, sans-serif;
+  font-family: var(--font-body), var(--font-bengali), Georgia, serif, system-ui, sans-serif;
   min-height: 100dvh;
 }
 

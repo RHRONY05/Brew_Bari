@@ -31,8 +31,8 @@ export default function StaffRootPage() {
   }, [router]);
 
   return (
-    <div className="min-h-screen bg-[#FFF7EE] flex items-center justify-center">
-      <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+    <div className="min-h-screen bg-bg flex items-center justify-center">
+      <Loader2 className="w-8 h-8 animate-spin text-brand-muted" />
     </div>
   );
 }

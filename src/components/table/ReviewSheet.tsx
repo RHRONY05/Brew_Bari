@@ -73,10 +73,10 @@ export function ReviewSheet({
         {!isSubmitted ? (
           /* Feedback Form */
           <div className="flex flex-col items-center gap-3 text-center pt-2">
-            <h2 className="text-2xl font-extrabold text-[#24170F] tracking-tight">
+            <h2 className="text-2xl font-extrabold text-ink tracking-tight">
               {locale === 'bn' ? 'কেমন ছিল আপনার অভিজ্ঞতা?' : 'How was your visit?'}
             </h2>
-            <p className="text-[14px] text-[#6F5A4B] max-w-xs leading-snug">
+            <p className="text-[14px] text-ink-2 max-w-xs leading-snug">
               {locale === 'bn'
                 ? 'আপনার মূল্যবান মতামত সরাসরি ক্যাফে মালিকের কাছে পৌঁছে যাবে।'
                 : 'Your feedback goes straight to the owner.'}
@@ -101,21 +101,21 @@ export function ReviewSheet({
                   <Star
                     className={`w-9 h-9 transition-colors ${
                       star <= rating
-                        ? 'fill-[#F2C27D] text-[#E3A651]'
-                        : 'fill-transparent text-[#CDB59B]'
+                        ? 'fill-accent text-accent-strong'
+                        : 'fill-transparent text-ink-3'
                     }`}
                   />
                 </button>
               ))}
             </div>
 
-            <div className="text-[14px] font-bold text-[#8A5A37] min-h-[20px]">
+            <div className="text-[14px] font-bold text-brand-muted min-h-[20px]">
               {RATING_WORDS[locale][rating]}
             </div>
 
             {/* Comment textarea */}
             <div className="w-full flex flex-col gap-1.5 text-left pt-2">
-              <label htmlFor="feedback-comment" className="text-[13px] font-bold text-[#24170F]">
+              <label htmlFor="feedback-comment" className="text-[13px] font-bold text-ink">
                 {locale === 'bn' ? 'আরও কিছু জানাতে চান? (ঐচ্ছিক)' : 'Tell us more (optional)'}
               </label>
               <textarea
@@ -129,7 +129,7 @@ export function ReviewSheet({
                     ? 'আপনার মতামত লিখুন…'
                     : 'Great coffee, quick service and cosy vibes!'
                 }
-                className="w-full p-3 rounded-2xl border border-[#F0DFCB] bg-[#FFF7EE] text-[14px] text-[#24170F] placeholder:text-[#8C7767] focus:outline-none focus:ring-1 focus:ring-[#6B4226] resize-none"
+                className="w-full p-3 rounded-2xl border border-line bg-bg text-[14px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-1 focus:ring-brand resize-none"
               />
             </div>
 
@@ -140,14 +140,14 @@ export function ReviewSheet({
                 data-testid="submit-feedback-button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="w-full h-13 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[16px] flex items-center justify-center hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50"
+                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50"
               >
                 {locale === 'bn' ? 'মতামত পাঠান' : 'Send feedback'}
               </button>
               <button
                 type="button"
                 onClick={() => setIsSubmitted(true)}
-                className="h-10 text-[13.5px] font-bold text-[#6F5A4B] hover:text-[#24170F]"
+                className="h-10 text-[13.5px] font-bold text-ink-2 hover:text-ink"
               >
                 {locale === 'bn' ? 'এড়িয়ে যান' : 'Skip'}
               </button>
@@ -156,22 +156,22 @@ export function ReviewSheet({
         ) : (
           /* Thank You & Google Review (NO GATING: ALWAYS SHOWN) */
           <div className="flex flex-col items-center gap-3.5 text-center pt-3">
-            <div className="w-20 h-20 rounded-full bg-[#FBEBD7] text-[#6B4226] flex items-center justify-center shadow-xs">
-              <Heart className="w-10 h-10 stroke-[2] fill-[#6B4226]" />
+            <div className="w-20 h-20 rounded-full bg-surface-2 text-brand flex items-center justify-center shadow-xs">
+              <Heart className="w-10 h-10 stroke-[2] fill-brand" />
             </div>
 
-            <h2 className="text-2xl font-extrabold text-[#24170F] tracking-tight">
+            <h2 className="text-2xl font-extrabold text-ink tracking-tight">
               {locale === 'bn' ? 'ধন্যবাদ!' : 'Thank you!'}
             </h2>
-            <p className="text-[14px] leading-relaxed text-[#6F5A4B] max-w-xs">
+            <p className="text-[14px] leading-relaxed text-ink-2 max-w-xs">
               {locale === 'bn'
                 ? 'গুগল ম্যাপে আপনার অভিজ্ঞতা শেয়ার করবেন? এটি আমাদের ছোট ক্যাফের জন্য অনেক সহায়ক হবে।'
                 : 'Would you share your experience on Google? It really helps a small café like ours.'}
             </p>
 
             {comment && (
-              <div className="w-full p-3.5 rounded-2xl bg-[#FFF7EE] border border-[#F0DFCB] text-left flex items-start gap-2.5 text-[12.5px] text-[#6F5A4B]">
-                <Copy className="w-4 h-4 text-[#8A5A37] shrink-0 mt-0.5" />
+              <div className="w-full p-3.5 rounded-2xl bg-bg border border-line text-left flex items-start gap-2.5 text-[12.5px] text-ink-2">
+                <Copy className="w-4 h-4 text-brand-muted shrink-0 mt-0.5" />
                 <span>
                   {locale === 'bn'
                     ? 'আপনার মন্তব্যটি কপি করা হয়েছে, যাতে সহজেই গুগলে পেস্ট করতে পারেন।'
@@ -187,7 +187,7 @@ export function ReviewSheet({
                 target="_blank"
                 rel="noreferrer"
                 data-testid="google-review-button"
-                className="w-full h-13 rounded-full bg-[#F2C27D] text-[#24170F] font-extrabold text-[15.5px] flex items-center justify-center gap-2.5 hover:bg-[#e0b06c] active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)]"
+                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[15.5px] flex items-center justify-center gap-2.5 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)]"
               >
                 <Star className="w-5 h-5 fill-current" />
                 <span>
@@ -203,7 +203,7 @@ export function ReviewSheet({
                     href={facebookUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 h-11 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] text-[13.5px] font-bold flex items-center justify-center hover:bg-[#FFF7EE]"
+                    className="flex-1 h-11 rounded-full border border-line bg-white text-ink text-[13.5px] font-bold flex items-center justify-center hover:bg-bg"
                   >
                     Facebook
                   </a>
@@ -213,7 +213,7 @@ export function ReviewSheet({
                     href={instagramUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex-1 h-11 rounded-full border border-[#F0DFCB] bg-white text-[#24170F] text-[13.5px] font-bold flex items-center justify-center hover:bg-[#FFF7EE]"
+                    className="flex-1 h-11 rounded-full border border-line bg-white text-ink text-[13.5px] font-bold flex items-center justify-center hover:bg-bg"
                   >
                     Instagram
                   </a>
@@ -223,7 +223,7 @@ export function ReviewSheet({
               <button
                 type="button"
                 onClick={onClose}
-                className="h-10 text-[13.5px] font-bold text-[#6F5A4B] hover:text-[#24170F]"
+                className="h-10 text-[13.5px] font-bold text-ink-2 hover:text-ink"
               >
                 {locale === 'bn' ? 'বন্ধ করুন' : 'Close'}
               </button>

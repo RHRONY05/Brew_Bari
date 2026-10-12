@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { Loader2 } from 'lucide-react';
+import { AdminNav } from '@/components/admin/AdminNav';
 
 export default function AdminProtectedLayout({
   children,
@@ -42,9 +43,12 @@ export default function AdminProtectedLayout({
           <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
         </div>
       )}
-      <div className={!isAdmin ? 'invisible' : ''}>
+      <div className={!isAdmin ? 'invisible' : 'min-h-screen bg-[#FFF7EE] flex flex-col lg:flex-row'}>
         <React.Suspense fallback={null}>
-          {children}
+          <AdminNav />
+          <main className="flex-1 min-w-0 p-4 lg:p-6 overflow-y-auto">
+            {children}
+          </main>
         </React.Suspense>
       </div>
     </>

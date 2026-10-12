@@ -88,7 +88,7 @@ export async function getMenu(slug: string): Promise<MenuData | null> {
     [`menu-data-${slug}`],
     {
       revalidate: 60,
-      tags: [`menu:${initial.restaurant.id}`, `menu-slug:${slug}`],
+      tags: [`menu:${initial.restaurant.id}`, `menu-slug:${slug}`, `menu-data-${slug}`],
     }
   );
 

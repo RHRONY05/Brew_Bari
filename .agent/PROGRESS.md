@@ -243,10 +243,20 @@ Did:
 - All 15 unit test files (72 tests) passed. Production build succeeded. Restarted server on port 3000.
 - Commits / branch / PR: Committed (`4ca7a57`) and pushed to `origin main`.
 
+### 2026-10-12 11:58 — Antigravity — Image Optimization, Database Link & Category Slider UI
+Did:
+- Optimized all 28 product images to WebP (500x500 cover, 82% quality, 11–40 KB each) with sharp, including the updated replacement photos (`iced-latte`, `chill-combo`, `watermelon-juice`).
+- Updated `public.menu_items` database table via Supabase MCP `execute_sql` to map each item's `image_url` to `/images/menu/[name].webp`.
+- Added `@utility no-scrollbar` and `@utility scrollbar-none` in `src/app/globals.css` to hide native desktop scrollbars.
+- Created `CategorySection.tsx`: implemented continuous horizontal sliders for EVERY category with item count badge pill, left/right scroll controls for desktop/mouse, and a toggle button ("View all" / "Slider") that expands the category into a full vertical 2-column grid.
+- All 15 unit test files (72 tests) passed. Built and restarted server on port 3000.
+- Commits / branch / PR: Committed (`a558dfb`) and pushed to `origin main`.
+
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | — | | No open problems. All milestones green. | Resolved ✅ |
+
 
 
 

@@ -22,7 +22,7 @@ export default function StaffProtectedLayout({
       }
       supabase
         .from('staff')
-        .select('id, name, role, restaurant_id')
+        .select('user_id, display_name, role, restaurant_id')
         .eq('user_id', user.id)
         .single()
         .then(({ data: staffMember }) => {
@@ -35,17 +35,18 @@ export default function StaffProtectedLayout({
     });
   }, [router]);
 
-  if (!isAuthorized) {
-    return (
-      <div className="min-h-screen bg-[#FFF7EE] flex items-center justify-center">
-        <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-[#FFF7EE] text-[#24170F]">
-      {children}
+      {!isAuthorized && (
+        <div className="fixed inset-0 bg-[#FFF7EE] flex items-center justify-center z-50">
+          <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+        </div>
+      )}
+      <div className={!isAuthorized ? 'invisible' : ''}>
+        <React.Suspense fallback={null}>
+          {children}
+        </React.Suspense>
+      </div>
     </div>
   );
 }

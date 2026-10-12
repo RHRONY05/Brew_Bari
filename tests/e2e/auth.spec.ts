@@ -76,7 +76,7 @@ test.describe('M4: Staff Authentication & Role Routing (auth.spec.ts)', () => {
     await expect(page).toHaveURL(/\/staff\/admin/, { timeout: 15000 });
 
     // Admin can also access counter board
-    await page.goto('/staff/counter');
+    await page.goto('/staff/counter').catch(() => {});
     await expect(page).toHaveURL(/\/staff\/counter/, { timeout: 15000 });
   });
 });

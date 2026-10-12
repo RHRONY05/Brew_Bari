@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Check, Bell, Receipt, Star } from 'lucide-react';
+import { Check, Bell, Receipt, Star, XCircle, X } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { SessionRequestJson } from '@/lib/schemas';
 import { formatTaka } from '@/lib/money';
@@ -114,62 +114,78 @@ export function TableStatusSheet({
                           {locale === 'bn' ? 'পরিবেশিত ✅' : 'Served ✅'}
                         </span>
                       )}
+                      {order.status === 'cancelled' && (
+                        <span className="px-2 py-0.5 rounded-full text-[11px] font-extrabold bg-danger-soft text-danger">
+                          {locale === 'bn' ? 'বাতিল করা হয়েছে ✕' : 'Cancelled ✕'}
+                        </span>
+                      )}
                     </div>
                     <span className="text-[12.5px] font-bold text-ink-3 tabular-nums shrink-0">
                       {order.subtotal ? formatTaka(order.subtotal, locale) : ''}
                     </span>
                   </div>
 
-                  {/* 4-step Progress Stepper */}
-                  <div className="flex items-start pt-1">
-                    {[1, 2, 3, 4].map((step) => {
-                      const isComplete = currentStep > step;
-                      const isCurrent = currentStep === step;
-                      const label =
-                        step === 1 && order.status === 'acknowledged'
-                          ? locale === 'bn'
-                            ? 'গৃহীত'
-                            : 'Accepted'
-                          : labels[step - 1];
+                  {order.status === 'cancelled' ? (
+                    <div className="rounded-xl bg-danger-soft/60 border border-danger/20 p-3 text-[12.5px] text-danger font-medium flex items-center gap-2.5">
+                      <XCircle className="w-4 h-4 shrink-0 text-danger stroke-[2.2]" />
+                      <span>
+                        {locale === 'bn'
+                          ? 'এই অর্ডারটি স্টাফ দ্বারা বাতিল করা হয়েছে। বিস্তারিত জানতে অনুগ্রহ করে স্টাফের সাথে কথা বলুন।'
+                          : 'This order was cancelled by staff. Please speak with staff for details.'}
+                      </span>
+                    </div>
+                  ) : (
+                    /* 4-step Progress Stepper */
+                    <div className="flex items-start pt-1">
+                      {[1, 2, 3, 4].map((step) => {
+                        const isComplete = currentStep > step;
+                        const isCurrent = currentStep === step;
+                        const label =
+                          step === 1 && order.status === 'acknowledged'
+                            ? locale === 'bn'
+                              ? 'গৃহীত'
+                              : 'Accepted'
+                            : labels[step - 1];
 
-                      return (
-                        <React.Fragment key={step}>
-                          <div className="flex flex-col items-center gap-1.5 flex-1 min-w-0">
-                            <span
-                              className={`w-7 h-7 rounded-full text-xs font-extrabold flex items-center justify-center transition-all ${
-                                isComplete
-                                  ? 'bg-success text-white'
-                                  : isCurrent
-                                    ? 'bg-brand text-bg ring-2 ring-brand/30'
-                                    : 'bg-surface-2 text-ink-3'
-                              }`}
-                            >
-                              {isComplete ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : step}
-                            </span>
-                            <span
-                              className={`text-[11px] font-bold text-center leading-tight truncate w-full px-0.5 ${
-                                isCurrent
-                                  ? 'text-ink'
-                                  : isComplete
-                                    ? 'text-success'
-                                    : 'text-ink-3'
-                              }`}
-                            >
-                              {label}
-                            </span>
-                          </div>
+                        return (
+                          <React.Fragment key={step}>
+                            <div className="flex flex-col items-center gap-1.5 flex-1 min-w-0">
+                              <span
+                                className={`w-7 h-7 rounded-full text-xs font-extrabold flex items-center justify-center transition-all ${
+                                  isComplete
+                                    ? 'bg-success text-white'
+                                    : isCurrent
+                                      ? 'bg-brand text-bg ring-2 ring-brand/30'
+                                      : 'bg-surface-2 text-ink-3'
+                                }`}
+                              >
+                                {isComplete ? <Check className="w-3.5 h-3.5 stroke-[3]" /> : step}
+                              </span>
+                              <span
+                                className={`text-[11px] font-bold text-center leading-tight truncate w-full px-0.5 ${
+                                  isCurrent
+                                    ? 'text-ink'
+                                    : isComplete
+                                      ? 'text-success'
+                                      : 'text-ink-3'
+                                }`}
+                              >
+                                {label}
+                              </span>
+                            </div>
 
-                          {step < 4 && (
-                            <span
-                              className={`h-[3px] flex-1 mt-3 rounded-full transition-all ${
-                                currentStep > step ? 'bg-success' : 'bg-line'
-                              }`}
-                            />
-                          )}
-                        </React.Fragment>
-                      );
-                    })}
-                  </div>
+                            {step < 4 && (
+                              <span
+                                className={`h-[3px] flex-1 mt-3 rounded-full transition-all ${
+                                  currentStep > step ? 'bg-success' : 'bg-line'
+                                }`}
+                              />
+                            )}
+                          </React.Fragment>
+                        );
+                      })}
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -177,6 +193,8 @@ export function TableStatusSheet({
             {/* Waiter calls */}
             {waiterCalls.map((call) => {
               const isComing = call.status === 'acknowledged';
+              const isCancelled = call.status === 'cancelled';
+              const isDone = call.status === 'done';
 
               return (
                 <div
@@ -185,23 +203,56 @@ export function TableStatusSheet({
                 >
                   <div
                     className={`w-11 h-11 rounded-full flex items-center justify-center shrink-0 ${
-                      isComing ? 'bg-success-soft text-success' : 'bg-surface-2 text-brand'
+                      isCancelled
+                        ? 'bg-danger-soft text-danger'
+                        : isComing
+                        ? 'bg-success-soft text-success'
+                        : isDone
+                        ? 'bg-surface-2 text-ink-3'
+                        : 'bg-surface-2 text-brand'
                     }`}
                   >
-                    <Bell className="w-5 h-5 stroke-[2]" />
+                    {isCancelled ? (
+                      <X className="w-5 h-5 stroke-[2.5]" />
+                    ) : (
+                      <Bell className="w-5 h-5 stroke-[2]" />
+                    )}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="font-extrabold text-[15px] text-ink">
-                      {isComing
-                        ? locale === 'bn'
-                          ? 'ওয়েটার আসছেন'
-                          : 'Waiter coming'
-                        : locale === 'bn'
-                          ? 'ওয়েটার ডাকা হয়েছে'
-                          : 'Waiter called'}
+                    <div className="font-extrabold text-[15px] text-ink flex items-center gap-2">
+                      <span>
+                        {isCancelled
+                          ? locale === 'bn'
+                            ? 'ওয়েটার কল বাতিল'
+                            : 'Waiter call cancelled'
+                          : isDone
+                          ? locale === 'bn'
+                            ? 'ওয়েটার উপস্থিত হয়েছেন'
+                            : 'Waiter attended'
+                          : isComing
+                          ? locale === 'bn'
+                            ? 'ওয়েটার আসছেন'
+                            : 'Waiter coming'
+                          : locale === 'bn'
+                            ? 'ওয়েটার ডাকা হয়েছে'
+                            : 'Waiter called'}
+                      </span>
+                      {isCancelled && (
+                        <span className="px-2 py-0.5 rounded-full text-[10.5px] font-extrabold bg-danger-soft text-danger">
+                          {locale === 'bn' ? 'বাতিল ✕' : 'Cancelled ✕'}
+                        </span>
+                      )}
                     </div>
                     <div className="text-[12.5px] font-medium text-ink-2">
-                      {isComing
+                      {isCancelled
+                        ? locale === 'bn'
+                          ? 'স্টাফ এই কলটি বাতিল করেছেন'
+                          : 'Staff cancelled this request'
+                        : isDone
+                        ? locale === 'bn'
+                          ? 'কল সম্পন্ন হয়েছে'
+                          : 'Request completed'
+                        : isComing
                         ? locale === 'bn'
                           ? 'স্টাফ আপনার ডাক দেখেছেন'
                           : 'Staff acknowledged your call'

@@ -71,23 +71,21 @@ export function TableProvider({
 
   // Active status summary for floating pill
   const activeStatusText = React.useMemo(() => {
-    const activeOrder = requests.find(
-      (r) => r.type === 'order' && ['new', 'acknowledged', 'preparing', 'ready', 'done'].includes(r.status)
-    );
-    if (activeOrder) {
-      if (activeOrder.status === 'new') {
+    const latestOrder = requests.find((r) => r.type === 'order');
+    if (latestOrder && latestOrder.status !== 'cancelled') {
+      if (latestOrder.status === 'new') {
         return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order received';
       }
-      if (activeOrder.status === 'acknowledged') {
+      if (latestOrder.status === 'acknowledged') {
         return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order accepted';
       }
-      if (activeOrder.status === 'preparing') {
+      if (latestOrder.status === 'preparing') {
         return locale === 'bn' ? 'অর্ডার তৈরি হচ্ছে' : 'Order preparing';
       }
-      if (activeOrder.status === 'ready') {
+      if (latestOrder.status === 'ready') {
         return locale === 'bn' ? 'অর্ডার প্রস্তুত' : 'Order ready';
       }
-      if (activeOrder.status === 'done') {
+      if (latestOrder.status === 'done') {
         return locale === 'bn' ? 'অর্ডার পরিবেশন করা হয়েছে' : 'Order served';
       }
     }
@@ -252,6 +250,32 @@ export function TableProvider({
             playChime();
           } else if (r.status === 'done') {
             toast.success(locale === 'bn' ? 'অর্ডার পরিবেশন করা হয়েছে! ✨' : 'Order served! Enjoy your brew! ✨');
+            playChime();
+          } else if (r.status === 'cancelled') {
+            toast.error(
+              locale === 'bn'
+                ? 'আপনার অর্ডারটি বাতিল করা হয়েছে। বিস্তারিত জানতে অনুগ্রহ করে স্টাফের সাথে কথা বলুন।'
+                : 'Your order was cancelled. Please speak with staff for details.'
+            );
+            playChime();
+          }
+        } else if (r.type === 'call_waiter') {
+          if (r.status === 'acknowledged') {
+            toast.info(locale === 'bn' ? 'ওয়েটার আসছেন!' : 'A staff member is on the way!');
+            playChime();
+          } else if (r.status === 'cancelled') {
+            toast.info(locale === 'bn' ? 'ওয়েটার কল বাতিল করা হয়েছে।' : 'Waiter call was cancelled.');
+            playChime();
+          }
+        } else if (r.type === 'bill') {
+          if (r.status === 'acknowledged') {
+            toast.info(locale === 'bn' ? 'বিল প্রস্তুত হচ্ছে!' : 'Bill request acknowledged!');
+            playChime();
+          } else if (r.status === 'done') {
+            toast.success(locale === 'bn' ? 'বিল পরিশোধ সম্পন্ন হয়েছে! ধন্যবাদ।' : 'Bill settled! Thank you.');
+            playChime();
+          } else if (r.status === 'cancelled') {
+            toast.info(locale === 'bn' ? 'বিল রিকোয়েস্ট বাতিল করা হয়েছে।' : 'Bill request was cancelled.');
             playChime();
           }
         }

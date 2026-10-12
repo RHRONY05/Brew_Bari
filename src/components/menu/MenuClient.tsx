@@ -355,16 +355,17 @@ export function MenuClient({
                     </span>
                   </div>
 
-                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div className="flex gap-3 overflow-x-auto no-scrollbar pb-2 snap-x -mx-4 px-4">
                     {quickItems.map((item) => (
-                      <ItemCard
-                        key={item.id}
-                        item={item}
-                        locale={locale}
-                        packageTier={packageTier}
-                        onSelect={handleItemSelect}
-                        onAddDirectly={handleItemSelect}
-                      />
+                      <div key={item.id} className="w-[165px] sm:w-[185px] shrink-0 snap-start">
+                        <ItemCard
+                          item={item}
+                          locale={locale}
+                          packageTier={packageTier}
+                          onSelect={handleItemSelect}
+                          onAddDirectly={handleItemSelect}
+                        />
+                      </div>
                     ))}
                   </div>
                 </section>

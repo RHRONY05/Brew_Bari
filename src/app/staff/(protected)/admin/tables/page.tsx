@@ -18,8 +18,6 @@ import {
   X,
   Loader2,
   Copy,
-  Globe,
-  Sparkles,
 } from 'lucide-react';
 
 type TableRow = Database['public']['Tables']['tables']['Row'];
@@ -35,9 +33,6 @@ export default function AdminTablesPage() {
 
   // Table QR data URLs map: tableId -> dataUrl
   const [tableQrs, setTableQrs] = useState<Record<string, string>>({});
-
-  // Target base URL for QR codes: 'live' (https://brew-bari.vercel.app) or 'local'
-  const [qrTarget, setQrTarget] = useState<'live' | 'local'>('live');
 
   // Selected table for the QR Inspection Modal
   const [selectedQrTable, setSelectedQrTable] = useState<TableRow | null>(null);
@@ -55,24 +50,22 @@ export default function AdminTablesPage() {
   const [regenTargetTable, setRegenTargetTable] = useState<TableRow | null>(null);
   const [isRegenerating, setIsRegenerating] = useState(false);
 
-  // Determine current origin and initial target
+  // Determine current origin
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      const currentOrigin = window.location.origin;
-      setSiteUrl(currentOrigin);
-      // If we're already on the live domain, default to 'live'
-      if (!currentOrigin.includes('localhost') && !currentOrigin.includes('127.0.0.1')) {
-        setQrTarget('live');
-      }
+      setSiteUrl(window.location.origin);
     }
   }, []);
 
   const effectiveBaseUrl = useMemo(() => {
-    if (qrTarget === 'live') {
-      return LIVE_PRODUCTION_URL;
+    if (typeof window !== 'undefined') {
+      if (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')) {
+        return LIVE_PRODUCTION_URL;
+      }
+      return window.location.origin;
     }
-    return siteUrl || 'http://localhost:3000';
-  }, [qrTarget, siteUrl]);
+    return process.env.NEXT_PUBLIC_SITE_URL || LIVE_PRODUCTION_URL;
+  }, []);
 
   // Generate QR codes for all tables and shop
   const generateQrs = useCallback(
@@ -439,47 +432,6 @@ export default function AdminTablesPage() {
             <Printer className="w-4 h-4" />
             Print QR cards
           </Link>
-        </div>
-      </div>
-
-      {/* Target Base URL Selector (Ensures Phone Scanning Works!) */}
-      <div className="bg-white rounded-2xl border border-line p-3.5 shadow-2xs flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2 text-[13px] font-bold text-ink">
-          <Globe className="w-4 h-4 text-brand" />
-          <span>QR Code Target URL:</span>
-          <code className="px-2 py-0.5 rounded-md bg-surface-2 text-brand font-mono text-[12px] font-bold">
-            {effectiveBaseUrl}
-          </code>
-        </div>
-
-        <div className="flex items-center gap-2 text-[12px] font-bold">
-          <span className="text-ink-2">Scan Mode:</span>
-          <button
-            type="button"
-            onClick={() => setQrTarget('live')}
-            className={`h-8 px-3 rounded-full transition-all flex items-center gap-1.5 ${
-              qrTarget === 'live'
-                ? 'bg-ink text-bg font-extrabold shadow-2xs'
-                : 'bg-surface-2 text-ink-2 hover:bg-line'
-            }`}
-          >
-            <Sparkles className="w-3 h-3 text-warning" />
-            <span>Live Vercel (Ready for Phone Camera)</span>
-          </button>
-
-          {siteUrl && (siteUrl.includes('localhost') || siteUrl.includes('127.0.0.1')) && (
-            <button
-              type="button"
-              onClick={() => setQrTarget('local')}
-              className={`h-8 px-3 rounded-full transition-all ${
-                qrTarget === 'local'
-                  ? 'bg-ink text-bg font-extrabold shadow-2xs'
-                  : 'bg-surface-2 text-ink-2 hover:bg-line'
-              }`}
-            >
-              Localhost (Desktop testing)
-            </button>
-          )}
         </div>
       </div>
 

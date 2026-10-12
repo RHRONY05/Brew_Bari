@@ -236,10 +236,18 @@ Did:
 - Commits / branch / PR: Committed on `main` and pushed to `https://github.com/RHRONY05/Brew_Bari.git`.
 - Project Milestone M0 through M7 is 100% complete!
 
+### 2026-10-12 10:52 — Antigravity — Customer Order Tracking UX Fix
+Did:
+- Fixed `activeStatusText` in `src/components/table/TableProvider.tsx`: removed `'served'` to strictly adhere to `RequestStatus` union type (`'new' | 'acknowledged' | 'preparing' | 'ready' | 'done'`), ensuring the floating status pill stays active and updates seamlessly through every order step: Received → Accepted → Preparing → Ready → Served.
+- Added persistent `Track Order / Bill` button in `src/components/menu/MenuClient.tsx` right inside the table context header (`data-testid="header-track-order-button"`) so customers can reopen the live 4-step order stepper and bill sheet at any time.
+- All 15 unit test files (72 tests) passed. Production build succeeded. Restarted server on port 3000.
+- Commits / branch / PR: Committed (`4ca7a57`) and pushed to `origin main`.
+
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | — | | No open problems. All milestones green. | Resolved ✅ |
+
 
 
 

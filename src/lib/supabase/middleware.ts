@@ -29,6 +29,7 @@ export async function updateSession(request: NextRequest) {
 
   const {
     data: { user },
+    error: authError,
   } = await supabase.auth.getUser()
 
   const pathname = request.nextUrl.pathname
@@ -38,11 +39,29 @@ export async function updateSession(request: NextRequest) {
     pathname.startsWith('/staff/admin') ||
     pathname.startsWith('/staff/(protected)')
 
+  if (pathname === '/staff/login' || pathname === '/staff') {
+    if (user) {
+      const { data: staffMember } = await supabase
+        .from('staff')
+        .select('role')
+        .eq('user_id', user.id)
+        .single()
+
+      const url = request.nextUrl.clone()
+      url.pathname = staffMember?.role === 'admin' ? '/staff/admin' : '/staff/counter'
+      const redirectResponse = NextResponse.redirect(url)
+      supabaseResponse.cookies.getAll().forEach((c) => redirectResponse.cookies.set(c.name, c.value, c))
+      return redirectResponse
+    }
+  }
+
   if (isStaffRoute) {
     if (!user) {
       const url = request.nextUrl.clone()
       url.pathname = '/staff/login'
-      return NextResponse.redirect(url)
+      const redirectResponse = NextResponse.redirect(url)
+      supabaseResponse.cookies.getAll().forEach((c) => redirectResponse.cookies.set(c.name, c.value, c))
+      return redirectResponse
     }
 
     if (pathname.startsWith('/staff/admin')) {
@@ -55,7 +74,9 @@ export async function updateSession(request: NextRequest) {
       if (!staffMember || staffMember.role !== 'admin') {
         const url = request.nextUrl.clone()
         url.pathname = '/staff/counter'
-        return NextResponse.redirect(url)
+        const redirectResponse = NextResponse.redirect(url)
+        supabaseResponse.cookies.getAll().forEach((c) => redirectResponse.cookies.set(c.name, c.value, c))
+        return redirectResponse
       }
     }
   }

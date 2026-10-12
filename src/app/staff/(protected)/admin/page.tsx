@@ -1,5 +1,19 @@
-import { redirect } from 'next/navigation'
+'use client';
+
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { Loader2 } from 'lucide-react';
 
 export default function AdminPage() {
-  redirect('/staff/admin/menu')
+  const router = useRouter();
+
+  useEffect(() => {
+    router.replace('/staff/admin/menu');
+  }, [router]);
+
+  return (
+    <div className="min-h-screen bg-[#FFF7EE] flex items-center justify-center">
+      <Loader2 className="w-8 h-8 animate-spin text-[#8A5A37]" />
+    </div>
+  );
 }

@@ -158,15 +158,20 @@ export default function CounterBoardPage() {
         if (r.request_items && Array.isArray(r.request_items)) {
           items = r.request_items.map((it: any) => {
             let optSummary = '';
-            if (it.selected_options && typeof it.selected_options === 'object') {
+            if (Array.isArray(it.options)) {
+              optSummary = it.options
+                .map((o: any) => o.choice_en || o.choice_bn || (typeof o === 'string' ? o : ''))
+                .filter(Boolean)
+                .join(', ');
+            } else if (it.selected_options && typeof it.selected_options === 'object') {
               optSummary = Object.values(it.selected_options).flat().join(', ');
             }
             return {
               id: it.id,
-              name: it.item_name_en || 'Item',
+              name: it.name_en || it.name_bn || it.item_name_en || 'Item',
               quantity: it.quantity,
               optionsSummary: optSummary,
-              price: it.price_at_order,
+              price: it.line_total ?? it.unit_price ?? it.price_at_order ?? 0,
             };
           });
         }

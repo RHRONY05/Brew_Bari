@@ -157,7 +157,18 @@ export function loadCartFromStorage(sessionId: string | null | undefined): CartI
     }
 
     const key = `${STORAGE_PREFIX}_${sessionId || 'guest'}`;
-    const raw = localStorage.getItem(key);
+    let raw = localStorage.getItem(key);
+    // If opening a table session with empty cart, import items chosen on the public guest menu
+    if (!raw && sessionId) {
+      const guestRaw = localStorage.getItem(`${STORAGE_PREFIX}_guest`);
+      if (guestRaw) {
+        raw = guestRaw;
+        try {
+          localStorage.setItem(key, guestRaw);
+          localStorage.removeItem(`${STORAGE_PREFIX}_guest`);
+        } catch {}
+      }
+    }
     if (!raw) return [];
     return JSON.parse(raw) as CartItem[];
   } catch {

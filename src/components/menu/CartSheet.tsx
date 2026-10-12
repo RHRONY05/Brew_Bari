@@ -284,6 +284,46 @@ export function CartSheet({
                   </span>
                 </button>
               )}
+
+              {/* Table selection fallback if on public menu without a table */}
+              {!onPlaceOrder && (
+                <div className="p-3.5 rounded-2xl bg-[#FFF7EE] border border-[#F0DFCB] text-center flex flex-col items-center gap-2 my-1">
+                  <div className="text-[14px] font-extrabold text-[#24170F]">
+                    {locale === 'bn' ? 'অর্ডার দিতে টেবিল নির্বাচন করুন' : 'Ready to place this order?'}
+                  </div>
+                  <p className="text-[12px] text-[#6F5A4B] leading-snug">
+                    {locale === 'bn'
+                      ? 'অর্ডার পাঠাতে আপনার টেবিলের কিউআর কোড স্ক্যান করুন, অথবা নিচের টেস্ট টেবিল বেছে নিন:'
+                      : 'You are viewing the digital menu. To send your order to the kitchen, scan your table QR or tap a table below:'}
+                  </p>
+                  <div className="grid grid-cols-4 gap-2 w-full pt-1">
+                    <a
+                      href="/t/cb56e5ef05ab0759602d6481"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                    >
+                      Table 1
+                    </a>
+                    <a
+                      href="/t/b90039ff9153f8d73c622bfe"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                    >
+                      Table 2
+                    </a>
+                    <a
+                      href="/t/b8110d50b8ca25d560837030"
+                      className="py-2.5 px-1 rounded-xl bg-white border border-[#F0DFCB] hover:border-[#6B4226] text-xs font-bold text-[#24170F] text-center shadow-2xs hover:bg-[#FBEBD7]/30 transition-all"
+                    >
+                      Table 3
+                    </a>
+                    <a
+                      href="/t/test-table-99"
+                      className="py-2.5 px-1 rounded-xl bg-[#6B4226] text-[#FFF7EE] text-xs font-bold text-center shadow-2xs hover:bg-[#57351e] transition-all"
+                    >
+                      Table 99
+                    </a>
+                  </div>
+                </div>
+              )}
             </div>
           </>
         )}

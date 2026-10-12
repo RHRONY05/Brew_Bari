@@ -223,16 +223,29 @@ export function MenuClient({
 
         {/* Table context indicator if scanning QR */}
         {tableContext?.tableNumber && (
-          <div className="px-4 pb-3 flex items-center gap-2">
-            <div className="h-8 px-3 rounded-full bg-[#6B4226] text-[#FFF7EE] text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
-              <Coffee className="w-4 h-4 stroke-[2]" />
-              <span>
-                {locale === 'bn' ? `টেবিল ${tableContext.tableNumber}` : `Table ${tableContext.tableNumber}`}
+          <div className="px-4 pb-3 flex items-center justify-between gap-2">
+            <div className="flex items-center gap-2">
+              <div className="h-8 px-3 rounded-full bg-[#6B4226] text-[#FFF7EE] text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
+                <Coffee className="w-4 h-4 stroke-[2]" />
+                <span>
+                  {locale === 'bn' ? `টেবিল ${tableContext.tableNumber}` : `Table ${tableContext.tableNumber}`}
+                </span>
+              </div>
+              <span className="text-[12px] font-medium text-[#6F5A4B] hidden sm:inline">
+                {locale === 'bn' ? 'আপনার টেবিল সংযুক্ত' : 'Table connected'}
               </span>
             </div>
-            <span className="text-[12px] font-medium text-[#6F5A4B]">
-              {locale === 'bn' ? 'আপনার টেবিল সংযুক্ত' : 'Table connected'}
-            </span>
+
+            {onOpenStatus && (
+              <button
+                type="button"
+                onClick={onOpenStatus}
+                data-testid="header-track-order-button"
+                className="h-8 px-3.5 rounded-full bg-[#FBEBD7] border border-[#F0DFCB] text-[#8A5A37] text-[12px] font-extrabold flex items-center gap-1.5 hover:bg-[#F2C27D] hover:text-[#24170F] active:scale-95 transition-all shadow-2xs"
+              >
+                <span>{locale === 'bn' ? 'অর্ডার ট্র্যাকার / বিল' : 'Track Order / Bill'}</span>
+              </button>
+            )}
           </div>
         )}
 

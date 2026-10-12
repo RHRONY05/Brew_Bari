@@ -70,17 +70,23 @@ export function TableProvider({
   // Active status summary for floating pill
   const activeStatusText = React.useMemo(() => {
     const activeOrder = requests.find(
-      (r) => r.type === 'order' && ['new', 'acknowledged', 'preparing', 'ready'].includes(r.status)
+      (r) => r.type === 'order' && ['new', 'acknowledged', 'preparing', 'ready', 'done'].includes(r.status)
     );
     if (activeOrder) {
       if (activeOrder.status === 'new') {
         return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order received';
+      }
+      if (activeOrder.status === 'acknowledged') {
+        return locale === 'bn' ? 'অর্ডার গ্রহণ করা হয়েছে' : 'Order accepted';
       }
       if (activeOrder.status === 'preparing') {
         return locale === 'bn' ? 'অর্ডার তৈরি হচ্ছে' : 'Order preparing';
       }
       if (activeOrder.status === 'ready') {
         return locale === 'bn' ? 'অর্ডার প্রস্তুত' : 'Order ready';
+      }
+      if (activeOrder.status === 'done') {
+        return locale === 'bn' ? 'অর্ডার পরিবেশন করা হয়েছে' : 'Order served';
       }
     }
 
@@ -95,6 +101,13 @@ export function TableProvider({
         : locale === 'bn'
           ? 'ওয়েটার ডাকা হয়েছে'
           : 'Waiter called';
+    }
+
+    const activeBill = requests.find(
+      (r) => r.type === 'bill' && ['new', 'acknowledged'].includes(r.status)
+    );
+    if (activeBill) {
+      return locale === 'bn' ? 'বিল চাওয়া হয়েছে' : 'Bill requested';
     }
 
     return null;
@@ -207,7 +220,7 @@ export function TableProvider({
       ['new', 'acknowledged', 'preparing', 'ready'].includes(r.status)
     );
 
-    const interval = hasActiveRequests ? 5000 : 30000;
+    const interval = hasActiveRequests ? 3000 : 15000;
 
     const poll = async () => {
       if (typeof document !== 'undefined' && document.hidden) return;

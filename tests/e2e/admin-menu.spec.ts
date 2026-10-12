@@ -160,5 +160,16 @@ test.describe('M6: Admin Menu Editor (admin-menu.spec.ts)', () => {
 
     // Verify newly created item appears in the list
     await expect(page.getByText(testItemName).first()).toBeVisible({ timeout: 10000 });
+
+    // Clean up: delete test item so it does not persist in the menu
+    page.once('dialog', (dialog) => dialog.accept());
+    const newRow = page
+      .locator('div[data-testid^="menu-item-row-"]')
+      .filter({ has: page.locator('[data-testid="item-name-en"]', { hasText: testItemName }) })
+      .first();
+    await newRow.locator('button[aria-label*="Edit"]').click();
+    await expect(page.getByTestId('item-editor-panel')).toBeVisible({ timeout: 5000 });
+    await page.getByTestId('delete-item-button').click();
+    await expect(page.getByTestId('item-editor-panel')).not.toBeVisible({ timeout: 10000 });
   });
 });

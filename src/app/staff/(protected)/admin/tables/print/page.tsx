@@ -7,6 +7,9 @@ import type { Database } from '@/types/database';
 import QRCode from 'qrcode';
 import { Printer, ArrowLeft, Loader2, Download, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
+import { qrBaseUrl, tablePath, tableUrl } from '@/lib/site-urls';
+import { readThemeColors } from '@/lib/theme-colors';
 
 type TableRow = Database['public']['Tables']['tables']['Row'];
 
@@ -14,15 +17,14 @@ interface TableWithQr extends TableRow {
   qrDataUrl: string;
 }
 
-const LIVE_PRODUCTION_URL = 'https://brew-bari.vercel.app';
-
 export default function PrintTableCardsPage() {
+  const { restaurant, logo } = useStaffRestaurant();
   const searchParams = useSearchParams();
   const showTest = searchParams.get('showTest') === '1';
 
   const [loading, setLoading] = useState(true);
   const [tablesWithQr, setTablesWithQr] = useState<TableWithQr[]>([]);
-  const [baseUrl, setBaseUrl] = useState<string>(LIVE_PRODUCTION_URL);
+  const [baseUrl, setBaseUrl] = useState<string>('');
   const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   useEffect(() => {
@@ -52,24 +54,19 @@ export default function PrintTableCardsPage() {
       if (!tablesData) return;
 
       const filtered = tablesData.filter((t) => showTest || t.number !== 99);
-      const origin =
-        typeof window !== 'undefined'
-          ? window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')
-            ? LIVE_PRODUCTION_URL
-            : window.location.origin
-          : process.env.NEXT_PUBLIC_SITE_URL || LIVE_PRODUCTION_URL;
-
+      const origin = qrBaseUrl();
+      const colors = readThemeColors();
       setBaseUrl(origin);
 
       const withQr: TableWithQr[] = await Promise.all(
         filtered.map(async (t) => {
-          const url = `${origin}/t/${t.qr_token}`;
+          const url = tableUrl(origin, restaurant.slug, t.qr_token);
           const qrDataUrl = await QRCode.toDataURL(url, {
             width: 320,
             margin: 1,
             color: {
-              dark: '#24170F',
-              light: '#FFFFFF',
+              dark: colors.ink,
+              light: colors.surface,
             },
           });
           return {
@@ -84,7 +81,7 @@ export default function PrintTableCardsPage() {
     }
 
     load();
-  }, [showTest]);
+  }, [showTest, restaurant.slug]);
 
   // Generate and download individual table card PNG
   const handleDownloadCard = useCallback(async (table: TableWithQr) => {
@@ -94,33 +91,34 @@ export default function PrintTableCardsPage() {
       canvas.height = 1050;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
+      const colors = readThemeColors();
 
       // Card Background
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = colors.surface;
       ctx.fillRect(0, 0, 800, 1050);
 
       // Card Frame
-      ctx.strokeStyle = '#6B4226';
+      ctx.strokeStyle = colors.brand;
       ctx.lineWidth = 10;
       ctx.strokeRect(18, 18, 764, 1014);
 
       // Inner Cream surface
-      ctx.fillStyle = '#FAF7F2';
+      ctx.fillStyle = colors.paper;
       ctx.fillRect(24, 24, 752, 1002);
 
       // Brand Title
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 46px system-ui, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('Brew Bari', 400, 110);
+      ctx.fillText(restaurant.name_en, 400, 110);
 
       // Bengali Brand Subtitle
-      ctx.fillStyle = '#6B4226';
+      ctx.fillStyle = colors.brand;
       ctx.font = 'bold 24px system-ui, sans-serif';
-      ctx.fillText('ব্রু বাড়ি · কফি ও খাবার', 400, 150);
+      if (restaurant.name_bn) ctx.fillText(restaurant.name_bn, 400, 150);
 
       // Divider
-      ctx.strokeStyle = '#E6DFD5';
+      ctx.strokeStyle = colors.paperLine;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(120, 180);
@@ -128,13 +126,13 @@ export default function PrintTableCardsPage() {
       ctx.stroke();
 
       // Table Number Title
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 54px system-ui, sans-serif';
       const title = table.label || `Table ${table.number}`;
       ctx.fillText(title, 400, 255);
 
       if (table.label && table.label !== `Table ${table.number}`) {
-        ctx.fillStyle = '#8C7E74';
+        ctx.fillStyle = colors.paperInk;
         ctx.font = 'bold 24px system-ui, sans-serif';
         ctx.fillText(`Table #${table.number} · ${table.seats} Seats`, 400, 295);
       }
@@ -144,9 +142,9 @@ export default function PrintTableCardsPage() {
       img.crossOrigin = 'anonymous';
       await new Promise<void>((resolve, reject) => {
         img.onload = () => {
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = colors.surface;
           ctx.fillRect(170, 330, 460, 460);
-          ctx.strokeStyle = '#E6DFD5';
+          ctx.strokeStyle = colors.paperLine;
           ctx.lineWidth = 3;
           ctx.strokeRect(170, 330, 460, 460);
           ctx.drawImage(img, 190, 350, 420, 420);
@@ -157,33 +155,39 @@ export default function PrintTableCardsPage() {
       });
 
       // Call-to-actions
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 30px system-ui, sans-serif';
       ctx.fillText('Scan to order & call waiter', 400, 850);
 
-      ctx.fillStyle = '#6B4226';
+      ctx.fillStyle = colors.brand;
       ctx.font = 'bold 24px system-ui, sans-serif';
       ctx.fillText('অর্ডার করতে ও ওয়েটার ডাকতে স্ক্যান করুন', 400, 895);
 
       // Wi-Fi info footer
-      ctx.fillStyle = '#8C7E74';
-      ctx.font = '500 20px system-ui, sans-serif';
-      ctx.fillText('Wi-Fi: BrewBari_Guest  |  Pass: Coffee2026', 400, 970);
+      if (restaurant.wifi_name) {
+        ctx.fillStyle = colors.paperInk;
+        ctx.font = '500 20px system-ui, sans-serif';
+        ctx.fillText(
+          `Wi-Fi: ${restaurant.wifi_name}${restaurant.wifi_password ? `  |  Pass: ${restaurant.wifi_password}` : ''}`,
+          400,
+          970
+        );
+      }
 
       // Download
       const dataUrl = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = `brew-bari-table-${table.number}-card.png`;
+      a.download = `${restaurant.slug}-table-${table.number}-card.png`;
       a.click();
     } catch {
       // Fallback: download raw QR
       const a = document.createElement('a');
       a.href = table.qrDataUrl;
-      a.download = `brew-bari-table-${table.number}-qr.png`;
+      a.download = `${restaurant.slug}-table-${table.number}-qr.png`;
       a.click();
     }
-  }, []);
+  }, [restaurant]);
 
   const handleDownloadAllCards = async () => {
     setIsDownloadingAll(true);
@@ -262,12 +266,12 @@ export default function PrintTableCardsPage() {
             {/* Header */}
             <div className="flex items-center gap-2">
               <img
-                src="/images/brand/concept-1.png"
-                alt="Brew Bari Logo"
+                src={logo}
+                alt={`${restaurant.name_en} logo`}
                 className="w-7 h-7 object-contain shrink-0"
               />
               <span className="text-[16px] font-extrabold tracking-tight text-ink">
-                Brew Bari
+                {restaurant.name_en}
               </span>
             </div>
 
@@ -294,10 +298,12 @@ export default function PrintTableCardsPage() {
             </div>
 
             {/* Wi-Fi footer */}
-            <div className="mt-2 pt-2 border-t border-line w-full text-[11px] text-ink-3 font-medium flex justify-between px-2">
-              <span>Wi-Fi: BrewBari_Guest</span>
-              <span>Pass: Coffee2026</span>
-            </div>
+            {restaurant.wifi_name && (
+              <div className="mt-2 pt-2 border-t border-line w-full text-[11px] text-ink-3 font-medium flex justify-between px-2">
+                <span>Wi-Fi: {restaurant.wifi_name}</span>
+                {restaurant.wifi_password && <span>Pass: {restaurant.wifi_password}</span>}
+              </div>
+            )}
 
             {/* On-screen quick download & open button (hidden during print) */}
             <div className="print:hidden flex gap-2 w-full pt-1">
@@ -311,7 +317,7 @@ export default function PrintTableCardsPage() {
                 <span>Save PNG</span>
               </button>
               <Link
-                href={`/t/${table.qr_token}`}
+                href={tablePath(restaurant.slug, table.qr_token)}
                 target="_blank"
                 className="h-8 px-2.5 rounded-full border border-line bg-white hover:bg-bg text-[11.5px] font-bold text-ink-2 flex items-center justify-center transition-colors"
                 title="Open guest page in browser"

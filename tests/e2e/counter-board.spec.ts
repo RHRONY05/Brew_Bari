@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { resetTable99 } from './helpers';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import WebSocket from 'ws';
@@ -47,6 +48,7 @@ test.describe('M4: Live Counter Board (counter-board.spec.ts)', () => {
 
     expect(tableErr).toBeNull();
     table99Token = table!.qr_token;
+    await resetTable99(supabase);
     restaurantId = table!.restaurant_id;
   });
 
@@ -131,7 +133,7 @@ test.describe('M4: Live Counter Board (counter-board.spec.ts)', () => {
     const guestContext = await browser.newContext();
     const guestPage = await guestContext.newPage();
 
-    await guestPage.goto(`/t/${table99Token}`);
+    await guestPage.goto(`/brew-bari/t/${table99Token}`);
     await expect(guestPage.getByText('Table 99')).toBeVisible();
 
     // Guest calls waiter

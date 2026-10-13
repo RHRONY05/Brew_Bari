@@ -13,9 +13,9 @@ import {
   LayoutGrid,
   Flame,
   Sparkles,
-  UtensilsCrossed,
   type LucideIcon,
 } from 'lucide-react';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   // Emojis from database seed
@@ -101,5 +101,5 @@ export function CategoryIcon({
     return <span className="text-[15px] leading-none select-none">{iconTrimmed}</span>;
   }
 
-  return <Coffee className={className} />;
+  return <VenueIcon className={className} />;
 }

@@ -8,11 +8,11 @@
 ## Now
 | | |
 |---|---|
-| **Phase** | Complete — Phase 1, Phase 2 & Phase 3 delivered |
-| **Current milestone** | M7 (Demo polish & release complete) |
-| **Next task(s) to pick** | Project complete ✅ — Ready for live pitch using 08-DEMO-SCRIPT.md |
+| **Phase** | Brew Bari complete (tag `brew-bari-v1`). **Platform refactor done (Menuwala, multi-restaurant).** |
+| **Current milestone** | Grill Ghar (restaurant #2, fast food, P3 locked) — planning & design not started |
+| **Next task(s) to pick** | Wait for the human/Claude Code to write the Grill Ghar plan. Read [10-PLATFORM.md](10-PLATFORM.md) first. |
 | **Blocked on** | — |
-| **Last updated** | 2026-10-12 by Antigravity (All milestones M0–M7 complete and green) |
+| **Last updated** | 2026-10-14 by Claude Code (multi-restaurant platform refactor) |
 
 ## Lane status
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -29,9 +29,9 @@
 ## Environment facts (no secrets here!)
 | Item | Value |
 |---|---|
-| GitHub repo | https://github.com/RHRONY05/Brew_Bari.git |
+| GitHub repo | https://github.com/RHRONY05/Brew_Bari.git (**public**) |
 | Supabase project ref / region | vaxjsaknytquzcfxsukv / ap-southeast-1 |
-| Vercel URL | _(set in T7.4)_ |
+| Vercel URL | https://menuwala.vercel.app (project `menuwala`). `brew-bari.vercel.app` redirects there. |
 | Staff test accounts | stored in `.env.local` only — names of the env vars: `TEST_STAFF_ADMIN_EMAIL`, … |
 | Node / package manager | Node v20.19.2, npm 10.8.2 |
 
@@ -39,6 +39,10 @@
 Agents append here when they make a choice the docs didn't cover (one line each, newest last). If it changes a doc, update the doc too.
 - 2026-10-12 — Planning: see `agent.md` "Key decisions".
 - 2026-10-12 — Preflight: Added `chrome-devtools` to `~/.gemini/config/mcp_config.json` for optional in-chat browser tools.
+
+- 2026-10-14 — Platform: one codebase for all restaurants (Menuwala). URLs `/<slug>` + `/<slug>/t/<token>`; themes in `src/themes`; platform-managed DB fields guarded by trigger. See 10-PLATFORM.md.
+- 2026-10-14 — Removed demo staff passwords from the public home page and the login quick-fill (they were in client code and in the public git history).
+- 2026-10-14 — E2E suite runs serially (`workers: 1`) and resets table 99 before each table-service spec: specs share live data and the 15-requests/10-min rate limit made later specs fail.
 
 ## Session log
 Newest at the bottom. One entry per agent session. Keep entries short.
@@ -252,10 +256,27 @@ Did:
 - All 15 unit test files (72 tests) passed. Built and restarted server on port 3000.
 - Commits / branch / PR: Committed (`a558dfb`) and pushed to `origin main`.
 
+### 2026-10-14 — Claude Code — Multi-restaurant platform refactor
+Did:
+- Tag `brew-bari-v1` = restore point. Branch `platform/multi-restaurant`, merged to `main`.
+- DB migration `20261014000005_multi_restaurant.sql`: `restaurants.theme_key / package_locked / is_listed / custom_domain`, reserved-slug check, trigger `guard_restaurant_admin_update` (platform-managed fields), RPC `resolve_table_slug`. Types regenerated.
+- Verified isolation with `supabase/tests/09_multi_restaurant.sql` (restaurant A admin sees/updates 0 rows of B; guard blocks slug/theme/lock changes).
+- Routes: `/<slug>`, `/<slug>/t/<token>`; `/m/<slug>` and `/t/<token>` redirect (308). Platform home `/` lists restaurants; no credentials, no package switcher. Root `not-found`.
+- Themes: `src/themes` (types, registry, curated fonts, `ThemeStyle`, `ThemeContext`, `brew-bari`, `menuwala`). Replaced 77 hard-coded colours with tokens; canvas/QR colours via `readThemeColors()`.
+- Removed all Brew Bari hard-coding (names, logo, Wi-Fi, URLs, `brew-bari.vercel.app`, café wording, fake fallback phone/Wi-Fi) from shared components; staff pages get the restaurant from `StaffRestaurantProvider`.
+- Removed hard-coded table tokens from the public cart sheet and demo passwords from home + login pages.
+- `package.json` renamed `menuwala`, removed self-dependency `brew-bari: file:../Coffe_house`.
+- Vercel: project renamed `menuwala`, domain `menuwala.vercel.app` added, `NEXT_PUBLIC_PRODUCTION_URL` set, `brew-bari.vercel.app` → redirect.
+Tests: typecheck ✅ lint ✅ (no new errors; 50 pre-existing vs 55 before) unit ✅ 83/83 e2e ✅ 87/87 (guest, staff, staff-phone)
+Problems / surprises: the e2e suite was NOT green before this work (13/72 failed on `brew-bari-v1`): wrong assertions (print page image count, "BB" text) and shared table-99 state + rate limit. Fixed those tests.
+Next: plan & design Grill Ghar.
+
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
-| — | | No open problems. All milestones green. | Resolved ✅ |
+| 1 | Security (2026-10-14) | Demo staff passwords were in client code on the live site and are in the **public** git history. | **Open — human must change both staff passwords** (Supabase → Authentication → Users) and update `.env.local`. |
+| 2 | Supabase advisor | Leaked-password protection is off. | Open — enable in Supabase → Authentication → Settings. |
+| 3 | Dev only | Next.js logs "could not validate instant navigation" for `/staff/admin/*` because staff pages wait for the restaurant to load. No effect on build/production. | Known, accepted |
 
 
 

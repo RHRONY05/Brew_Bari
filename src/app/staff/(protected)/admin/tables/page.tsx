@@ -5,6 +5,9 @@ import Link from 'next/link';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import type { Database } from '@/types/database';
 import QRCode from 'qrcode';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
+import { qrBaseUrl, menuUrl, tablePath, tableUrl } from '@/lib/site-urls';
+import { readThemeColors } from '@/lib/theme-colors';
 import { toast } from 'sonner';
 import {
   QrCode,
@@ -22,9 +25,8 @@ import {
 
 type TableRow = Database['public']['Tables']['tables']['Row'];
 
-const LIVE_PRODUCTION_URL = 'https://brew-bari.vercel.app';
-
 export default function AdminTablesPage() {
+  const { restaurant } = useStaffRestaurant();
   const [loading, setLoading] = useState(true);
   const [restaurantId, setRestaurantId] = useState<string>('');
   const [tables, setTables] = useState<TableRow[]>([]);
@@ -57,31 +59,23 @@ export default function AdminTablesPage() {
     }
   }, []);
 
-  const effectiveBaseUrl = useMemo(() => {
-    if (typeof window !== 'undefined') {
-      if (window.location.origin.includes('localhost') || window.location.origin.includes('127.0.0.1')) {
-        return LIVE_PRODUCTION_URL;
-      }
-      return window.location.origin;
-    }
-    return process.env.NEXT_PUBLIC_SITE_URL || LIVE_PRODUCTION_URL;
-  }, []);
+  const effectiveBaseUrl = useMemo(() => qrBaseUrl(), []);
 
   // Generate QR codes for all tables and shop
   const generateQrs = useCallback(
     async (tablesList: TableRow[], baseUrl: string) => {
+      const colors = readThemeColors();
       // 1. Generate Table QRs
       const qrs: Record<string, string> = {};
       await Promise.all(
         tablesList.map(async (t) => {
           try {
-            const tableUrl = `${baseUrl}/t/${t.qr_token}`;
-            const qrData = await QRCode.toDataURL(tableUrl, {
+            const qrData = await QRCode.toDataURL(tableUrl(baseUrl, restaurant.slug, t.qr_token), {
               width: 360,
               margin: 1,
               color: {
-                dark: '#24170F',
-                light: '#FFFFFF',
+                dark: colors.ink,
+                light: colors.surface,
               },
             });
             qrs[t.id] = qrData;
@@ -94,13 +88,13 @@ export default function AdminTablesPage() {
 
       // 2. Generate Shop QR (menu only)
       try {
-        const shopUrl = `${baseUrl}/m/brew-bari`;
+        const shopUrl = menuUrl(baseUrl, restaurant.slug);
         const qrData = await QRCode.toDataURL(shopUrl, {
           width: 360,
           margin: 1,
           color: {
-            dark: '#24170F',
-            light: '#FFFFFF',
+            dark: colors.ink,
+            light: colors.surface,
           },
         });
         setShopQrDataUrl(qrData);
@@ -108,7 +102,7 @@ export default function AdminTablesPage() {
         console.error('Failed to generate shop QR', e);
       }
     },
-    []
+    [restaurant.slug]
   );
 
   const fetchData = useCallback(async () => {
@@ -224,7 +218,7 @@ export default function AdminTablesPage() {
     if (!qrData) return;
     const a = document.createElement('a');
     a.href = qrData;
-    a.download = `brew-bari-table-${table.number}-qr.png`;
+    a.download = `${restaurant.slug}-table-${table.number}-qr.png`;
     a.click();
     toast.success(`Downloaded QR for Table ${table.number}`);
   };
@@ -240,33 +234,34 @@ export default function AdminTablesPage() {
       canvas.height = 1050;
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
+      const colors = readThemeColors();
 
       // Card Background
-      ctx.fillStyle = '#FFFFFF';
+      ctx.fillStyle = colors.surface;
       ctx.fillRect(0, 0, 800, 1050);
 
       // Card Frame
-      ctx.strokeStyle = '#6B4226';
+      ctx.strokeStyle = colors.brand;
       ctx.lineWidth = 10;
       ctx.strokeRect(18, 18, 764, 1014);
 
       // Inner Cream surface
-      ctx.fillStyle = '#FAF7F2';
+      ctx.fillStyle = colors.paper;
       ctx.fillRect(24, 24, 752, 1002);
 
       // Brand Title
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 46px system-ui, sans-serif';
       ctx.textAlign = 'center';
-      ctx.fillText('Brew Bari', 400, 110);
+      ctx.fillText(restaurant.name_en, 400, 110);
 
       // Bengali Brand Subtitle
-      ctx.fillStyle = '#6B4226';
+      ctx.fillStyle = colors.brand;
       ctx.font = 'bold 24px system-ui, sans-serif';
-      ctx.fillText('ব্রু বাড়ি · কফি ও খাবার', 400, 150);
+      if (restaurant.name_bn) ctx.fillText(restaurant.name_bn, 400, 150);
 
       // Divider
-      ctx.strokeStyle = '#E6DFD5';
+      ctx.strokeStyle = colors.paperLine;
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(120, 180);
@@ -274,13 +269,13 @@ export default function AdminTablesPage() {
       ctx.stroke();
 
       // Table Number Title
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 54px system-ui, sans-serif';
       const title = table.label || `Table ${table.number}`;
       ctx.fillText(title, 400, 255);
 
       if (table.label && table.label !== `Table ${table.number}`) {
-        ctx.fillStyle = '#8C7E74';
+        ctx.fillStyle = colors.paperInk;
         ctx.font = 'bold 24px system-ui, sans-serif';
         ctx.fillText(`Table #${table.number} · ${table.seats} Seats`, 400, 295);
       }
@@ -291,9 +286,9 @@ export default function AdminTablesPage() {
       await new Promise<void>((resolve, reject) => {
         img.onload = () => {
           // White box behind QR
-          ctx.fillStyle = '#FFFFFF';
+          ctx.fillStyle = colors.surface;
           ctx.fillRect(170, 330, 460, 460);
-          ctx.strokeStyle = '#E6DFD5';
+          ctx.strokeStyle = colors.paperLine;
           ctx.lineWidth = 3;
           ctx.strokeRect(170, 330, 460, 460);
 
@@ -306,24 +301,30 @@ export default function AdminTablesPage() {
       });
 
       // Call-to-actions
-      ctx.fillStyle = '#24170F';
+      ctx.fillStyle = colors.ink;
       ctx.font = 'bold 30px system-ui, sans-serif';
       ctx.fillText('Scan to order & call waiter', 400, 850);
 
-      ctx.fillStyle = '#6B4226';
+      ctx.fillStyle = colors.brand;
       ctx.font = 'bold 24px system-ui, sans-serif';
       ctx.fillText('অর্ডার করতে ও ওয়েটার ডাকতে স্ক্যান করুন', 400, 895);
 
       // Wi-Fi info footer
-      ctx.fillStyle = '#8C7E74';
-      ctx.font = '500 20px system-ui, sans-serif';
-      ctx.fillText('Wi-Fi: BrewBari_Guest  |  Pass: Coffee2026', 400, 970);
+      if (restaurant.wifi_name) {
+        ctx.fillStyle = colors.paperInk;
+        ctx.font = '500 20px system-ui, sans-serif';
+        ctx.fillText(
+          `Wi-Fi: ${restaurant.wifi_name}${restaurant.wifi_password ? `  |  Pass: ${restaurant.wifi_password}` : ''}`,
+          400,
+          970
+        );
+      }
 
       // Download
       const dataUrl = canvas.toDataURL('image/png');
       const a = document.createElement('a');
       a.href = dataUrl;
-      a.download = `brew-bari-table-${table.number}-card.png`;
+      a.download = `${restaurant.slug}-table-${table.number}-card.png`;
       a.click();
       toast.success(`Downloaded printable card for Table ${table.number}`);
     } catch (e) {
@@ -357,7 +358,7 @@ export default function AdminTablesPage() {
     if (!shopQrDataUrl) return;
     const a = document.createElement('a');
     a.href = shopQrDataUrl;
-    a.download = 'brew-bari-shop-qr.png';
+    a.download = `${restaurant.slug}-shop-qr.png`;
     a.click();
     toast.success('Downloaded Shop QR');
   };
@@ -439,7 +440,7 @@ export default function AdminTablesPage() {
         {/* Table List Card */}
         <section
           aria-label="Tables"
-          className="flex-1 min-w-0 w-full bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66_38,0.08)] overflow-hidden border border-line/60 flex flex-col"
+          className="flex-1 min-w-0 w-full bg-white rounded-[20px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] overflow-hidden border border-line/60 flex flex-col"
         >
           <div className="flex justify-between items-center px-4 py-3 text-[11.5px] font-extrabold tracking-wider uppercase text-ink-3 border-b border-line-soft">
             <span>Table &amp; QR Code</span>
@@ -448,8 +449,8 @@ export default function AdminTablesPage() {
 
           <div className="divide-y divide-line-soft">
             {tables.map((table) => {
-              const tableUrl = `/t/${table.qr_token}`;
-              const fullUrl = `${effectiveBaseUrl}${tableUrl}`;
+              const tableHref = tablePath(restaurant.slug, table.qr_token);
+              const fullUrl = `${effectiveBaseUrl}${tableHref}`;
               const qrDataUrl = tableQrs[table.id];
 
               return (
@@ -526,7 +527,7 @@ export default function AdminTablesPage() {
 
                   {/* Token & Direct Link (e2e test compatibility) */}
                   <Link
-                    href={tableUrl}
+                    href={tableHref}
                     target="_blank"
                     data-testid={`view-table-link-${table.number}`}
                     className="h-9 px-2.5 rounded-full bg-bg text-ink-2 hover:text-brand text-[12px] font-mono flex items-center gap-1 shrink-0 transition-colors"
@@ -585,7 +586,7 @@ export default function AdminTablesPage() {
         {/* Shop QR Side Section (Entrance / General Menu) */}
         <aside
           aria-label="Shop QR"
-          className="w-full xl:w-[340px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 flex flex-col gap-3.5 border border-line/60"
+          className="w-full xl:w-[340px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 flex flex-col gap-3.5 border border-line/60"
         >
           <div>
             <div className="inline-block px-2 py-0.5 rounded-full bg-surface-2 text-brand text-[11px] font-extrabold uppercase tracking-wider mb-1">
@@ -600,7 +601,7 @@ export default function AdminTablesPage() {
           <div className="flex gap-3 items-center">
             <div className="p-2.5 bg-white border border-line rounded-2xl shrink-0 shadow-2xs">
               {shopQrDataUrl ? (
-                <img src={shopQrDataUrl} alt="Brew Bari Shop QR" className="w-28 h-28" />
+                <img src={shopQrDataUrl} alt={`${restaurant.name_en} shop QR`} className="w-28 h-28" />
               ) : (
                 <div className="w-28 h-28 bg-bg flex items-center justify-center">
                   <QrCode className="w-10 h-10 text-brand-muted" />
@@ -610,7 +611,7 @@ export default function AdminTablesPage() {
 
             <div className="flex flex-col gap-2 min-w-0 flex-1">
               <span className="text-[11.5px] text-ink-2 font-mono break-all leading-tight">
-                {effectiveBaseUrl}/m/brew-bari
+                {menuUrl(effectiveBaseUrl, restaurant.slug)}
               </span>
               <button
                 type="button"
@@ -653,9 +654,9 @@ export default function AdminTablesPage() {
             </div>
 
             {/* Branded Card Preview */}
-            <div className="p-6 rounded-2xl bg-[#FAF7F2] border-2 border-brand/80 flex flex-col items-center text-center gap-3 shadow-xs">
+            <div className="p-6 rounded-2xl bg-[var(--paper)] border-2 border-brand/80 flex flex-col items-center text-center gap-3 shadow-xs">
               <div className="text-[17px] font-extrabold text-ink tracking-tight">
-                Brew Bari
+                {restaurant.name_en}
               </div>
               <div className="text-[22px] font-extrabold text-ink">
                 {selectedQrTable.label || `Table ${selectedQrTable.number}`}
@@ -684,20 +685,23 @@ export default function AdminTablesPage() {
                 অর্ডার করতে ও ওয়েটার ডাকতে স্ক্যান করুন
               </div>
 
-              <div className="text-[11px] font-medium text-ink-3 pt-1 border-t border-line/60 w-full">
-                Wi-Fi: BrewBari_Guest | Pass: Coffee2026
-              </div>
+              {restaurant.wifi_name && (
+                <div className="text-[11px] font-medium text-ink-3 pt-1 border-t border-line/60 w-full">
+                  Wi-Fi: {restaurant.wifi_name}
+                  {restaurant.wifi_password ? ` | Pass: ${restaurant.wifi_password}` : ''}
+                </div>
+              )}
             </div>
 
             {/* URL Display with Copy Button */}
             <div className="p-2.5 rounded-xl bg-bg border border-line flex items-center justify-between gap-2">
               <span className="text-[11.5px] font-mono text-ink-2 truncate select-all">
-                {`${effectiveBaseUrl}/t/${selectedQrTable.qr_token}`}
+                {tableUrl(effectiveBaseUrl, restaurant.slug, selectedQrTable.qr_token)}
               </span>
               <button
                 type="button"
                 data-testid="copy-table-link-button"
-                onClick={() => handleCopyUrl(`${effectiveBaseUrl}/t/${selectedQrTable.qr_token}`)}
+                onClick={() => handleCopyUrl(tableUrl(effectiveBaseUrl, restaurant.slug, selectedQrTable.qr_token))}
                 className="px-2.5 py-1 rounded-lg bg-white border border-line hover:bg-surface-2 text-[11px] font-bold text-ink flex items-center gap-1 shrink-0 transition-colors cursor-pointer"
               >
                 {copiedUrl ? (
@@ -740,7 +744,7 @@ export default function AdminTablesPage() {
               </div>
 
               <Link
-                href={`/t/${selectedQrTable.qr_token}`}
+                href={tablePath(restaurant.slug, selectedQrTable.qr_token)}
                 target="_blank"
                 data-testid="open-table-guest-button"
                 className="w-full h-10 rounded-full border border-line bg-bg hover:bg-surface-2 text-ink-2 hover:text-ink text-[13px] font-bold flex items-center justify-center gap-1.5 transition-colors"

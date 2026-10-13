@@ -109,8 +109,8 @@ export default function AdminSettingsPage() {
     if (rest) {
       setRestaurant(rest);
       setPkg(Number(rest.package || 3));
-      setNameEn(rest.name_en || 'Brew Bari');
-      setNameBn(rest.name_bn || 'ব্রু বাড়ি');
+      setNameEn(rest.name_en || '');
+      setNameBn(rest.name_bn || '');
       setTaglineEn(rest.tagline_en || '');
       setOpeningHours(rest.opening_hours_en || '');
       setAddress(rest.address || '');
@@ -239,10 +239,11 @@ export default function AdminSettingsPage() {
         </div>
       )}
 
-      {/* Package Tier Picker */}
+      {/* Package Tier Picker (hidden when the platform locks the package) */}
+      {!restaurant?.package_locked && (
       <section
         aria-label="Package"
-        className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 border border-line/60 flex flex-col gap-3"
+        className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 border border-line/60 flex flex-col gap-3"
       >
         <div className="flex flex-wrap justify-between items-baseline gap-2">
           <h2 className="text-[17px] font-extrabold text-ink">Package Level</h2>
@@ -298,13 +299,14 @@ export default function AdminSettingsPage() {
           })}
         </div>
       </section>
+      )}
 
       {/* Settings Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
         {/* Café Info */}
         <section
           aria-label="Café info"
-          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
+          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
         >
           <h2 className="text-[17px] font-extrabold text-ink flex items-center gap-2">
             <Building className="w-4 h-4 text-brand-muted" />
@@ -378,7 +380,7 @@ export default function AdminSettingsPage() {
         {/* Wi-Fi & Contact */}
         <section
           aria-label="Wi-Fi and contact"
-          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
+          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
         >
           <h2 className="text-[17px] font-extrabold text-ink flex items-center gap-2">
             <Wifi className="w-4 h-4 text-brand-muted" />
@@ -441,7 +443,7 @@ export default function AdminSettingsPage() {
         {/* Social & Reviews */}
         <section
           aria-label="Social and reviews"
-          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
+          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
         >
           <h2 className="text-[17px] font-extrabold text-ink flex items-center gap-2">
             <Share2 className="w-4 h-4 text-brand-muted" />
@@ -493,7 +495,7 @@ export default function AdminSettingsPage() {
         {/* Bill & Table Service */}
         <section
           aria-label="Bill and tables"
-          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
+          className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 border border-line/60 flex flex-col gap-3.5"
         >
           <h2 className="text-[17px] font-extrabold text-ink flex items-center gap-2">
             <Receipt className="w-4 h-4 text-brand-muted" />

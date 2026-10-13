@@ -4,6 +4,9 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { getMenu } from '@/lib/menu/data';
 import { MenuClient } from '@/components/menu/MenuClient';
+import { getTheme } from '@/themes';
+import { ThemeStyle } from '@/themes/ThemeStyle';
+import { MenuSkeleton } from '@/components/menu/MenuSkeleton';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -14,13 +17,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const { slug } = await params;
   const menu = await getMenu(slug);
   if (!menu) {
-    return {
-      title: 'Menu Not Found | Brew Bari',
-    };
+    return { title: 'Menu not found' };
   }
   return {
-    title: `${menu.restaurant.name_en} — Digital Menu`,
-    description: menu.restaurant.tagline_en || 'Coffee and fresh juice, made with love.',
+    title: `${menu.restaurant.name_en} — Menu`,
+    description: menu.restaurant.tagline_en || `Digital menu of ${menu.restaurant.name_en}`,
   };
 }
 
@@ -36,32 +37,24 @@ async function MenuContent({ params, searchParams }: PageProps) {
   const cookieStore = await cookies();
   const cookieLocale = cookieStore.get('lang')?.value;
   const initialLocale = (lang === 'bn' || (!lang && cookieLocale === 'bn')) ? 'bn' : 'en';
-  const packageOverride = pkg ? Number(pkg) : undefined;
+  // ?pkg= lets a salesperson preview another package; never for package-locked restaurants
+  const packageOverride = pkg && !menu.restaurant.package_locked ? Number(pkg) : undefined;
 
   return (
-    <MenuClient
-      menu={menu}
-      initialLocale={initialLocale}
-      packageOverride={packageOverride}
-    />
+    <>
+      <ThemeStyle theme={getTheme(menu.restaurant.theme_key)} />
+      <MenuClient
+        menu={menu}
+        initialLocale={initialLocale}
+        packageOverride={packageOverride}
+      />
+    </>
   );
 }
 
 export default function GuestMenuPage(props: PageProps) {
   return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen bg-bg p-6 max-w-4xl mx-auto flex flex-col gap-6 animate-pulse">
-          <div className="h-12 w-48 bg-line rounded-2xl" />
-          <div className="h-[50px] w-full bg-line rounded-full" />
-          <div className="h-40 w-full bg-line rounded-3xl" />
-          <div className="grid grid-cols-2 gap-4">
-            <div className="aspect-square bg-line rounded-3xl" />
-            <div className="aspect-square bg-line rounded-3xl" />
-          </div>
-        </div>
-      }
-    >
+    <Suspense fallback={<MenuSkeleton />}>
       <MenuContent {...props} />
     </Suspense>
   );

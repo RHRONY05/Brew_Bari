@@ -56,7 +56,7 @@ test.describe('M6: Admin Tables and QR Codes (admin-tables.spec.ts)', () => {
     // Read initial token link
     const oldLink = await page.getByTestId('view-table-link-99').getAttribute('href');
     expect(oldLink).not.toBeNull();
-    const oldToken = oldLink!.replace('/t/', '');
+    const oldToken = oldLink!.split('/t/')[1];
 
     // 3. Click New QR on Table 99
     await page.getByTestId('regen-token-99').click();
@@ -72,20 +72,20 @@ test.describe('M6: Admin Tables and QR Codes (admin-tables.spec.ts)', () => {
     });
 
     const newLink = await page.getByTestId('view-table-link-99').getAttribute('href');
-    const newToken = newLink!.replace('/t/', '');
+    const newToken = newLink!.split('/t/')[1];
     expect(newToken).not.toBe(oldToken);
 
     // 5. Context 2: Guest navigates to old token URL -> G8 not-found page
     const guestContext = await browser.newContext();
     const guestPage = await guestContext.newPage();
 
-    await guestPage.goto(`/t/${oldToken}`);
+    await guestPage.goto(`/brew-bari/t/${oldToken}`);
     await expect(
       guestPage.locator('text=Table not found').or(guestPage.locator('text=Invalid table QR'))
     ).toBeVisible({ timeout: 10000 });
 
     // Guest navigates to new token URL -> valid table page
-    await guestPage.goto(`/t/${newToken}`);
+    await guestPage.goto(`/brew-bari/t/${newToken}`);
     await expect(guestPage.getByText('Table 99')).toBeVisible({ timeout: 10000 });
 
     await guestContext.close();
@@ -114,7 +114,7 @@ test.describe('M6: Admin Tables and QR Codes (admin-tables.spec.ts)', () => {
     await expect(page.getByTestId('qr-card-99')).toBeVisible();
 
     // Verify QR code images are rendered inside cards
-    const qrImages = page.locator('[data-testid^="qr-card-"] img');
+    const qrImages = page.locator('[data-testid^="qr-card-"] img[alt$="QR code"]');
     await expect(qrImages).toHaveCount(9);
   });
 });

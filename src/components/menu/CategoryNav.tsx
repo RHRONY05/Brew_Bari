@@ -56,7 +56,7 @@ export function CategoryNav({
             onClick={() => onSelectCategory('quick')}
             className={`h-10 px-4 rounded-full font-bold text-[14px] whitespace-nowrap flex items-center gap-2 transition-all shrink-0 ${
               activeCategoryId === 'quick'
-                ? 'bg-brand text-bg shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
+                ? 'bg-brand text-bg shadow-[0_4px_12px_rgb(var(--shadow-rgb)/0.25)]'
                 : 'bg-white border border-line text-ink hover:border-brand/40'
             }`}
           >
@@ -79,7 +79,7 @@ export function CategoryNav({
               onClick={() => onSelectCategory(cat.id)}
               className={`h-10 px-4 rounded-full font-bold text-[14px] whitespace-nowrap flex items-center gap-2 transition-all shrink-0 ${
                 isActive
-                  ? 'bg-brand text-bg shadow-[0_4px_12px_rgba(107,66,38,0.25)]'
+                  ? 'bg-brand text-bg shadow-[0_4px_12px_rgb(var(--shadow-rgb)/0.25)]'
                   : 'bg-white border border-line text-ink hover:border-brand/40'
               }`}
             >

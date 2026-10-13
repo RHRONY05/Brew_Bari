@@ -2,7 +2,7 @@ import * as React from 'react'
 
 export function ItemCardSkeleton() {
   return (
-    <div className="flex flex-col bg-surface rounded-[24px] p-2.5 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border border-line/40 animate-pulse">
+    <div className="flex flex-col bg-surface rounded-[24px] p-2.5 shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] border border-line/40 animate-pulse">
       {/* 1:1 Image placeholder */}
       <div className="w-full aspect-square bg-surface-2 rounded-[16px] mb-2.5" />
 

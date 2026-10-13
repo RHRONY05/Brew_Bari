@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
+import { useTheme } from '@/themes/ThemeContext';
 import { Wifi, MapPin, Clock, Phone, ExternalLink, Check, Copy } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { Restaurant } from '@/lib/menu/data';
@@ -21,13 +22,14 @@ export function CafeInfoSheet({
   onClose,
 }: CafeInfoSheetProps) {
   const [copied, setCopied] = useState(false);
+  const theme = useTheme();
 
   const name = pick(restaurant, 'name', locale);
   const hours = pick(restaurant, 'opening_hours', locale) || restaurant.opening_hours_en || '';
-  const address = restaurant.address || 'GEC Circle, Chattogram';
-  const phone = restaurant.phone || '+880 1812-345678';
-  const wifiName = restaurant.wifi_name || 'BrewBari_Guest';
-  const wifiPass = restaurant.wifi_password || 'coffee2026';
+  const address = restaurant.address || '';
+  const phone = restaurant.phone || '';
+  const wifiName = restaurant.wifi_name || '';
+  const wifiPass = restaurant.wifi_password || '';
 
   const handleCopyWifi = async () => {
     try {
@@ -47,8 +49,8 @@ export function CafeInfoSheet({
         <div className="flex items-center gap-3 pt-1">
           <div className="relative w-14 h-14 shrink-0">
             <Image
-              src="/images/brand/concept-1.png"
-              alt="Brew Bari Logo"
+              src={restaurant.logo_url || theme.assets.logo}
+              alt={`${restaurant.name_en} logo`}
               width={56}
               height={56}
               className="w-14 h-14 object-contain"
@@ -56,9 +58,7 @@ export function CafeInfoSheet({
           </div>
           <div>
             <h2 className="text-xl font-extrabold text-ink tracking-tight">{name}</h2>
-            <div className="text-[13px] font-bold text-success">
-              {locale === 'bn' ? 'খোলা আছে · রাত ১১টা পর্যন্ত' : 'Open now · until 11 PM'}
-            </div>
+            {hours && <div className="text-[13px] font-bold text-success">{hours}</div>}
           </div>
         </div>
 
@@ -97,6 +97,7 @@ export function CafeInfoSheet({
         {/* Info Rows */}
         <div className="flex flex-col divide-y divide-line-soft text-ink">
           {/* Address */}
+          {address && (
           <div className="py-3 flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-surface-2 text-brand flex items-center justify-center shrink-0">
               <MapPin className="w-5 h-5 stroke-[2]" />
@@ -119,8 +120,10 @@ export function CafeInfoSheet({
               </a>
             )}
           </div>
+          )}
 
           {/* Opening hours */}
+          {hours && (
           <div className="py-3 flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-surface-2 text-brand flex items-center justify-center shrink-0">
               <Clock className="w-5 h-5 stroke-[2]" />
@@ -132,8 +135,10 @@ export function CafeInfoSheet({
               <div className="text-[14.5px] font-bold truncate">{hours}</div>
             </div>
           </div>
+          )}
 
           {/* Phone */}
+          {phone && (
           <div className="py-3 flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-xl bg-surface-2 text-brand flex items-center justify-center shrink-0">
               <Phone className="w-5 h-5 stroke-[2]" />
@@ -151,6 +156,7 @@ export function CafeInfoSheet({
               {locale === 'bn' ? 'কল' : 'Call'}
             </a>
           </div>
+          )}
         </div>
 
         {/* Social Links */}

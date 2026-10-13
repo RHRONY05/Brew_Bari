@@ -6,6 +6,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UtensilsCrossed, Tag, QrCode, Settings, MessageSquareQuote, ArrowRight, LayoutDashboard } from 'lucide-react';
 import { LanguageToggle } from '@/components/menu/LanguageToggle';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
+import { pick } from '@/lib/i18n';
+import { menuPath } from '@/lib/site-urls';
 
 const ADMIN_LINKS = [
   { href: '/staff/admin/menu', labelEn: 'Menu', labelBn: 'মেন্যু', icon: UtensilsCrossed },
@@ -27,6 +30,7 @@ function getCookieLocale(): 'en' | 'bn' {
 
 export function AdminNav() {
   const pathname = usePathname();
+  const { restaurant, logo } = useStaffRestaurant();
   const [locale, setLocale] = useState<'en' | 'bn'>('en');
 
   useEffect(() => {
@@ -38,6 +42,7 @@ export function AdminNav() {
   };
 
   const isBn = locale === 'bn';
+  const restaurantName = pick(restaurant, 'name', locale);
 
   return (
     <>
@@ -46,8 +51,8 @@ export function AdminNav() {
         <div className="px-4 pt-4 pb-2.5 flex items-center gap-2.5">
           <div className="relative w-9 h-9 shrink-0">
             <Image
-              src="/images/brand/concept-1.png"
-              alt="Brew Bari Logo"
+              src={logo}
+              alt={`${restaurant.name_en} logo`}
               width={36}
               height={36}
               className="w-9 h-9 object-contain"
@@ -55,7 +60,7 @@ export function AdminNav() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="font-heading text-[16px] font-extrabold text-ink leading-tight">
-              {isBn ? 'ব্রু বাড়ি' : 'Brew Bari'}
+              {restaurantName}
             </div>
             <div className="text-[11.5px] text-ink-2 font-semibold leading-tight">
               {isBn ? 'অ্যাডমিন' : 'Admin'}
@@ -100,8 +105,8 @@ export function AdminNav() {
         <div className="flex items-center gap-2.5 px-2 pb-5 mb-2 border-b border-line/60">
           <div className="relative w-9 h-9 shrink-0">
             <Image
-              src="/images/brand/concept-1.png"
-              alt="Brew Bari Logo"
+              src={logo}
+              alt={`${restaurant.name_en} logo`}
               width={36}
               height={36}
               className="w-9 h-9 object-contain"
@@ -109,7 +114,7 @@ export function AdminNav() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="font-heading text-[15px] font-extrabold text-ink leading-tight">
-              {isBn ? 'ব্রু বাড়ি' : 'Brew Bari'}
+              {restaurantName}
             </div>
             <div className="text-[11.5px] text-ink-2 font-semibold leading-tight">
               {isBn ? 'অ্যাডমিন কনসোল' : 'Admin Console'}
@@ -158,7 +163,7 @@ export function AdminNav() {
           </Link>
 
           <Link
-            href="/m/brew-bari"
+            href={menuPath(restaurant.slug)}
             target="_blank"
             className="flex items-center gap-2.5 h-11 px-3.5 rounded-xl text-[14px] font-bold text-ink-2 hover:bg-bg hover:text-ink transition-all"
           >

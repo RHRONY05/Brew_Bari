@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { resetTable99 } from './helpers';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import WebSocket from 'ws';
@@ -47,6 +48,7 @@ test.describe('M4: Table Sessions Drawer S3 (session-approval.spec.ts)', () => {
 
     expect(tableErr).toBeNull();
     table99Token = table!.qr_token;
+    await resetTable99(supabase);
     restaurantId = table!.restaurant_id;
   });
 

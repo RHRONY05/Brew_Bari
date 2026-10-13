@@ -5,7 +5,7 @@ test.describe('Responsive layout tests (responsive.spec.ts)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 768, height: 1024 });
-    await page.goto('/m/brew-bari?pkg=3');
+    await page.goto('/brew-bari?pkg=3');
 
     // Verify no horizontal overflow
     const hasHorizontalOverflow = await page.evaluate(() => {
@@ -30,7 +30,7 @@ test.describe('Responsive layout tests (responsive.spec.ts)', () => {
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto('/m/brew-bari?pkg=3');
+    await page.goto('/brew-bari?pkg=3');
 
     const hasHorizontalOverflow = await page.evaluate(() => {
       return document.documentElement.scrollWidth > window.innerWidth;

@@ -2,13 +2,14 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Minus, Plus, Bell, Coffee } from 'lucide-react';
+import { Minus, Plus, Bell } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { CartItem } from '@/lib/cart/store';
 import { getCartTotals } from '@/lib/cart/store';
 import { formatTaka } from '@/lib/money';
 import { pick } from '@/lib/i18n';
 import { ItemOptions as ItemOptionsSchema } from '@/lib/schemas';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 
 interface CartSheetProps {
@@ -83,7 +84,7 @@ export function CartSheet({
         {items.length === 0 ? (
           <div className="py-12 flex flex-col items-center justify-center text-center gap-2">
             <div className="w-16 h-16 rounded-full bg-surface-2 flex items-center justify-center text-brand-muted">
-              <Coffee className="w-8 h-8 stroke-[1.4]" />
+              <VenueIcon className="w-8 h-8 stroke-[1.4]" />
             </div>
             <div className="font-bold text-[16px] text-ink">
               {locale === 'bn' ? 'আপনার কার্ট খালি' : 'Your cart is empty'}
@@ -114,7 +115,7 @@ export function CartSheet({
                         sizes="64px"
                       />
                     ) : (
-                      <Coffee className="w-8 h-8 stroke-[1.4]" />
+                      <VenueIcon className="w-8 h-8 stroke-[1.4]" />
                     )}
                   </div>
 
@@ -201,8 +202,8 @@ export function CartSheet({
                 onChange={(e) => onKitchenNoteChange(e.target.value)}
                 placeholder={
                   locale === 'bn'
-                    ? 'যেমন: কফির সাথে ব্রাউনি একসাথে দিন'
-                    : 'e.g. bring the brownie with the coffee'
+                    ? 'যেমন: সব একসাথে দিন'
+                    : 'e.g. bring everything together'
                 }
                 className="w-full h-11 px-3.5 rounded-xl border border-line bg-bg text-[13.5px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-1 focus:ring-brand"
               />
@@ -220,8 +221,8 @@ export function CartSheet({
               </div>
               <div className="text-[12px] text-ink-3 mt-0.5">
                 {locale === 'bn'
-                  ? 'ভ্যাট বিলে যোগ করা হবে। ক্যাফে কর্তৃক দাম নিশ্চিত।'
-                  : 'VAT is added on the bill. Prices are confirmed by the café.'}
+                  ? 'ভ্যাট বিলে যোগ করা হবে। দাম রেস্টুরেন্ট নিশ্চিত করবে।'
+                  : 'VAT is added on the bill. Prices are confirmed by the restaurant.'}
               </div>
             </div>
 
@@ -246,7 +247,7 @@ export function CartSheet({
                   data-testid="place-order-button"
                   disabled={hasSoldOut || isPlacingOrder}
                   onClick={onPlaceOrder}
-                  className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <span>
                     {isPlacingOrder
@@ -289,39 +290,13 @@ export function CartSheet({
               {!onPlaceOrder && (
                 <div className="p-3.5 rounded-2xl bg-bg border border-line text-center flex flex-col items-center gap-2 my-1">
                   <div className="text-[14px] font-extrabold text-ink">
-                    {locale === 'bn' ? 'অর্ডার দিতে টেবিল নির্বাচন করুন' : 'Ready to place this order?'}
+                    {locale === 'bn' ? 'অর্ডার দিতে প্রস্তুত?' : 'Ready to place this order?'}
                   </div>
                   <p className="text-[12px] text-ink-2 leading-snug">
                     {locale === 'bn'
-                      ? 'অর্ডার পাঠাতে আপনার টেবিলের কিউআর কোড স্ক্যান করুন, অথবা নিচের টেস্ট টেবিল বেছে নিন:'
-                      : 'You are viewing the digital menu. To send your order to the kitchen, scan your table QR or tap a table below:'}
+                      ? 'অর্ডার পাঠাতে আপনার টেবিলে রাখা কিউআর কোডটি স্ক্যান করুন।'
+                      : 'You are viewing the digital menu. To send your order, scan the QR code on your table.'}
                   </p>
-                  <div className="grid grid-cols-4 gap-2 w-full pt-1">
-                    <a
-                      href="/t/cb56e5ef05ab0759602d6481"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
-                    >
-                      Table 1
-                    </a>
-                    <a
-                      href="/t/b90039ff9153f8d73c622bfe"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
-                    >
-                      Table 2
-                    </a>
-                    <a
-                      href="/t/b8110d50b8ca25d560837030"
-                      className="py-2.5 px-1 rounded-xl bg-white border border-line hover:border-brand text-xs font-bold text-ink text-center shadow-2xs hover:bg-surface-2/30 transition-all"
-                    >
-                      Table 3
-                    </a>
-                    <a
-                      href="/t/test-table-99"
-                      className="py-2.5 px-1 rounded-xl bg-brand text-bg text-xs font-bold text-center shadow-2xs hover:bg-brand-dark transition-all"
-                    >
-                      Table 99
-                    </a>
-                  </div>
                 </div>
               )}
             </div>

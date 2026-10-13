@@ -53,9 +53,41 @@
   --r-pill: 999px;
   --radius: 16px;
 
-  --shadow-card: 0 6px 20px rgba(107,66,38,.08);
-  --shadow-sheet: 0 -8px 30px rgba(36,23,15,.12);
-  --shadow-bar: 0 -4px 16px rgba(36,23,15,.08);
+  /* RGB triplets for tinted shadows/overlays: rgb(var(--shadow-rgb)/0.08) */
+  --shadow-rgb: 107 66 38;
+  --ink-rgb: 36 23 15;
+  --accent-rgb: 227 166 81;
+
+  --shadow-card: 0 6px 20px rgb(var(--shadow-rgb)/.08);
+  --shadow-sheet: 0 -8px 30px rgb(var(--ink-rgb)/.12);
+  --shadow-bar: 0 -4px 16px rgb(var(--ink-rgb)/.08);
+
+  /* Offer banner */
+  --offer-from: #4A2814;
+  --offer-via: #543019;
+  --offer-to: #3D2010;
+  --offer-shadow-rgb: 59 34 19;
+  --offer-image-bg: #1F120A;
+
+  /* Offer banner decoration palette (theme.layout.offerDecoration) */
+  --deco-1: #C48858;
+  --deco-2: #8A5A37;
+  --deco-3: #543019;
+  --deco-4: #2E180B;
+  --deco-5: #F2C27D;
+  --deco-6: #D48B47;
+  --deco-7: #381E10;
+  --deco-8: #A86F44;
+
+  /* Printed / downloaded QR cards */
+  --paper: #FAF7F2;
+  --paper-line: #E6DFD5;
+  --paper-ink: #8C7E74;
+
+  /* Fonts: themes point these at a curated font (src/themes/fonts.ts) */
+  --theme-font-heading: var(--ff-cinzel);
+  --theme-font-body: var(--ff-libre-baskerville);
+  --theme-font-bengali: var(--ff-hasan-protilipi);
 }
 
 @theme inline {
@@ -101,11 +133,11 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  --font-sans: var(--font-body), var(--font-bengali), Georgia, serif, system-ui, sans-serif;
-  --font-serif: var(--font-body), var(--font-bengali), Georgia, serif;
-  --font-heading: var(--font-heading), var(--font-bengali), serif;
-  --font-cinzel: var(--font-heading), var(--font-bengali), serif;
-  --font-bengali: var(--font-bengali), var(--font-body), serif, system-ui, sans-serif;
+  --font-sans: var(--theme-font-body), var(--theme-font-bengali), Georgia, serif, system-ui, sans-serif;
+  --font-serif: var(--theme-font-body), var(--theme-font-bengali), Georgia, serif;
+  --font-heading: var(--theme-font-heading), var(--theme-font-bengali), serif;
+  --font-cinzel: var(--theme-font-heading), var(--theme-font-bengali), serif;
+  --font-bengali: var(--theme-font-bengali), var(--theme-font-body), serif, system-ui, sans-serif;
 }
 
 html, body, *, *::before, *::after {
@@ -121,7 +153,7 @@ html, body, *, *::before, *::after {
 body {
   background-color: var(--bg);
   color: var(--ink);
-  font-family: var(--font-body), var(--font-bengali), Georgia, serif, system-ui, sans-serif;
+  font-family: var(--theme-font-body), var(--theme-font-bengali), Georgia, serif, system-ui, sans-serif;
   min-height: 100dvh;
 }
 

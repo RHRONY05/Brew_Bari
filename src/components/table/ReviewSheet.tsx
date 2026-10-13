@@ -25,9 +25,9 @@ export function ReviewSheet({
   token,
   isOpen,
   locale,
-  googleReviewUrl = 'https://g.page/r/brewbari/review',
-  facebookUrl = 'https://facebook.com/brewbari',
-  instagramUrl = 'https://instagram.com/brewbari',
+  googleReviewUrl = null,
+  facebookUrl = null,
+  instagramUrl = null,
   onClose,
 }: ReviewSheetProps) {
   const [rating, setRating] = useState(5);
@@ -78,7 +78,7 @@ export function ReviewSheet({
             </h2>
             <p className="text-[14px] text-ink-2 max-w-xs leading-snug">
               {locale === 'bn'
-                ? 'আপনার মূল্যবান মতামত সরাসরি ক্যাফে মালিকের কাছে পৌঁছে যাবে।'
+                ? 'আপনার মূল্যবান মতামত সরাসরি মালিকের কাছে পৌঁছে যাবে।'
                 : 'Your feedback goes straight to the owner.'}
             </p>
 
@@ -127,7 +127,7 @@ export function ReviewSheet({
                 placeholder={
                   locale === 'bn'
                     ? 'আপনার মতামত লিখুন…'
-                    : 'Great coffee, quick service and cosy vibes!'
+                    : 'Great food, quick service and cosy vibes!'
                 }
                 className="w-full p-3 rounded-2xl border border-line bg-bg text-[14px] text-ink placeholder:text-ink-3 focus:outline-none focus:ring-1 focus:ring-brand resize-none"
               />
@@ -140,7 +140,7 @@ export function ReviewSheet({
                 data-testid="submit-feedback-button"
                 disabled={isSubmitting}
                 onClick={handleSubmit}
-                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50"
+                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)] disabled:opacity-50"
               >
                 {locale === 'bn' ? 'মতামত পাঠান' : 'Send feedback'}
               </button>
@@ -165,8 +165,8 @@ export function ReviewSheet({
             </h2>
             <p className="text-[14px] leading-relaxed text-ink-2 max-w-xs">
               {locale === 'bn'
-                ? 'গুগল ম্যাপে আপনার অভিজ্ঞতা শেয়ার করবেন? এটি আমাদের ছোট ক্যাফের জন্য অনেক সহায়ক হবে।'
-                : 'Would you share your experience on Google? It really helps a small café like ours.'}
+                ? 'গুগল ম্যাপে আপনার অভিজ্ঞতা শেয়ার করবেন? এটি আমাদের জন্য অনেক সহায়ক হবে।'
+                : 'Would you share your experience on Google? It really helps a local place like ours.'}
             </p>
 
             {comment && (
@@ -187,7 +187,7 @@ export function ReviewSheet({
                 target="_blank"
                 rel="noreferrer"
                 data-testid="google-review-button"
-                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[15.5px] flex items-center justify-center gap-2.5 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)]"
+                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[15.5px] flex items-center justify-center gap-2.5 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)]"
               >
                 <Star className="w-5 h-5 fill-current" />
                 <span>

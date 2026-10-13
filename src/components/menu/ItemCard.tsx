@@ -2,11 +2,12 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Plus, Clock, Coffee } from 'lucide-react';
+import { Plus, Clock } from 'lucide-react';
 import type { MenuItem } from '@/lib/menu/data';
 import { formatTaka } from '@/lib/money';
 import { formatPrepTime } from '@/lib/menu/sort';
 import { pick } from '@/lib/i18n';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 interface ItemCardProps {
   item: MenuItem;
@@ -77,7 +78,7 @@ export function ItemCard({
     <article
       data-testid={`item-card-${item.id}`}
       onClick={handleCardClick}
-      className={`card group cursor-pointer bg-white rounded-3xl p-2.5 flex flex-col gap-2 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border border-line/50 transition-all hover:shadow-[0_8px_24px_rgba(107,66,38,0.12)] min-w-0 ${
+      className={`card group cursor-pointer bg-white rounded-3xl p-2.5 flex flex-col gap-2 shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] border border-line/50 transition-all hover:shadow-[0_8px_24px_rgb(var(--shadow-rgb)/0.12)] min-w-0 ${
         isSoldOut ? 'opacity-85' : ''
       }`}
     >
@@ -97,7 +98,7 @@ export function ItemCard({
           />
         ) : (
           <div className="flex flex-col items-center gap-1 opacity-70">
-            <Coffee className="w-10 h-10 stroke-[1.4]" />
+            <VenueIcon className="w-10 h-10 stroke-[1.4]" />
           </div>
         )}
 
@@ -148,7 +149,7 @@ export function ItemCard({
             data-testid="item-card-add-button"
             aria-label={`Add ${name}`}
             onClick={handlePlusClick}
-            className="w-9 h-9 rounded-full bg-accent text-ink flex items-center justify-center shadow-[0_4px_10px_rgba(227,166,81,0.35)] transition-transform hover:scale-105 active:scale-95 shrink-0"
+            className="w-9 h-9 rounded-full bg-accent text-ink flex items-center justify-center shadow-[0_4px_10px_rgb(var(--accent-rgb)/0.35)] transition-transform hover:scale-105 active:scale-95 shrink-0"
           >
             <Plus className="w-[18px] h-[18px] stroke-[2.5]" />
           </button>

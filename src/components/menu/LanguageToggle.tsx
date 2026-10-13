@@ -72,7 +72,7 @@ export function LanguageToggle({
           isSmall ? 'h-[28px] min-w-[36px] px-2 text-[12px]' : 'h-[34px] min-w-[44px] px-2.5 text-[13px]'
         } rounded-full font-bold transition-all cursor-pointer ${
           activeLocale === 'en'
-            ? 'bg-surface text-ink shadow-[0_2px_6px_rgba(107,66,38,0.15)]'
+            ? 'bg-surface text-ink shadow-[0_2px_6px_rgb(var(--shadow-rgb)/0.15)]'
             : 'text-ink-2 hover:text-ink'
         }`}
       >
@@ -86,7 +86,7 @@ export function LanguageToggle({
           isSmall ? 'h-[28px] min-w-[36px] px-2 text-[12px]' : 'h-[34px] min-w-[44px] px-2.5 text-[13px]'
         } rounded-full font-bold transition-all cursor-pointer ${
           activeLocale === 'bn'
-            ? 'bg-surface text-ink shadow-[0_2px_6px_rgba(107,66,38,0.15)] font-bengali'
+            ? 'bg-surface text-ink shadow-[0_2px_6px_rgb(var(--shadow-rgb)/0.15)] font-bengali'
             : 'text-ink-2 hover:text-ink font-bengali'
         }`}
       >

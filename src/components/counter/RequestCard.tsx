@@ -293,7 +293,7 @@ export function RequestCard({
   return (
     <article
       data-testid={`request-card-${request.id}`}
-      className={`bg-white rounded-3xl p-4 shadow-[0_6px_20px_rgba(107,66,38,0.08)] border-2 transition-all ${cardBorder} ${
+      className={`bg-white rounded-3xl p-4 shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] border-2 transition-all ${cardBorder} ${
         request.isFlashing ? 'animate-pulse ring-4 ring-accent' : ''
       } ${isMobile ? 'flex flex-col gap-3' : 'flex gap-4'}`}
     >

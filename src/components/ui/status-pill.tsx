@@ -4,11 +4,11 @@ import {
   Clock,
   CheckCircle2,
   Receipt,
-  Coffee,
   AlertCircle,
   XCircle,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { VenueIcon } from '@/themes/ThemeContext';
 
 export type ServiceStatus =
   | 'pending'
@@ -73,7 +73,7 @@ export function StatusPill({ status, label, className }: StatusPillProps) {
             className
           )}
         >
-          <Coffee className="w-3.5 h-3.5" />
+          <VenueIcon className="w-3.5 h-3.5" />
           <span>{label || 'Preparing'}</span>
         </span>
       )

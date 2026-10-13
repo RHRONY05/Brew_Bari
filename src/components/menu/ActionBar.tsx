@@ -44,7 +44,7 @@ export function ActionBar({
           type="button"
           onClick={onOpenStatus}
           data-testid="floating-status-pill"
-          className="pointer-events-auto self-center h-[34px] px-3.5 rounded-full bg-white shadow-[0_6px_20px_rgba(107,66,38,0.14)] border border-line/60 flex items-center gap-2 text-[13px] font-bold text-ink hover:bg-bg active:scale-95 transition-all"
+          className="pointer-events-auto self-center h-[34px] px-3.5 rounded-full bg-white shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.14)] border border-line/60 flex items-center gap-2 text-[13px] font-bold text-ink hover:bg-bg active:scale-95 transition-all"
         >
           <span className="w-2 h-2 rounded-full bg-warning animate-pulse" />
           <span>{activeStatusText}</span>
@@ -53,7 +53,7 @@ export function ActionBar({
       )}
 
       {/* Main bar container */}
-      <div className="pointer-events-auto bg-white/95 backdrop-blur-md rounded-[28px] p-2 shadow-[0_-4px_24px_rgba(36,23,15,0.12)] border border-line/80 flex gap-2">
+      <div className="pointer-events-auto bg-white/95 backdrop-blur-md rounded-[28px] p-2 shadow-[0_-4px_24px_rgb(var(--ink-rgb)/0.12)] border border-line/80 flex gap-2">
         {/* Call waiter button */}
         <button
           type="button"

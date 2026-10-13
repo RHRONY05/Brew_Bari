@@ -329,23 +329,27 @@ export type Database = {
           address: string | null
           cover_url: string | null
           created_at: string
+          custom_domain: string | null
           facebook_url: string | null
           google_maps_url: string | null
           google_review_url: string | null
           id: string
           instagram_url: string | null
+          is_listed: boolean
           logo_url: string | null
           name_bn: string | null
           name_en: string
           opening_hours_bn: string | null
           opening_hours_en: string | null
           package: number
+          package_locked: boolean
           phone: string | null
           require_session_approval: boolean
           service_charge_percent: number
           slug: string
           tagline_bn: string | null
           tagline_en: string | null
+          theme_key: string
           updated_at: string
           vat_percent: number
           wifi_name: string | null
@@ -355,23 +359,27 @@ export type Database = {
           address?: string | null
           cover_url?: string | null
           created_at?: string
+          custom_domain?: string | null
           facebook_url?: string | null
           google_maps_url?: string | null
           google_review_url?: string | null
           id?: string
           instagram_url?: string | null
+          is_listed?: boolean
           logo_url?: string | null
           name_bn?: string | null
           name_en: string
           opening_hours_bn?: string | null
           opening_hours_en?: string | null
           package?: number
+          package_locked?: boolean
           phone?: string | null
           require_session_approval?: boolean
           service_charge_percent?: number
           slug: string
           tagline_bn?: string | null
           tagline_en?: string | null
+          theme_key?: string
           updated_at?: string
           vat_percent?: number
           wifi_name?: string | null
@@ -381,23 +389,27 @@ export type Database = {
           address?: string | null
           cover_url?: string | null
           created_at?: string
+          custom_domain?: string | null
           facebook_url?: string | null
           google_maps_url?: string | null
           google_review_url?: string | null
           id?: string
           instagram_url?: string | null
+          is_listed?: boolean
           logo_url?: string | null
           name_bn?: string | null
           name_en?: string
           opening_hours_bn?: string | null
           opening_hours_en?: string | null
           package?: number
+          package_locked?: boolean
           phone?: string | null
           require_session_approval?: boolean
           service_charge_percent?: number
           slug?: string
           tagline_bn?: string | null
           tagline_en?: string | null
+          theme_key?: string
           updated_at?: string
           vat_percent?: number
           wifi_name?: string | null
@@ -706,6 +718,7 @@ export type Database = {
         Args: { p_device_id: string; p_token: string }
         Returns: Json
       }
+      resolve_table_slug: { Args: { p_token: string }; Returns: string }
       submit_feedback: {
         Args: { p_comment?: string; p_rating: number; p_token: string }
         Returns: Json

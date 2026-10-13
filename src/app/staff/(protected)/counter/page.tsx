@@ -13,7 +13,8 @@ import { TableTile, type TableItem } from '@/components/counter/TableTile';
 import { RequestCard, type ServiceRequestData } from '@/components/counter/RequestCard';
 import { SoldOutDialog, type MenuItemAvailability } from '@/components/counter/SoldOutDialog';
 import { TableDrawer, type TableSessionData } from '@/components/counter/TableDrawer';
-import { Coffee, ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp } from 'lucide-react';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 function getTimeAgo(isoString: string): string {
   const diffSec = Math.floor((Date.now() - new Date(isoString).getTime()) / 1000);
@@ -599,10 +600,10 @@ export default function CounterBoardPage() {
                 className="w-full bg-white rounded-3xl p-12 border border-line flex flex-col items-center justify-center text-center gap-3 shadow-2xs"
               >
                 <div className="w-14 h-14 rounded-full bg-bg flex items-center justify-center text-brand-muted">
-                  <Coffee className="w-7 h-7" />
+                  <VenueIcon className="w-7 h-7" />
                 </div>
                 <h3 className="text-[17px] font-extrabold text-ink">
-                  All calm ☕
+                  All calm
                 </h3>
                 <p className="text-[13.5px] text-ink-2 font-medium max-w-sm">
                   New requests and orders will appear here automatically.

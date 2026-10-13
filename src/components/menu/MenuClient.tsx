@@ -2,7 +2,9 @@
 
 import React, { useState, useMemo, useRef } from 'react';
 import Image from 'next/image';
-import { Search, Info, Coffee, ChevronLeft, ChevronRight, SlidersHorizontal, Zap } from 'lucide-react';
+import { Search, Info, Coffee, UtensilsCrossed, ChevronLeft, ChevronRight, SlidersHorizontal, Zap } from 'lucide-react';
+import { getTheme } from '@/themes';
+import { ThemeProvider } from '@/themes/ThemeContext';
 import type { MenuData, MenuItem, Offer } from '@/lib/menu/data';
 
 import { ItemCard } from './ItemCard';
@@ -194,10 +196,15 @@ export function MenuClient({
     }
   };
 
+  const theme = getTheme(menu.restaurant.theme_key);
+  const VenueIcon = theme.icons.venue === 'coffee' ? Coffee : UtensilsCrossed;
   const restaurantName = pick(menu.restaurant, 'name', locale);
+  const footerHours = pick(menu.restaurant, 'opening_hours', locale);
+  const footerLine = [menu.restaurant.address, footerHours].filter(Boolean).join(' · ');
   const tagline = pick(menu.restaurant, 'tagline', locale);
 
   return (
+    <ThemeProvider value={theme}>
     <div
       lang={locale}
       data-lang={locale}
@@ -209,8 +216,8 @@ export function MenuClient({
           <div className="flex items-center gap-3 min-w-0">
             <div className="relative w-12 h-12 shrink-0">
               <Image
-                src="/images/brand/concept-1.png"
-                alt="Brew Bari Logo"
+                src={menu.restaurant.logo_url || theme.assets.logo}
+                alt={`${menu.restaurant.name_en} logo`}
                 width={48}
                 height={48}
                 className="w-12 h-12 object-contain"
@@ -233,9 +240,9 @@ export function MenuClient({
             <LanguageToggle locale={locale} onLocaleChange={setLocale} />
             <button
               type="button"
-              aria-label="Café info"
+              aria-label={theme.copy.infoLabel[locale]}
               onClick={() => setIsInfoOpen(true)}
-              className="w-11 h-11 rounded-full bg-white text-brand shadow-[0_6px_20px_rgba(107,66,38,0.1)] flex items-center justify-center hover:bg-bg active:scale-95 transition-all"
+              className="w-11 h-11 rounded-full bg-white text-brand shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.1)] flex items-center justify-center hover:bg-bg active:scale-95 transition-all"
             >
               <Info className="w-5 h-5 stroke-[2]" />
             </button>
@@ -247,7 +254,7 @@ export function MenuClient({
           <div className="px-4 pb-3 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <div className="h-8 px-3 rounded-full bg-brand text-bg text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
-                <Coffee className="w-4 h-4 stroke-[2]" />
+                <VenueIcon className="w-4 h-4 stroke-[2]" />
                 <span>
                   {locale === 'bn' ? `টেবিল ${tableContext.tableNumber}` : `Table ${tableContext.tableNumber}`}
                 </span>
@@ -279,11 +286,7 @@ export function MenuClient({
               type="search"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={
-                locale === 'bn'
-                  ? 'কফি, জুস, স্ন্যাকস খুঁজুন…'
-                  : 'Search coffee, juice, bites…'
-              }
+              placeholder={theme.copy.searchPlaceholder[locale]}
               className="flex-1 bg-transparent text-[15px] font-medium text-ink placeholder:text-ink-3 outline-none min-w-0"
             />
             {searchQuery && (
@@ -304,6 +307,7 @@ export function MenuClient({
             <OfferCarousel
               offers={menu.offers}
               items={menu.items}
+              decoration={theme.layout.offerDecoration}
               locale={locale}
               onSelectOffer={handleOfferSelect}
             />
@@ -497,14 +501,9 @@ export function MenuClient({
 
           {/* Footer */}
           <footer className="pt-6 pb-2 text-center text-[12px] leading-relaxed text-ink-3 border-t border-line/60">
-            <div>
-              {menu.restaurant.address || 'GEC Circle, Chattogram'} ·{' '}
-              {pick(menu.restaurant, 'opening_hours', locale) ||
-                menu.restaurant.opening_hours_en ||
-                'Every day 9 AM – 11 PM'}
-            </div>
+            {footerLine && <div>{footerLine}</div>}
             <div className="mt-1 text-[11px] font-semibold text-brand-muted">
-              Powered by Brew Bari
+              Powered by Menuwala
             </div>
           </footer>
         </main>
@@ -561,6 +560,7 @@ export function MenuClient({
         onOpenStatus={onOpenStatus}
       />
     </div>
+    </ThemeProvider>
   );
 }
 

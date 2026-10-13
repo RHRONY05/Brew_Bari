@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('homepage loads demo launcher', async ({ page }) => {
+test('homepage loads the Menuwala platform page', async ({ page }) => {
   await page.goto('/')
-  await expect(page.locator('text=Brew Bari')).toBeVisible()
+  await expect(page.getByText('Menuwala').first()).toBeVisible()
 })

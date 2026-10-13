@@ -118,7 +118,7 @@ test.describe('M6: Admin Menu Editor (admin-menu.spec.ts)', () => {
     const guestContext = await browser.newContext();
     const guestPage = await guestContext.newPage();
 
-    await guestPage.goto('/m/brew-bari');
+    await guestPage.goto('/brew-bari');
     await guestPage.reload();
     const americanoCard = guestPage
       .locator('[data-testid^="item-card-"]')

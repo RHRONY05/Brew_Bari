@@ -54,6 +54,7 @@ describe('BillSheet Component', () => {
       <BillSheet
         token="token-123"
         tableNumber={99}
+        restaurantName="Brew Bari"
         isOpen={true}
         locale="en"
         onRequestBillComplete={onRequestBillComplete}

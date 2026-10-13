@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { resetTable99 } from './helpers';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import WebSocket from 'ws';
@@ -46,6 +47,7 @@ test.describe('M5: Order, Bill, and Review Flow (p3-order-bill-review.spec.ts)',
 
     expect(tableErr).toBeNull();
     table99Token = table!.qr_token;
+    await resetTable99(supabase);
   });
 
   test('complete guest premium flow: place order -> view status -> view bill -> request bill -> submit review & see Google button', async ({
@@ -56,7 +58,7 @@ test.describe('M5: Order, Bill, and Review Flow (p3-order-bill-review.spec.ts)',
     await context.grantPermissions(['clipboard-read', 'clipboard-write']);
 
     // 1. Open table 99
-    await page.goto(`/t/${table99Token}`);
+    await page.goto(`/brew-bari/t/${table99Token}`);
     await expect(page.getByText('Table 99')).toBeVisible();
 
     // 2. Add Cappuccino to cart

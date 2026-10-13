@@ -86,15 +86,17 @@ tests/
 ## Routes & rendering
 | Route | Who | Rendering | Data |
 |---|---|---|---|
-| `/` | salesperson | static + small client part | links; package switch only if logged in as admin |
-| `/m/[slug]` | guest (shop QR) | RSC, menu cached with tag `menu:<restaurant_id>` (max age 60 s) + on-demand revalidation | `getMenu(slug)` (anon client, public RLS) |
-| `/t/[token]` | guest (table QR) | dynamic RSC shell + client `TableProvider` | menu via `getMenu` (cached) + `get_table_context(token)` RPC |
+| `/` | anyone | RSC (platform theme) | lists restaurants with `is_listed = true`; staff login link. No credentials, no package switcher. |
+| `/[slug]` | guest (shop QR) | RSC, menu cached with tag `menu:<restaurant_id>` (max age 60 s) + on-demand revalidation; applies the restaurant's theme | `getMenu(slug)` (anon client, public RLS) |
+| `/[slug]/t/[token]` | guest (table QR) | dynamic RSC shell + client `TableProvider`; redirects if the token belongs to another slug | menu via `getMenu` (cached) + `get_table_context(token)` RPC |
+| `/m/[slug]`, `/t/[token]` | old links | 308 redirects (next.config / proxy) | see 10-PLATFORM.md |
 | `/staff/login` | staff | client form | Supabase Auth |
 | `/staff/counter` | counter, admin | client | staff RLS reads + Realtime |
 | `/staff/admin/*` | admin | RSC pages + server actions | staff RLS reads/writes |
 
-- If `package = 1` and someone opens `/t/<token>`, render the plain menu (no action bar) — never an error.
-- `/m/[slug]` for P2/P3 shops still works as a read-only menu (shared on Facebook etc.).
+- If `package = 1` and someone opens a table link, render the plain menu (no action bar) — never an error.
+- `/[slug]` for P2/P3 shops still works as a read-only menu (shared on Facebook etc.).
+- **Multi-restaurant (2026-10-14):** this section's original single-café routes were replaced; [10-PLATFORM.md](10-PLATFORM.md) is the source of truth for URLs, themes and adding restaurants.
 - Locale: `?lang=bn` or cookie `lang` (default `en`). The toggle sets the cookie and re-renders; `<html lang>` follows it.
 
 ## Key flows

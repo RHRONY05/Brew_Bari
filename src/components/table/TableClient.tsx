@@ -10,6 +10,9 @@ import { TableStatusSheet } from './TableStatusSheet';
 import { BillSheet } from './BillSheet';
 import { ReviewSheet } from './ReviewSheet';
 import { MenuClient } from '@/components/menu/MenuClient';
+import { ThemeProvider } from '@/themes/ThemeContext';
+import { getTheme } from '@/themes';
+import { pick } from '@/lib/i18n';
 
 interface TableClientProps {
   token: string;
@@ -124,6 +127,7 @@ function TableContent({
       <BillSheet
         token={token}
         tableNumber={table.number}
+        restaurantName={pick(menu.restaurant, 'name', initialLocale)}
         isOpen={isBillOpen}
         locale={initialLocale}
         onRequestBillComplete={() => {
@@ -139,7 +143,7 @@ function TableContent({
         token={token}
         isOpen={isReviewOpen}
         locale={initialLocale}
-        googleReviewUrl={menu.restaurant.google_review_url || 'https://g.page/r/brewbari/review'}
+        googleReviewUrl={menu.restaurant.google_review_url}
         facebookUrl={menu.restaurant.facebook_url}
         instagramUrl={menu.restaurant.instagram_url}
         onClose={() => setIsReviewOpen(false)}
@@ -155,12 +159,14 @@ export function TableClient({
   initialLocale = 'en',
 }: TableClientProps) {
   return (
-    <TableProvider
-      token={token}
-      initialContext={tableContext}
-      locale={initialLocale}
-    >
-      <TableContent menu={menu} initialLocale={initialLocale} />
-    </TableProvider>
+    <ThemeProvider value={getTheme(menu.restaurant.theme_key)}>
+      <TableProvider
+        token={token}
+        initialContext={tableContext}
+        locale={initialLocale}
+      >
+        <TableContent menu={menu} initialLocale={initialLocale} />
+      </TableProvider>
+    </ThemeProvider>
   );
 }

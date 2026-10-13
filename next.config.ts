@@ -14,6 +14,10 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  // Old guest menu URLs (/m/<slug>) moved to /<slug>. Old table links are handled in src/proxy.ts.
+  async redirects() {
+    return [{ source: '/m/:slug', destination: '/:slug', permanent: true }];
+  },
   cacheComponents: true,
   partialPrefetching: true,
   turbopack: {

@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { processImageFile, uploadMenuImage } from '@/lib/storage';
 import { revalidateMenuAction } from '@/lib/menu/actions';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
 import type { Database } from '@/types/database';
 import {
   Plus,
@@ -40,6 +41,7 @@ interface OptionGroup {
 const AVAILABLE_TAGS = ['Hot', 'Iced', 'Bestseller', 'New', 'Seasonal', 'Veg'];
 
 export default function AdminMenuPage() {
+  const { restaurant } = useStaffRestaurant();
   const [loading, setLoading] = useState(true);
   const [restaurantId, setRestaurantId] = useState<string>('');
   const [categories, setCategories] = useState<CategoryRow[]>([]);
@@ -119,7 +121,7 @@ export default function AdminMenuPage() {
         prev.map((it) => (it.id === item.id ? { ...it, is_available: item.is_available } : it))
       );
     } else {
-      await revalidateMenuAction(restaurantId, 'brew-bari');
+      await revalidateMenuAction(restaurantId, restaurant.slug);
     }
   };
 
@@ -243,7 +245,7 @@ export default function AdminMenuPage() {
         if (error) throw error;
       }
 
-      await revalidateMenuAction(restaurantId, 'brew-bari');
+      await revalidateMenuAction(restaurantId, restaurant.slug);
       await fetchData();
       handleCloseEditor();
     } catch (err: any) {
@@ -442,7 +444,7 @@ export default function AdminMenuPage() {
         </div>
 
         {/* Items List Card */}
-        <div className="bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-line/40">
+        <div className="bg-white rounded-[20px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] overflow-hidden border border-line/40">
           <div className="flex justify-between px-4 py-2.5 text-[11.5px] font-extrabold tracking-wider uppercase text-ink-3 border-b border-line-soft">
             <span>Item</span>
             <span>Price · Available</span>
@@ -539,7 +541,7 @@ export default function AdminMenuPage() {
         <aside
           aria-label="Edit item"
           data-testid="item-editor-panel"
-          className="w-full xl:w-[420px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] p-5 flex flex-col gap-4 border border-line/60 sticky top-4 z-40"
+          className="w-full xl:w-[420px] shrink-0 bg-white rounded-[20px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] p-5 flex flex-col gap-4 border border-line/60 sticky top-4 z-40"
         >
           {/* Header */}
           <div className="flex justify-between items-center pb-2 border-b border-line-soft">

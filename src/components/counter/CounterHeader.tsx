@@ -3,6 +3,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
 import { Volume2, VolumeX, AlertTriangle, Settings, LogOut, CheckCircle2 } from 'lucide-react';
 
 interface CounterHeaderProps {
@@ -26,13 +27,14 @@ export function CounterHeader({
   packageLevel = 'P3',
   isLive,
 }: CounterHeaderProps) {
+  const { restaurant, logo } = useStaffRestaurant();
   return (
     <header className="w-full bg-white border-b border-line px-4 md:px-6 py-3 md:py-3.5 flex flex-wrap items-center justify-between gap-3 shadow-2xs">
       <div className="flex items-center gap-3">
         <div className="relative w-10 h-10 shrink-0">
           <Image
-            src="/images/brand/concept-1.png"
-            alt="Brew Bari Logo"
+            src={logo}
+            alt={`${restaurant.name_en} logo`}
             width={40}
             height={40}
             className="w-10 h-10 object-contain"
@@ -40,7 +42,7 @@ export function CounterHeader({
         </div>
         <div>
           <h1 className="font-heading text-[17px] font-extrabold text-ink tracking-tight leading-tight">
-            Brew Bari · Counter
+            {restaurant.name_en} · Counter
           </h1>
           <p className="text-[12px] text-ink-2 font-medium">
             Package {packageLevel} · {tableCount} tables

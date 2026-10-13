@@ -1,6 +1,6 @@
 # agent.md — Start here
 
-You are building **Brew Bari**, a demo QR-menu & table-service web app for a (fictional) coffee & juice shop in Chattogram, Bangladesh. It is a sales demo: Turjo will show it to real restaurant owners to sell one of three packages. It must look polished, feel instant on a cheap Android phone, and never break during a pitch.
+This repo is **Menuwala**, a multi-restaurant QR-menu & table-service platform. **Brew Bari** (a fictional coffee & juice shop in Chattogram, Bangladesh) is restaurant #1; more restaurants are added as data + a theme (see [10-PLATFORM.md](10-PLATFORM.md)). It is a sales demo: Turjo will show it to real restaurant owners to sell one of three packages. It must look polished, feel instant on a cheap Android phone, and never break during a pitch.
 
 ## Read in this order
 0. [PROGRESS.md](PROGRESS.md) — **where the project is right now** (read first, update before you stop)
@@ -17,6 +17,7 @@ You are building **Brew Bari**, a demo QR-menu & table-service web app for a (fi
 11. `references/` — the original inspiration images
 12. `rules/`, `workflows/` — short always-on rules and the `/status` and `/next-task` workflows
 13. [09-HANDOFF.md](09-HANDOFF.md) — for the human: how the build is started and run (agents may skip)
+14. [10-PLATFORM.md](10-PLATFORM.md) — **multi-restaurant platform: URLs, themes, platform-managed fields, how to add a restaurant.** Read before touching routes, themes or the `restaurants` table.
 
 ## One-paragraph summary
 A customer scans a QR code → a mobile web page (no app, no login) shows the café's menu and offers in English or Bangla. Depending on the café's **package**: (P1) menu only; (P2) per-table QR, a cart, and a **Call Waiter** button that sends the table number and the cart to the counter screen; (P3) everything in P2 plus **Place Order**, **Request Bill**, and a feedback → Google review prompt. Staff use a live **Counter board** (realtime, with sound) and an **Admin panel** (menu, offers, tables & QR printing, settings). The package is a setting, so one deployment can demo all three tiers.
@@ -24,7 +25,9 @@ A customer scans a QR code → a mobile web page (no app, no login) shows the ca
 ## Key decisions (already made — do not re-open)
 | Topic | Decision |
 |---|---|
-| Scope | ONE coffee shop ("Brew Bari"). Data is still scoped by `restaurant_id` so a second shop is a data change, not a code change. No multi-brand UI. |
+| Scope | **Platform (Menuwala), many restaurants** in one codebase and one database. Each restaurant = data + a theme (`restaurants.theme_key` → `src/themes`). Never copy code per restaurant. (Was: one coffee shop, until 2026-10-14.) |
+| URLs | Guest menu `/<slug>`, table `/<slug>/t/<token>`, staff `/staff/*` (restaurant from login). Production domain `menuwala.vercel.app`; `brew-bari.vercel.app` redirects there. |
+| Packages | Per restaurant. `package_locked = true` fixes it (e.g. Grill Ghar = P3 only). |
 | Stack | Next.js (App Router, TypeScript, React Server Components) + Tailwind CSS + shadcn/ui + Supabase (Postgres, Auth, Realtime, Storage). Hosted on Vercel. |
 | Supabase | Cloud project, created & managed by the agent through the **Supabase MCP**. No local Docker. Every schema change is also saved as a file in `supabase/migrations/`. |
 | Customers | Anonymous. No accounts. Identified only by the table QR token + a random device id. |
@@ -38,7 +41,9 @@ A customer scans a QR code → a mobile web page (no app, no login) shows the ca
 - [x] Product & technical planning (this folder)
 - [x] UI mockups (Claude Design) — https://claude.ai/artifact/QdYT3Ufcx86yhnXdGr41JM (linked in 05-UI-DESIGN.md)
 - [x] Supabase project created: ref `vaxjsaknytquzcfxsukv` (region `ap-southeast-1`, `brew-bari-demo`)
-- [ ] Implementation — see 07-TASKS.md and live status in PROGRESS.md
+- [x] Brew Bari implementation (M0–M7) — tag `brew-bari-v1`
+- [x] Multi-restaurant platform refactor (2026-10-14) — see 10-PLATFORM.md
+- [ ] Grill Ghar (fast-food restaurant #2) — planning next
 
 ## Open questions for the humans (do not block on these; use the defaults)
 | Question | Default used until answered |

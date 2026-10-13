@@ -1,8 +1,9 @@
 'use client';
 
 import React from 'react';
-import { Coffee, Volume2 } from 'lucide-react';
+import { Volume2 } from 'lucide-react';
 import { playChime, requestWakeLock } from '@/lib/audio';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 interface StartShiftOverlayProps {
   onStartShift: () => void;
@@ -22,7 +23,7 @@ export function StartShiftOverlay({ onStartShift }: StartShiftOverlayProps) {
     >
       <div className="w-full max-w-sm bg-white rounded-3xl p-7 flex flex-col items-center text-center gap-5 border border-line shadow-[0_20px_50px_rgba(0,0,0,0.3)] animate-in fade-in zoom-in-95 duration-200">
         <div className="w-16 h-16 rounded-2xl bg-brand text-accent flex items-center justify-center shadow-xs">
-          <Coffee className="w-8 h-8 stroke-[2.2]" />
+          <VenueIcon className="w-8 h-8 stroke-[2.2]" />
         </div>
 
         <div className="flex flex-col gap-1">
@@ -38,7 +39,7 @@ export function StartShiftOverlay({ onStartShift }: StartShiftOverlayProps) {
           type="button"
           data-testid="start-shift-button"
           onClick={handleStart}
-          className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_16px_rgba(227,166,81,0.35)]"
+          className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_16px_rgb(var(--accent-rgb)/0.35)]"
         >
           <Volume2 className="w-5 h-5 stroke-[2.5]" />
           <span>Start shift</span>

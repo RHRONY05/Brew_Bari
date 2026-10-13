@@ -170,7 +170,7 @@ export default function AdminFeedbackPage() {
           {/* Summary Card */}
           <section
             aria-label="Summary"
-            className="bg-white rounded-[20px] p-5 shadow-[0_6px_20px_rgba(107,66,38,0.06)] border border-line/40 lg:col-span-1 flex flex-col justify-between"
+            className="bg-white rounded-[20px] p-5 shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.06)] border border-line/40 lg:col-span-1 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between pb-3 border-b border-line-soft mb-4">
@@ -244,7 +244,7 @@ export default function AdminFeedbackPage() {
           {/* Recent Feedback Feed Card */}
           <section
             aria-label="Recent feedback"
-            className="bg-white rounded-[20px] p-5 shadow-[0_6px_20px_rgba(107,66,38,0.06)] border border-line/40 lg:col-span-2"
+            className="bg-white rounded-[20px] p-5 shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.06)] border border-line/40 lg:col-span-2"
           >
             <div className="flex items-center justify-between pb-3 border-b border-line-soft mb-2">
               <h2 className="text-sm font-extrabold uppercase tracking-wider text-ink-2">

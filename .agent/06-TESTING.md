@@ -10,6 +10,8 @@ Three layers. Each task in 07-TASKS.md names the tests it must add or pass.
 | End-to-end | Playwright | `next dev` (or preview URL) + Supabase project | `npm run test:e2e` |
 
 ## Test data rules
+- **Serial runs.** Specs share live data (table 99, its QR token, its session), so Playwright runs with `workers: 1`. Table-service specs call `resetTable99()` (`tests/e2e/helpers.ts`) in `beforeAll` to close the table's session, otherwise the 15-requests/10-min rate limit breaks later specs.
+- **Multi-restaurant:** guest URLs are `/<slug>` and `/<slug>/t/<token>`; `tests/e2e/platform.spec.ts` covers the home page, redirects of old URLs and the absence of credentials. Run `supabase/tests/09_multi_restaurant.sql` after any RLS change.
 - Integration/E2E tests never touch Brew Bari's real tables 1–8. The seed adds a **test-only table 99** for Brew Bari (`number = 99, label = 'TEST'`). Tests read its token through a staff login (anon cannot read tokens).
 - Tests clean up after themselves: close table 99's session in `afterEach` (staff client).
 - Package switching tests restore `package = 3` in `afterAll`.

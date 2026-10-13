@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import Image from 'next/image';
-import { X, Minus, Plus, Coffee } from 'lucide-react';
+import { X, Minus, Plus } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { MenuItem } from '@/lib/menu/data';
 import type { OptionGroup } from '@/lib/schemas';
@@ -15,6 +15,7 @@ import {
 } from '@/lib/menu/options';
 import { formatTaka } from '@/lib/money';
 import { pick } from '@/lib/i18n';
+import { VenueIcon } from '@/themes/ThemeContext';
 
 interface ItemDetailSheetProps {
   item: MenuItem | null;
@@ -123,7 +124,7 @@ function ItemDetailContent({
             sizes="(max-width: 768px) 100vw, 420px"
           />
         ) : (
-          <Coffee className="w-20 h-20 stroke-[1.2]" />
+          <VenueIcon className="w-20 h-20 stroke-[1.2]" />
         )}
 
         {/* Close button top right */}
@@ -269,7 +270,7 @@ function ItemDetailContent({
             data-testid="item-sheet-add-button"
             disabled={!isValid}
             onClick={handleAdd}
-            className="flex-1 h-12 rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all disabled:opacity-45 disabled:cursor-not-allowed shadow-[0_4px_12px_rgba(227,166,81,0.3)]"
+            className="flex-1 h-12 rounded-full bg-accent text-ink text-[15px] font-extrabold flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all disabled:opacity-45 disabled:cursor-not-allowed shadow-[0_4px_12px_rgb(var(--accent-rgb)/0.3)]"
           >
             <span>{locale === 'bn' ? 'যোগ করুন' : 'Add'}</span>
             <span>·</span>

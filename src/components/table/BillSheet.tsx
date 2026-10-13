@@ -12,6 +12,7 @@ import type { BillResult } from '@/lib/schemas';
 interface BillSheetProps {
   token: string;
   tableNumber: number;
+  restaurantName: string;
   isOpen: boolean;
   locale: 'en' | 'bn';
   onRequestBillComplete?: () => void;
@@ -21,6 +22,7 @@ interface BillSheetProps {
 function BillSheetContent({
   token,
   tableNumber,
+  restaurantName,
   locale,
   onRequestBillComplete,
   onClose,
@@ -72,8 +74,8 @@ function BillSheetContent({
 
   const subtitle =
     locale === 'bn'
-      ? `ব্রু বাড়ি · টেবিল ${tableNumber}`
-      : `Brew Bari · Table ${tableNumber}`;
+      ? `${restaurantName} · টেবিল ${tableNumber}`
+      : `${restaurantName} · Table ${tableNumber}`;
 
   return (
     <div className="flex flex-col gap-4 pb-6" data-testid="bill-sheet">
@@ -172,7 +174,7 @@ function BillSheetContent({
                 data-testid="request-bill-button"
                 disabled={isRequesting}
                 onClick={handleRequestBill}
-                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgba(227,166,81,0.35)] disabled:opacity-50"
+                className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)] disabled:opacity-50"
               >
                 <Receipt className="w-5 h-5 stroke-[2]" />
                 <span>
@@ -189,6 +191,7 @@ function BillSheetContent({
 export function BillSheet({
   token,
   tableNumber,
+  restaurantName,
   isOpen,
   locale,
   onRequestBillComplete,
@@ -202,6 +205,7 @@ export function BillSheet({
         <BillSheetContent
           token={token}
           tableNumber={tableNumber}
+          restaurantName={restaurantName}
           locale={locale}
           onRequestBillComplete={onRequestBillComplete}
           onClose={onClose}

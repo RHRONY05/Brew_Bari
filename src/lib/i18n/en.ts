@@ -1,6 +1,6 @@
 export const en = {
   common: {
-    appName: 'Brew Bari',
+    appName: 'Menuwala',
     loading: 'Loading...',
     error: 'Something went wrong',
     retry: 'Try again',
@@ -76,10 +76,10 @@ export const en = {
     submitRating: 'Submit Feedback',
     reviewOnGoogle: 'Review us on Google',
     copiedToClipboard: 'Feedback copied to clipboard!',
-    thankYou: 'Thank you for visiting Brew Bari!',
+    thankYou: 'Thank you for visiting!',
   },
   info: {
-    title: 'About Brew Bari',
+    title: 'About us',
     address: 'Chattogram, Bangladesh',
     hours: 'Open daily: 8:00 AM – 11:00 PM',
     wifi: 'Wi-Fi Network',

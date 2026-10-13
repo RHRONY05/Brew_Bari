@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { processImageFile, uploadMenuImage } from '@/lib/storage';
 import { revalidateMenuAction } from '@/lib/menu/actions';
+import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
 import type { Database } from '@/types/database';
 import {
   Tag,
@@ -21,6 +22,7 @@ import {
 type OfferRow = Database['public']['Tables']['offers']['Row'];
 
 export default function AdminOffersPage() {
+  const { restaurant } = useStaffRestaurant();
   const [loading, setLoading] = useState(true);
   const [restaurantId, setRestaurantId] = useState<string>('');
   const [offers, setOffers] = useState<OfferRow[]>([]);
@@ -74,7 +76,7 @@ export default function AdminOffersPage() {
 
     const supabase = getSupabaseBrowserClient();
     await supabase.from('offers').update({ is_active: nextVal }).eq('id', offer.id);
-    await revalidateMenuAction(restaurantId, 'brew-bari');
+    await revalidateMenuAction(restaurantId, restaurant.slug);
   };
 
   // Add new offer
@@ -175,7 +177,7 @@ export default function AdminOffersPage() {
         if (error) throw error;
       }
 
-      await revalidateMenuAction(restaurantId, 'brew-bari');
+      await revalidateMenuAction(restaurantId, restaurant.slug);
       await fetchData();
       setIsEditorOpen(false);
     } catch (err: any) {
@@ -196,7 +198,7 @@ export default function AdminOffersPage() {
       const { error } = await supabase.from('offers').delete().eq('id', editingOffer.id);
       if (error) throw error;
 
-      await revalidateMenuAction(restaurantId, 'brew-bari');
+      await revalidateMenuAction(restaurantId, restaurant.slug);
       await fetchData();
       setIsEditorOpen(false);
     } catch (err: any) {
@@ -258,7 +260,7 @@ export default function AdminOffersPage() {
             <article
               key={offer.id}
               data-testid={`offer-card-${offer.id}`}
-              className="bg-white rounded-[22px] shadow-[0_6px_20px_rgba(107,66,38,0.08)] overflow-hidden border border-line/60 flex flex-col transition-all hover:shadow-md"
+              className="bg-white rounded-[22px] shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)] overflow-hidden border border-line/60 flex flex-col transition-all hover:shadow-md"
             >
               {/* Banner Header (2:1 aspect) */}
               <div
@@ -268,7 +270,7 @@ export default function AdminOffersPage() {
                 style={
                   offer.image_url
                     ? {
-                        backgroundImage: `linear-gradient(rgba(36,23,15,0.4), rgba(36,23,15,0.75)), url(${offer.image_url})`,
+                        backgroundImage: `linear-gradient(rgb(var(--ink-rgb)/0.4), rgb(var(--ink-rgb)/0.75)), url(${offer.image_url})`,
                         backgroundSize: 'cover',
                         backgroundPosition: 'center',
                       }

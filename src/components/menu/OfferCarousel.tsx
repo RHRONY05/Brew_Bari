@@ -5,12 +5,15 @@ import Image from 'next/image';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import type { Offer, MenuItem } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
+import type { Theme } from '@/themes';
 
 interface OfferCarouselProps {
   offers: Offer[];
   items?: MenuItem[];
   locale: 'en' | 'bn';
   onSelectOffer?: (offer: Offer) => void;
+  /** Artwork behind the offer image, chosen by the restaurant's theme. */
+  decoration?: Theme['layout']['offerDecoration'];
 }
 
 function LiquidSplashCrown() {
@@ -24,16 +27,16 @@ function LiquidSplashCrown() {
       <defs>
         {/* Rich glossy melted chocolate / mocha gradient */}
         <linearGradient id="liquidChocGrad" x1="15%" y1="10%" x2="85%" y2="90%">
-          <stop offset="0%" stopColor="#C48858" />
-          <stop offset="35%" stopColor="#8A5A37" />
-          <stop offset="70%" stopColor="#543019" />
-          <stop offset="100%" stopColor="#2E180B" />
+          <stop offset="0%" style={{ stopColor: 'var(--deco-1)' }} />
+          <stop offset="35%" style={{ stopColor: 'var(--deco-2)' }} />
+          <stop offset="70%" style={{ stopColor: 'var(--deco-3)' }} />
+          <stop offset="100%" style={{ stopColor: 'var(--deco-4)' }} />
         </linearGradient>
         {/* Golden caramel specular edge shine */}
         <linearGradient id="chocShineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#F2C27D" stopOpacity="0.95" />
-          <stop offset="45%" stopColor="#D48B47" stopOpacity="0.8" />
-          <stop offset="100%" stopColor="#381E10" stopOpacity="0.3" />
+          <stop offset="0%" style={{ stopColor: 'var(--deco-5)' }} stopOpacity="0.95" />
+          <stop offset="45%" style={{ stopColor: 'var(--deco-6)' }} stopOpacity="0.8" />
+          <stop offset="100%" style={{ stopColor: 'var(--deco-7)' }} stopOpacity="0.3" />
         </linearGradient>
       </defs>
 
@@ -74,7 +77,7 @@ function LiquidSplashCrown() {
            M 86 198 C 82 190, 72 189, 65 192
            M 31 144 C 18 138, 18 126, 27 118
            M 56 48 C 58 35, 73 28, 83 37"
-        stroke="#F2C27D"
+        style={{ stroke: 'var(--deco-5)' }}
         strokeWidth="1.8"
         strokeLinecap="round"
         opacity="0.9"
@@ -82,57 +85,57 @@ function LiquidSplashCrown() {
 
       {/* Radiating Splash Droplets with Glossy Reflection Glints */}
       {/* Top Droplets */}
-      <circle cx="106" cy="12" r="3.5" fill="#8A5A37" />
-      <circle cx="105" cy="11" r="1.2" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="124" cy="7" r="2.4" fill="#A86F44" />
-      <circle cx="90" cy="17" r="1.8" fill="#543019" />
+      <circle cx="106" cy="12" r="3.5" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="105" cy="11" r="1.2" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="124" cy="7" r="2.4" style={{ fill: 'var(--deco-8)' }} />
+      <circle cx="90" cy="17" r="1.8" style={{ fill: 'var(--deco-3)' }} />
 
       {/* Top-Right Droplets */}
-      <circle cx="186" cy="30" r="3.8" fill="#8A5A37" />
-      <circle cx="185" cy="29" r="1.3" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="198" cy="46" r="2.5" fill="#A86F44" />
-      <circle cx="172" cy="20" r="1.8" fill="#543019" />
+      <circle cx="186" cy="30" r="3.8" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="185" cy="29" r="1.3" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="198" cy="46" r="2.5" style={{ fill: 'var(--deco-8)' }} />
+      <circle cx="172" cy="20" r="1.8" style={{ fill: 'var(--deco-3)' }} />
 
       {/* Right Droplets */}
-      <circle cx="204" cy="106" r="4.2" fill="#543019" />
-      <circle cx="203" cy="105" r="1.5" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="198" cy="124" r="2.4" fill="#A86F44" />
-      <circle cx="206" cy="74" r="1.9" fill="#8A5A37" />
+      <circle cx="204" cy="106" r="4.2" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="203" cy="105" r="1.5" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="198" cy="124" r="2.4" style={{ fill: 'var(--deco-8)' }} />
+      <circle cx="206" cy="74" r="1.9" style={{ fill: 'var(--deco-2)' }} />
 
       {/* Bottom-Right Droplets */}
-      <circle cx="190" cy="174" r="3.8" fill="#543019" />
-      <circle cx="189" cy="173" r="1.3" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="176" cy="198" r="2.6" fill="#8A5A37" />
-      <circle cx="200" cy="154" r="1.8" fill="#A86F44" />
+      <circle cx="190" cy="174" r="3.8" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="189" cy="173" r="1.3" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="176" cy="198" r="2.6" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="200" cy="154" r="1.8" style={{ fill: 'var(--deco-8)' }} />
 
       {/* Bottom Droplets */}
-      <circle cx="116" cy="205" r="3.6" fill="#8A5A37" />
-      <circle cx="115" cy="204" r="1.2" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="80" cy="208" r="2.6" fill="#543019" />
-      <circle cx="98" cy="209" r="1.7" fill="#A86F44" />
+      <circle cx="116" cy="205" r="3.6" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="115" cy="204" r="1.2" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="80" cy="208" r="2.6" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="98" cy="209" r="1.7" style={{ fill: 'var(--deco-8)' }} />
 
       {/* Bottom-Left Droplets */}
-      <circle cx="32" cy="184" r="3.8" fill="#543019" />
-      <circle cx="31" cy="183" r="1.3" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="48" cy="200" r="2.4" fill="#8A5A37" />
-      <circle cx="18" cy="164" r="1.9" fill="#A86F44" />
+      <circle cx="32" cy="184" r="3.8" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="31" cy="183" r="1.3" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="48" cy="200" r="2.4" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="18" cy="164" r="1.9" style={{ fill: 'var(--deco-8)' }} />
 
       {/* Left Droplets */}
-      <circle cx="6" cy="112" r="4.2" fill="#543019" />
-      <circle cx="5" cy="111" r="1.5" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="12" cy="92" r="2.5" fill="#8A5A37" />
-      <circle cx="10" cy="130" r="2" fill="#A86F44" />
+      <circle cx="6" cy="112" r="4.2" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="5" cy="111" r="1.5" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="12" cy="92" r="2.5" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="10" cy="130" r="2" style={{ fill: 'var(--deco-8)' }} />
 
       {/* Top-Left Droplets */}
-      <circle cx="26" cy="46" r="3.8" fill="#8A5A37" />
-      <circle cx="25" cy="45" r="1.3" fill="#FFF7EE" opacity="0.9" />
-      <circle cx="44" cy="22" r="2.6" fill="#543019" />
-      <circle cx="14" cy="66" r="1.9" fill="#A86F44" />
+      <circle cx="26" cy="46" r="3.8" style={{ fill: 'var(--deco-2)' }} />
+      <circle cx="25" cy="45" r="1.3" style={{ fill: 'var(--bg)' }} opacity="0.9" />
+      <circle cx="44" cy="22" r="2.6" style={{ fill: 'var(--deco-3)' }} />
+      <circle cx="14" cy="66" r="1.9" style={{ fill: 'var(--deco-8)' }} />
     </svg>
   );
 }
 
-export function OfferCarousel({ offers, items, locale, onSelectOffer }: OfferCarouselProps) {
+export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration = 'none' }: OfferCarouselProps) {
   const [activeIndex, setActiveIndex] = useState(0);
 
   useEffect(() => {
@@ -161,14 +164,14 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer }: OfferCar
       {/* Active offer card */}
       <div
         onClick={() => onSelectOffer?.(current)}
-        className="relative min-h-[178px] h-[178px] sm:h-[188px] rounded-3xl bg-gradient-to-r from-[#4A2814] via-[#543019] to-[#3D2010] border border-line/15 overflow-hidden flex shadow-[0_10px_28px_rgba(59,34,19,0.22)] cursor-pointer group"
+        className="relative min-h-[178px] h-[178px] sm:h-[188px] rounded-3xl bg-gradient-to-r from-[var(--offer-from)] via-[var(--offer-via)] to-[var(--offer-to)] border border-line/15 overflow-hidden flex shadow-[0_10px_28px_rgb(var(--offer-shadow-rgb)/0.22)] cursor-pointer group"
       >
         {/* Circular Liquid Chocolate Splash Crown & Droplets (Zero Blur, Crisp Splash) */}
-        <LiquidSplashCrown />
+        {decoration === 'liquid-splash' && <LiquidSplashCrown />}
 
         {/* Foreground Organic Fluid Blob Image Container */}
         {imageUrl ? (
-          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[124px] h-[124px] sm:w-[136px] sm:h-[136px] rounded-[64%_36%_66%_34%/36%_62%_38%_64%] overflow-hidden border-[2.5px] border-accent shadow-[0_12px_28px_rgba(20,10,5,0.55)] bg-[#1F120A] pointer-events-none transition-transform duration-500 group-hover:scale-105">
+          <div className="absolute right-3.5 top-1/2 -translate-y-1/2 w-[124px] h-[124px] sm:w-[136px] sm:h-[136px] rounded-[64%_36%_66%_34%/36%_62%_38%_64%] overflow-hidden border-[2.5px] border-accent shadow-[0_12px_28px_rgb(var(--offer-shadow-rgb)/0.55)] bg-[var(--offer-image-bg)] pointer-events-none transition-transform duration-500 group-hover:scale-105">
             <Image
               src={imageUrl}
               alt={title}

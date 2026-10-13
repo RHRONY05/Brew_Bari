@@ -3,11 +3,11 @@ import { test, expect } from '@playwright/test';
 test.describe('M2: Guest menu P1 (p1-menu.spec.ts)', () => {
   test('browse, search, sold-out, quick section, and language toggle in P1', async ({ page }) => {
     // 1. Open guest menu with package 1 override
-    await page.goto('/m/brew-bari?pkg=1');
+    await page.goto('/brew-bari?pkg=1');
 
     // Verify Header & restaurant name
     await expect(page.locator('h1')).toContainText('Brew Bari');
-    await expect(page.getByText('BB')).toBeVisible();
+    await expect(page.getByRole('img', { name: 'Brew Bari logo' })).toBeVisible();
 
     // Verify Offers Carousel is visible
     await expect(page.getByTestId('offer-carousel')).toBeVisible();

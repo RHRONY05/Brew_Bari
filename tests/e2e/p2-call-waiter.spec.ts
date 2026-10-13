@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { resetTable99 } from './helpers';
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from '@/types/database';
 import WebSocket from 'ws';
@@ -47,13 +48,14 @@ test.describe('M3: Table service P2 (p2-call-waiter.spec.ts)', () => {
 
     expect(tableErr).toBeNull();
     table99Token = table!.qr_token;
+    await resetTable99(supabase);
   });
 
   test('guest opens table 99, adds items, calls waiter, nudges waiter, verifies P2 constraints', async ({
     page,
   }) => {
     // 1. Guest scans/opens table 99 URL
-    await page.goto(`/t/${table99Token}`);
+    await page.goto(`/brew-bari/t/${table99Token}`);
 
     // Verify Table 99 indicator chip
     await expect(page.getByText('Table 99')).toBeVisible();
@@ -92,7 +94,7 @@ test.describe('M3: Table service P2 (p2-call-waiter.spec.ts)', () => {
   });
 
   test('invalid table token renders G8 not-found page', async ({ page }) => {
-    await page.goto('/t/invalid_token_999999999999');
+    await page.goto('/brew-bari/t/invalid_token_999999999999');
 
     await expect(page.getByText('Table Not Found')).toBeVisible();
     await expect(page.getByText('View menu instead')).toBeVisible();

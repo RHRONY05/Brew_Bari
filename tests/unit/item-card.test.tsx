@@ -67,4 +67,61 @@ describe('ItemCard component', () => {
     fireEvent.click(screen.getByTestId(`item-card-${mockItem.id}`));
     expect(onSelect).toHaveBeenCalledWith(mockItem);
   });
+
+  describe('bold variant (fast-food / Grill Ghar layout)', () => {
+    const grillTheme = {
+      ...mockItem,
+      key: 'grill-ghar',
+      layout: { itemCard: 'bold' as const },
+    };
+
+    it('renders chilis and spice label for spicy item', async () => {
+      const { ThemeProvider } = await import('@/themes/ThemeContext');
+      const { grillGharTheme } = await import('@/themes/grill-ghar');
+
+      const nagaItem: MenuItem = {
+        ...mockItem,
+        name_en: 'Naga Smash Burger',
+        name_bn: 'নাগা স্ম্যাশ বার্গার',
+        spice_level: 4,
+        tags: ['new'],
+      };
+
+      render(
+        <ThemeProvider value={grillGharTheme}>
+          <ItemCard item={nagaItem} locale="en" packageTier={3} />
+        </ThemeProvider>
+      );
+
+      expect(screen.getByText('Naga Smash Burger')).toBeInTheDocument();
+      expect(screen.getByText('Naga hot')).toBeInTheDocument();
+      expect(screen.getByLabelText('Spice: Naga hot')).toBeInTheDocument();
+      expect(screen.getByText('New')).toBeInTheDocument();
+      expect(screen.getByTestId('item-card-add-button')).toBeInTheDocument();
+    });
+
+    it('renders Bengali spice label and sold out state in bold variant', async () => {
+      const { ThemeProvider } = await import('@/themes/ThemeContext');
+      const { grillGharTheme } = await import('@/themes/grill-ghar');
+
+      const soldOutSpicy: MenuItem = {
+        ...mockItem,
+        name_en: 'Hot Wings',
+        name_bn: 'হট উইংস',
+        spice_level: 3,
+        is_available: false,
+      };
+
+      render(
+        <ThemeProvider value={grillGharTheme}>
+          <ItemCard item={soldOutSpicy} locale="bn" packageTier={3} />
+        </ThemeProvider>
+      );
+
+      expect(screen.getByText('হট উইংস')).toBeInTheDocument();
+      expect(screen.getByText('ঝাল')).toBeInTheDocument();
+      expect(screen.getByText('শেষ')).toBeInTheDocument();
+      expect(screen.queryByTestId('item-card-add-button')).not.toBeInTheDocument();
+    });
+  });
 });

@@ -39,7 +39,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - Category icon keys in `CATEGORY_ICON_MAP` (+ `FriesIcon`).
   - **AC:** `/grill-ghar` renders (still in the old layouts) with the Grill Ghar colours and fonts, all photos shown, every photo matches its dish (check each by eye at 375 px), anon `get_table_context(<GG table 99 token>)` returns package 3; logging in as the GG admin shows Grill Ghar's admin in the GG theme; `09_multi_restaurant.sql` passes; `/brew-bari` unchanged.
 
-- [ ] **G4 Menu home (GG1)** · design: `design/Main.dc.html` · spec: `05-UI-DESIGN.md` §2, GG1
+- [x] **G4 Menu home (GG1)** · completed: Antigravity · design: `design/Main.dc.html` · spec: `05-UI-DESIGN.md` §2, GG1
   - Implement `offerStyle: 'hero'`, `categoryNav: 'round-icons'`, `itemCard: 'bold'` (incl. chili row from `spice_level`), `dealsRow`, `quickPicks: 'banner'`, header/search/action-bar/live-pill styling via tokens. Category sections stay sliders (`CategorySection`) with the bold card.
   - All new strings EN + BN.
   - **Tests:** component tests for `ItemCard` bold variant (chilis, sold-out), deals row (SAVE % maths, hidden when no deals), round nav (active state).

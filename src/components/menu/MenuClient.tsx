@@ -11,6 +11,7 @@ import { ItemCard } from './ItemCard';
 import { CategoryNav } from './CategoryNav';
 import { CategorySection } from './CategorySection';
 import { OfferCarousel } from './OfferCarousel';
+import { DealsRow } from './DealsRow';
 import { LanguageToggle } from './LanguageToggle';
 import { CafeInfoSheet } from './CafeInfoSheet';
 import { ItemDetailSheet } from './ItemDetailSheet';
@@ -117,6 +118,20 @@ export function MenuClient({
 
   const handleSelectCategory = (id: string) => {
     setActiveCategoryId(id);
+    if (id === 'all') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+    if (id === 'deals') {
+      const target = document.getElementById('section-deals');
+      if (target) {
+        const navOffset = 64;
+        const elementPosition = target.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - navOffset;
+        window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+      }
+      return;
+    }
     const target = sectionRefs.current[id];
     if (target) {
       const navOffset = 64;
@@ -203,6 +218,15 @@ export function MenuClient({
   const footerLine = [menu.restaurant.address, footerHours].filter(Boolean).join(' · ');
   const tagline = pick(menu.restaurant, 'tagline', locale);
 
+  const hasDeals = useMemo(() => {
+    return (
+      theme.layout.dealsRow &&
+      menu.items.some(
+        (it) => it.compare_at_price != null && it.compare_at_price > it.price
+      )
+    );
+  }, [theme.layout.dealsRow, menu.items]);
+
   return (
     <ThemeProvider value={theme}>
     <div
@@ -214,7 +238,13 @@ export function MenuClient({
         {/* Header */}
         <header className="p-4 pt-5 pb-3 flex items-start justify-between gap-3">
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative w-12 h-12 shrink-0">
+            <div
+              className={`relative w-12 h-12 shrink-0 ${
+                theme.layout.itemCard === 'bold'
+                  ? 'rounded-[16px] bg-brand p-2 flex items-center justify-center shadow-[0_6px_16px_rgba(var(--brand-rgb,210_41_28)/0.28)]'
+                  : ''
+              }`}
+            >
               <Image
                 src={menu.restaurant.logo_url || theme.assets.logo}
                 alt={`${menu.restaurant.name_en} logo`}
@@ -225,14 +255,26 @@ export function MenuClient({
               />
             </div>
             <div className="min-w-0">
-              <h1 className="font-heading font-extrabold text-2xl leading-tight tracking-tight text-ink truncate">
+              <h1 className="font-heading font-extrabold text-[21px] sm:text-2xl leading-tight tracking-tight text-ink truncate">
                 {restaurantName}
               </h1>
-              {tagline && (
-                <p className="text-[13px] text-ink-2 leading-snug truncate">
-                  {tagline}
-                </p>
-              )}
+              <div className="flex items-center gap-1.5 mt-0.5">
+                {theme.layout.itemCard === 'bold' && tableContext?.tableNumber && (
+                  <span className="inline-flex items-center gap-1 bg-ink text-brand-ink text-[11px] font-semibold px-2.5 py-0.5 rounded-full shrink-0">
+                    <VenueIcon className="w-3 h-3 stroke-[2.2]" />
+                    <span>
+                      {locale === 'bn'
+                        ? `টেবিল ${tableContext.tableNumber}`
+                        : `Table ${tableContext.tableNumber}`}
+                    </span>
+                  </span>
+                )}
+                {tagline && (
+                  <p className="text-[12px] sm:text-[13px] text-ink-2 leading-snug truncate">
+                    {tagline}
+                  </p>
+                )}
+              </div>
             </div>
           </div>
 
@@ -242,15 +284,19 @@ export function MenuClient({
               type="button"
               aria-label={theme.copy.infoLabel[locale]}
               onClick={() => setIsInfoOpen(true)}
-              className="w-11 h-11 rounded-full bg-white text-brand shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.1)] flex items-center justify-center hover:bg-bg active:scale-95 transition-all"
+              className={`w-11 h-11 ${
+                theme.layout.itemCard === 'bold'
+                  ? 'rounded-[14px] border border-line'
+                  : 'rounded-full'
+              } bg-white text-ink shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.1)] flex items-center justify-center hover:bg-bg active:scale-95 transition-all`}
             >
               <Info className="w-5 h-5 stroke-[2]" />
             </button>
           </div>
         </header>
 
-        {/* Table context indicator if scanning QR */}
-        {tableContext?.tableNumber && (
+        {/* Table context indicator if scanning QR (standard layout) */}
+        {theme.layout.itemCard !== 'bold' && tableContext?.tableNumber && (
           <div className="px-4 pb-3 flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <div className="h-8 px-3 rounded-full bg-brand text-bg text-[13px] font-bold flex items-center gap-1.5 shadow-xs">
@@ -279,7 +325,11 @@ export function MenuClient({
 
         {/* Search Bar */}
         <div className="px-4 pb-4">
-          <div className="h-[50px] rounded-full bg-white border border-line shadow-xs px-4 flex items-center gap-2.5 text-ink-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand transition-all">
+          <div
+            className={`h-[50px] ${
+              theme.layout.itemCard === 'bold' ? 'rounded-[16px]' : 'rounded-full'
+            } bg-white border border-line shadow-xs px-4 flex items-center gap-2.5 text-ink-3 focus-within:border-brand focus-within:ring-1 focus-within:ring-brand transition-all`}
+          >
             <Search className="w-[18px] h-[18px] stroke-[2.2] text-ink-3 shrink-0" />
             <input
               id="search-menu"
@@ -320,9 +370,61 @@ export function MenuClient({
             categories={menu.categories}
             activeCategoryId={activeCategoryId}
             hasQuickSection={hasQuick}
+            hasDeals={hasDeals}
             locale={locale}
             onSelectCategory={handleSelectCategory}
           />
+        )}
+
+        {/* Meal Deals Row (if enabled by theme and deals exist) */}
+        {!searchQuery && hasDeals && (
+          <DealsRow
+            items={menu.items}
+            locale={locale}
+            packageTier={packageTier}
+            onSelect={handleItemSelect}
+            onAddDirectly={handleItemSelect}
+          />
+        )}
+
+        {/* Quick Picks Banner (fast food banner variant) */}
+        {!searchQuery && hasQuick && theme.layout.quickPicks === 'banner' && (
+          <section
+            aria-label="Ready fast"
+            data-testid="quick-picks-banner"
+            onClick={() => {
+              const friesCat = menu.categories.find(
+                (c) =>
+                  c.icon === 'fries' ||
+                  c.name_en.toLowerCase().includes('fries') ||
+                  c.name_en.toLowerCase().includes('snack')
+              );
+              if (friesCat) {
+                handleSelectCategory(friesCat.id);
+              }
+            }}
+            className="mx-4 mt-4 bg-ink rounded-[18px] p-3.5 sm:p-4 flex items-center gap-3 text-brand-ink cursor-pointer hover:bg-ink/95 transition-all shadow-md"
+          >
+            <span className="w-10 h-10 rounded-xl bg-accent text-accent-ink flex items-center justify-center shrink-0 shadow-xs">
+              <Zap className="w-5 h-5 fill-current stroke-[2]" />
+            </span>
+            <div className="flex-1 flex flex-col min-w-0">
+              <span className="font-bold text-[14px] leading-tight text-brand-ink">
+                {theme.copy.quickBannerTitle?.[locale] ||
+                  (locale === 'bn' ? 'তাড়া আছে?' : 'In a hurry?')}
+              </span>
+              <span className="text-[12px] text-surface-2/90 leading-tight truncate">
+                {theme.copy.quickBannerSubtitle?.[locale] ||
+                  (locale === 'bn'
+                    ? 'ফ্রাইজ, উইংস আর শেক — ৫ মিনিটে রেডি'
+                    : 'Fries, wings & shakes — ready in 5 min')}
+              </span>
+            </div>
+            <span className="text-accent font-bold text-[13px] shrink-0 flex items-center gap-0.5">
+              <span>{locale === 'bn' ? 'দেখুন' : 'See'}</span>
+              <span>→</span>
+            </span>
+          </section>
         )}
 
         {/* Main Content Sections */}
@@ -363,8 +465,8 @@ export function MenuClient({
           ) : (
             /* STANDARD CATEGORIES VIEW */
             <>
-              {/* Quick Picks Section */}
-              {hasQuick && (
+              {/* Quick Picks Section (standard section layout only) */}
+              {hasQuick && theme.layout.quickPicks === 'section' && (
                 <section
                   id="section-quick"
                   ref={(el) => {

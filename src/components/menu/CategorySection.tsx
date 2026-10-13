@@ -6,6 +6,7 @@ import type { Category, MenuItem } from '@/lib/menu/data';
 import { ItemCard } from './ItemCard';
 import { pick } from '@/lib/i18n';
 import { CategoryIcon } from '@/components/ui/category-icon';
+import { useTheme } from '@/themes/ThemeContext';
 
 interface CategorySectionProps {
   category: Category;
@@ -26,8 +27,12 @@ export function CategorySection({
   onAddDirectly,
   sectionRef,
 }: CategorySectionProps) {
+  const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
   const sliderRef = useRef<HTMLDivElement>(null);
+
+  const sliderItemWidth =
+    theme.layout.itemCard === 'bold' ? 'w-[158px]' : 'w-[165px] sm:w-[185px]';
 
   const catTitle = pick(category, 'name', locale);
 
@@ -128,7 +133,7 @@ export function CategorySection({
           className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x -mx-4 px-4"
         >
           {items.map((item) => (
-            <div key={item.id} className="w-[165px] sm:w-[185px] shrink-0 snap-start">
+            <div key={item.id} className={`${sliderItemWidth} shrink-0 snap-start`}>
               <ItemCard
                 item={item}
                 locale={locale}

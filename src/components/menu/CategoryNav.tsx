@@ -1,15 +1,17 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { Zap } from 'lucide-react';
+import { Zap, LayoutGrid, Tag } from 'lucide-react';
 import type { Category } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
 import { CategoryIcon } from '@/components/ui/category-icon';
+import { useTheme } from '@/themes/ThemeContext';
 
 interface CategoryNavProps {
   categories: Category[];
   activeCategoryId: string;
   hasQuickSection?: boolean;
+  hasDeals?: boolean;
   locale: 'en' | 'bn';
   onSelectCategory: (id: string) => void;
 }
@@ -18,18 +20,21 @@ export function CategoryNav({
   categories,
   activeCategoryId,
   hasQuickSection = false,
+  hasDeals = false,
   locale,
   onSelectCategory,
 }: CategoryNavProps) {
+  const theme = useTheme();
+  const isRoundIcons = theme.layout.categoryNav === 'round-icons';
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // Auto-scroll the active chip into view horizontally
+  // Auto-scroll the active chip/button into view horizontally
   useEffect(() => {
     if (!scrollContainerRef.current) return;
     const activeEl = scrollContainerRef.current.querySelector<HTMLElement>(
       `[data-category-id="${activeCategoryId}"]`
     );
-    if (activeEl) {
+    if (activeEl && typeof activeEl.scrollIntoView === 'function') {
       activeEl.scrollIntoView({
         behavior: 'smooth',
         block: 'nearest',
@@ -38,6 +43,147 @@ export function CategoryNav({
     }
   }, [activeCategoryId]);
 
+  // ---------------------------------------------------------------------------
+  // ROUND ICONS VARIANT (Grill Ghar / fast food)
+  // ---------------------------------------------------------------------------
+  if (isRoundIcons) {
+    const allLabel = locale === 'bn' ? 'সবগুলো' : 'All';
+    const dealsLabel = locale === 'bn' ? 'ডিলস' : 'Deals';
+    const isAllActive = activeCategoryId === 'all';
+    const isDealsActive = activeCategoryId === 'deals';
+
+    return (
+      <nav
+        aria-label="Categories"
+        className="sticky top-0 z-20 w-full bg-bg/95 backdrop-blur-md py-3 border-b border-line/50"
+      >
+        <div
+          ref={scrollContainerRef}
+          className="flex items-center gap-3.5 overflow-x-auto px-4 no-scrollbar scroll-smooth"
+        >
+          {/* First item: "All" (scroll to top) */}
+          <button
+            type="button"
+            data-category-id="all"
+            data-testid="chip-all"
+            onClick={() => onSelectCategory('all')}
+            className="flex flex-col items-center gap-1.5 shrink-0 w-[64px] cursor-pointer group"
+          >
+            <span
+              className={`p-[3px] rounded-full border-2 transition-all ${
+                isAllActive
+                  ? 'border-brand'
+                  : 'border-line group-hover:border-line-soft'
+              }`}
+            >
+              <span
+                className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                  isAllActive
+                    ? 'bg-brand text-brand-ink shadow-sm'
+                    : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
+                }`}
+              >
+                <LayoutGrid className="w-[24px] h-[24px] stroke-[2]" />
+              </span>
+            </span>
+            <span
+              className={`text-[12px] truncate max-w-full text-center transition-colors ${
+                isAllActive ? 'font-bold text-brand' : 'font-medium text-ink'
+              }`}
+            >
+              {allLabel}
+            </span>
+          </button>
+
+          {/* Deals icon if dealsRow is enabled */}
+          {hasDeals && (
+            <button
+              type="button"
+              data-category-id="deals"
+              data-testid="chip-deals"
+              onClick={() => onSelectCategory('deals')}
+              className="flex flex-col items-center gap-1.5 shrink-0 w-[64px] cursor-pointer group"
+            >
+              <span
+                className={`p-[3px] rounded-full border-2 transition-all ${
+                  isDealsActive
+                    ? 'border-brand'
+                    : 'border-line group-hover:border-line-soft'
+                }`}
+              >
+                <span
+                  className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                    isDealsActive
+                      ? 'bg-brand text-brand-ink shadow-sm'
+                      : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
+                  }`}
+                >
+                  <Tag className="w-[24px] h-[24px] stroke-[2]" />
+                </span>
+              </span>
+              <span
+                className={`text-[12px] truncate max-w-full text-center transition-colors ${
+                  isDealsActive ? 'font-bold text-brand' : 'font-medium text-ink'
+                }`}
+              >
+                {dealsLabel}
+              </span>
+            </button>
+          )}
+
+          {/* Categories list */}
+          {categories.map((cat) => {
+            const isActive = cat.id === activeCategoryId;
+            const label = pick(cat, 'name', locale);
+
+            return (
+              <button
+                key={cat.id}
+                type="button"
+                data-category-id={cat.id}
+                data-testid={`chip-${cat.id}`}
+                onClick={() => onSelectCategory(cat.id)}
+                className="flex flex-col items-center gap-1.5 shrink-0 w-[64px] cursor-pointer group"
+              >
+                <span
+                  className={`p-[3px] rounded-full border-2 transition-all ${
+                    isActive
+                      ? 'border-brand'
+                      : 'border-line group-hover:border-line-soft'
+                  }`}
+                >
+                  <span
+                    className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                      isActive
+                        ? 'bg-brand text-brand-ink shadow-sm'
+                        : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
+                    }`}
+                  >
+                    <CategoryIcon
+                      icon={cat.icon}
+                      name={cat.name_en}
+                      className="w-[26px] h-[26px] stroke-[1.8] shrink-0"
+                    />
+                  </span>
+                </span>
+                <span
+                  className={`text-[12px] truncate max-w-full text-center transition-colors ${
+                    isActive ? 'font-bold text-brand' : 'font-medium text-ink'
+                  }`}
+                >
+                  {label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+    );
+  }
+
+  // ---------------------------------------------------------------------------
+  // CHIPS VARIANT (Brew Bari / café standard)
+  // ---------------------------------------------------------------------------
   return (
     <nav
       aria-label="Categories"

@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G4 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G5 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G3 Seed, staff, images complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G4 Menu home GG1 complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -21,8 +21,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G1 | Antigravity | complete ✅ |
 | G2 | Antigravity | complete ✅ |
 | G3 | Antigravity | complete ✅ |
-| G4 | Antigravity | in progress 🟡 |
-| G5–G9 | — | not started |
+| G4 | Antigravity | complete ✅ |
+| G5 | Antigravity | in progress 🟡 |
+| G6–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -337,9 +338,19 @@ Did:
 - Created `tests/e2e/gg-staff.spec.ts` verifying GG admin & counter login, theme application, and package picker hidden (`package_locked = true`).
 - Updated `playwright.config.ts` to support `reuseExistingServer: !process.env.CI`.
 - Verified SQL tests (`09_multi_restaurant.sql` 11/11 green), typecheck (0 errors), unit tests (94/94 green), e2e tests (45/45 Brew Bari + 6/6 GG staff).
-Tests: typecheck ✅ lint ✅ unit ✅ 94/94 SQL ✅ (09) e2e ✅ (45/45 Brew Bari + 6/6 GG staff)
-Commits / branch / PR: `task/G3-seed-staff-images`
-Next: G4 Menu home (GG1).
+### 2026-10-14 — Antigravity — G4 Menu home (GG1)
+Did:
+- Implemented `offerStyle: 'hero'` in `src/components/menu/OfferCarousel.tsx`: 210px hero card with gradient background, circular photo bleed, multi-line uppercase Cinzel title (`white-space: pre-line`), subtitle, bottom-left price pill with struck compare-at price, and custom pagination dots.
+- Implemented `categoryNav: 'round-icons'` in `src/components/menu/CategoryNav.tsx`: 54px circle icons in 3px ring, "All" (scroll to top), "Deals" link, categories, scroll-spy with safe jsdom `scrollIntoView`.
+- Implemented `itemCard: 'bold'` in `src/components/menu/ItemCard.tsx`: 158px slider width in `CategorySection`, 1:0.82 aspect ratio, top-left badges, top-right prep pill, chili spice icons from `spice_level` (0-4) with EN & BN spice words (`aria-label`), round brand **+** button, and 55% opacity sold out state.
+- Created `src/components/menu/DealsRow.tsx`: meal deals horizontal slider with SAVE % math, price, compare price, and quick-add, automatically hidden when no items have `compare_at_price > price`.
+- Implemented `quickPicks: 'banner'` in `src/components/menu/MenuClient.tsx`: dark ink banner with mustard bolt icon, title + subtitle from theme copy, and click navigation to quick items.
+- Styled header, search, live order pill, and action bar using theme tokens and layout options.
+- Added component unit tests in `tests/unit/item-card.test.tsx`, `tests/unit/deals-row.test.tsx`, `tests/unit/category-nav.test.tsx` (all 104 tests passing across 19 test files).
+- Created e2e test `tests/e2e/gg-menu.spec.ts` (12/12 passing across guest, staff, and staff-phone: GG1 design match at 375x812, Bengali toggle, zero horizontal overflow across 320, 375, 768, 1440, and Brew Bari unchanged).
+Tests: typecheck ✅ lint ✅ unit ✅ 104/104 e2e ✅ (12/12 GG menu + 45/45 Brew Bari + 6/6 GG staff)
+Commits / branch / PR: `task/G4-menu-home`
+Next: G5 Item detail (GG2).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

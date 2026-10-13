@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import type { Offer, MenuItem } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
+import { formatTaka } from '@/lib/money';
+import { useTheme } from '@/themes/ThemeContext';
 import type { Theme } from '@/themes';
 
 interface OfferCarouselProps {
@@ -150,6 +152,9 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
     return null;
   }
 
+  const theme = useTheme();
+  const isHero = theme.layout.offerStyle === 'hero';
+
   const current = offers[activeIndex];
   const title = pick(current, 'title', locale);
   const subtitle = pick(current, 'subtitle', locale);
@@ -158,6 +163,95 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
 
   const linkedItem = items?.find((it) => it.id === current.menu_item_id);
   const imageUrl = current.image_url || linkedItem?.image_url;
+
+  if (isHero) {
+    return (
+      <div className="w-full px-4" data-testid="offer-carousel">
+        {/* Hero offer card */}
+        <div
+          onClick={() => onSelectOffer?.(current)}
+          className="relative min-h-[210px] h-[210px] rounded-[24px] bg-gradient-to-r from-[var(--offer-from,#D2291C)] via-[var(--offer-via,#B32116)] to-[var(--offer-to,#8E1A12)] overflow-hidden shadow-[0_14px_30px_rgb(var(--offer-shadow-rgb,142_26_18)/0.35)] cursor-pointer group text-brand-ink"
+        >
+          {/* Photo slot (bleeds off right side) */}
+          <div className="absolute -right-7 top-[18px] w-[210px] h-[210px] rounded-full bg-[var(--offer-image-bg,#F7C9A8)] border-[6px] border-white/20 overflow-hidden pointer-events-none transition-transform duration-500 group-hover:scale-105 shadow-inner">
+            {imageUrl ? (
+              <Image
+                src={imageUrl}
+                alt={title}
+                fill
+                sizes="210px"
+                className="object-cover"
+                priority={activeIndex === 0}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-brand-dark">
+                <Sparkles className="w-12 h-12 stroke-[1.8]" />
+              </div>
+            )}
+          </div>
+
+          {/* Content (Left Column) */}
+          <div className="relative p-5 pt-5 pb-4 flex flex-col justify-between h-full z-10 w-[210px] sm:w-[240px]">
+            <div className="flex flex-col gap-2 min-w-0">
+              {badge && (
+                <span className="self-start h-5 px-2.5 rounded-full bg-accent text-accent-ink text-[11px] font-bold uppercase tracking-wider flex items-center shadow-xs">
+                  {badge}
+                </span>
+              )}
+              <h3 className="font-heading font-black text-[23px] sm:text-[26px] leading-[1.02] tracking-wide text-brand-ink uppercase whitespace-pre-line">
+                {title}
+              </h3>
+              {subtitle && (
+                <p className="text-[12px] leading-snug text-brand-ink/90 line-clamp-2">
+                  {subtitle}
+                </p>
+              )}
+            </div>
+
+            <div className="pt-2">
+              <span className="inline-flex items-center gap-2 bg-brand-ink text-brand font-bold text-[13px] py-1.5 pl-3.5 pr-2 rounded-full shadow-sm">
+                <span>{linkedItem ? formatTaka(linkedItem.price, locale) : ctaText}</span>
+                {linkedItem?.compare_at_price && (
+                  <span className="line-through text-ink-3 text-[12px] font-medium">
+                    {formatTaka(linkedItem.compare_at_price, locale)}
+                  </span>
+                )}
+                <span className="w-6 h-6 rounded-full bg-brand text-brand-ink inline-flex items-center justify-center shrink-0">
+                  <ArrowRight className="w-3.5 h-3.5 stroke-[2.6]" />
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Pagination dots */}
+        {offers.length > 1 && (
+          <div className="flex justify-center items-center gap-1.5 pt-2.5 pb-0.5">
+            {offers.map((_, idx) => (
+              <button
+                key={idx}
+                type="button"
+                aria-label={`Go to offer ${idx + 1}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setActiveIndex(idx);
+                }}
+                className="h-7 px-1 flex items-center justify-center cursor-pointer group"
+              >
+                <span
+                  className={`h-1.5 rounded-full transition-all duration-300 ${
+                    idx === activeIndex
+                      ? 'w-[22px] bg-brand'
+                      : 'w-1.5 bg-line group-hover:bg-brand-muted'
+                  }`}
+                />
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="w-full px-4" data-testid="offer-carousel">

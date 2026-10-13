@@ -1,4 +1,5 @@
 import { brewBariTheme } from './brew-bari'
+import { grillGharTheme } from './grill-ghar'
 import { menuwalaTheme } from './menuwala'
 import type { BengaliFontKey, LatinFontKey, Theme } from './types'
 
@@ -7,6 +8,7 @@ export type { Theme, ThemeToken, Localized } from './types'
 /** Every restaurant theme, keyed by restaurants.theme_key. Register new themes here. */
 export const THEMES: Record<string, Theme> = {
   [brewBariTheme.key]: brewBariTheme,
+  [grillGharTheme.key]: grillGharTheme,
 }
 
 export const PLATFORM_THEME = menuwalaTheme
@@ -25,6 +27,7 @@ const FONT_VARIABLES: Record<LatinFontKey | BengaliFontKey, string> = {
   'hasan-protilipi': '--ff-hasan-protilipi',
   'hind-siliguri': '--ff-hind-siliguri',
   'anek-bangla': '--ff-anek-bangla',
+  'alinur-nobin': '--ff-alinur-nobin',
 }
 
 /** CSS that applies a theme to the whole document (including portalled sheets and dialogs). */

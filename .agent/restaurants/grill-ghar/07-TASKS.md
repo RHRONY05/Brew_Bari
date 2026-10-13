@@ -25,7 +25,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - **Tests:** `supabase/tests/10_option_rules.sql` (cases in 03-DATA §2); re-run `04_place_order.sql`, `09_multi_restaurant.sql`. Unit tests in `tests/unit/options.test.ts` + `schemas.test.ts` for: inactive group not required, child cleared when parent changes, price with/without meal, invalid `show_if` rejected by zod, Brew Bari's existing options still parse.
   - **AC:** all SQL + unit tests pass; Brew Bari ordering e2e (`p3-order-bill-review`, `sold-out-race`) green.
 
-- [ ] **G2 Theme, font, logo, layout-option scaffold** · spec: `05-UI-DESIGN.md` §1–§2
+- [x] **G2 Theme, font, logo, layout-option scaffold** — Alinur Nobin localFont configured, types & FONT_VARIABLES updated, layout options added to types, brew-bari.ts & menuwala.ts defaults set, grill-ghar.ts created and registered in THEMES, brand SVG created, 94 unit tests passing, full 87/87 Brew Bari E2E suite green.
   - Font: unzip `public/fonts/AlinurNobin.zip`, copy the two `Unicode/` TTFs to `src/app/fonts/Li-Alinur-Nobin-Unicode.ttf` and `…-Italic.ttf`, add `alinurNobin` localFont in `src/themes/fonts.ts`, key `'alinur-nobin'` in `types.ts` + `FONT_VARIABLES`. **Delete `public/fonts/AlinurNobin.zip`** (never commit it).
   - `src/themes/types.ts`: add the new `layout` options and optional `copy` keys. `brew-bari.ts` and `menuwala.ts`: set every new option to its **first** value (= today's behaviour).
   - `src/themes/grill-ghar.ts` with all tokens, fonts, icons, copy, assets; register in `THEMES`.

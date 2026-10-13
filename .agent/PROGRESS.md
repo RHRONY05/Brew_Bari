@@ -10,16 +10,17 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G2 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G3 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G1 Options model v2 complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G2 Theme & options scaffold complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
 |---|---|---|
 | G0 | Antigravity | complete ✅ |
 | G1 | Antigravity | complete ✅ |
-| G2–G9 | — | not started |
+| G2 | Antigravity | complete ✅ |
+| G3–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -313,6 +314,19 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ 93/93 SQL ✅ (10, 04, 09) e2e ✅ (6/6 Brew Bari ordering)
 Commits / branch / PR: `task/G1-options-v2`
 Next: G2 Theme, font, logo, layout-option scaffold.
+
+### 2026-10-14 — Antigravity — G2 Theme, font, logo, layout-option scaffold
+Did:
+- Configured Li Alinur Nobin Unicode font in `src/themes/fonts.ts` via `localFont` with weights 400-900, italic, and unicode-range Bengali; added to `fontVariableClasses` and `FONT_VARIABLES`.
+- Updated `src/themes/types.ts`: added `'alinur-nobin'` to `BengaliFontKey`, new `layout` options (`offerStyle`, `categoryNav`, `itemCard`, `dealsRow`, `quickPicks`, `cartUpsell`, `statusCard`), and optional copy keys.
+- Set layout options in `brew-bari.ts` and `menuwala.ts` to their first values to preserve today's exact behaviour.
+- Created `src/themes/grill-ghar.ts` with flame red and mustard tokens, Poppins/Cinzel/Alinur Nobin fonts, fast-food layout options, and copy overrides; registered in `THEMES`.
+- Authored custom SVG flame brand logo at `public/images/brand/grill-ghar.svg`.
+- Added unit tests in `tests/unit/themes.test.ts` (94/94 unit tests passed).
+- Executed full 87-test Brew Bari Playwright E2E suite across guest Pixel 7, staff desktop, and staff phone (87/87 passed).
+Tests: typecheck ✅ lint ✅ unit ✅ 94/94 e2e ✅ 87/87 (full Brew Bari suite)
+Commits / branch / PR: `task/G2-theme-scaffold`
+Next: G3 Seed, staff, images.
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

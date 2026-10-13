@@ -1,0 +1,88 @@
+import type { Theme } from './types'
+
+export const grillGharTheme: Theme = {
+  key: 'grill-ghar',
+  name: 'Grill Ghar — fast food (flame red & mustard)',
+  tokens: {
+    bg: '#FFF5EA',
+    surface: '#FFFFFF',
+    'surface-2': '#FBE3CC',
+    'surface-subtle': '#FFFAF4',
+    line: '#F0DCC8',
+    'line-soft': '#F7E8DA',
+    ink: '#2B1510',
+    'ink-2': '#6B4A3F',
+    'ink-3': '#8A6A5E',
+    brand: '#D2291C',
+    'brand-muted': '#E0493C',
+    'brand-dark': '#8E1A12',
+    'brand-ink': '#FFF5EA',
+    accent: '#FFB22C',
+    'accent-ink': '#2B1510',
+    'accent-strong': '#F29A00',
+    'shadow-rgb': '43 21 16',
+    'ink-rgb': '43 21 16',
+    'accent-rgb': '255 178 44',
+    'offer-from': '#D2291C',
+    'offer-via': '#B32116',
+    'offer-to': '#8E1A12',
+    'offer-shadow-rgb': '142 26 18',
+    'offer-image-bg': '#F7C9A8',
+    'r-sm': '10px',
+    'r-md': '16px',
+    'r-lg': '20px',
+    'r-xl': '28px',
+    radius: '16px',
+  },
+  fonts: {
+    heading: 'cinzel',
+    body: 'poppins',
+    bengali: 'alinur-nobin',
+  },
+  layout: {
+    offerDecoration: 'none',
+    offerStyle: 'hero',
+    categoryNav: 'round-icons',
+    itemCard: 'bold',
+    dealsRow: true,
+    quickPicks: 'banner',
+    cartUpsell: true,
+    statusCard: 'hero',
+  },
+  icons: {
+    venue: 'utensils',
+  },
+  copy: {
+    searchPlaceholder: {
+      en: 'Search burgers, chicken, shawarma…',
+      bn: 'বার্গার, চিকেন, শাওয়ারমা খুঁজুন…',
+    },
+    infoLabel: {
+      en: 'Restaurant info',
+      bn: 'রেস্টুরেন্টের তথ্য',
+    },
+    statusPreparing: {
+      en: 'On the grill',
+      bn: 'গ্রিলে চলছে',
+    },
+    placeOrder: {
+      en: 'Send to kitchen',
+      bn: 'কিচেনে পাঠান',
+    },
+    dealsTitle: {
+      en: 'Meal deals',
+      bn: 'মিল ডিলস',
+    },
+    quickBannerTitle: {
+      en: 'In a hurry?',
+      bn: 'তাড়া আছে?',
+    },
+    quickBannerSubtitle: {
+      en: 'Fries, wings & shakes — ready in 5 min',
+      bn: 'ফ্রাইজ, উইংস আর শেক — ৫ মিনিটে রেডি',
+    },
+  },
+  assets: {
+    logo: '/images/brand/grill-ghar.svg',
+  },
+}

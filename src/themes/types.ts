@@ -7,7 +7,11 @@ export type LatinFontKey =
   | 'poppins'
   | 'bricolage-grotesque'
 
-export type BengaliFontKey = 'hasan-protilipi' | 'hind-siliguri' | 'anek-bangla'
+export type BengaliFontKey =
+  | 'hasan-protilipi'
+  | 'hind-siliguri'
+  | 'anek-bangla'
+  | 'alinur-nobin'
 
 /** CSS variables a theme may override. Defaults live in src/app/globals.css (:root) and equal the Brew Bari look. */
 export type ThemeToken =
@@ -85,6 +89,20 @@ export interface Theme {
   layout: {
     /** Decorative artwork behind the offer banner image. */
     offerDecoration: 'liquid-splash' | 'none'
+    /** Banner or hero card offer carousel presentation. */
+    offerStyle: 'banner' | 'hero'
+    /** Category navigation layout: chips or round icon circles. */
+    categoryNav: 'chips' | 'round-icons'
+    /** Item card presentation style: standard or bold fast-food card. */
+    itemCard: 'standard' | 'bold'
+    /** Whether to render a horizontal meal deals row above categories. */
+    dealsRow: boolean
+    /** Quick items presentation: section chip or dark banner. */
+    quickPicks: 'section' | 'banner'
+    /** Whether to render 'Goes well with' upsell carousel in the cart. */
+    cartUpsell: boolean
+    /** Table order tracking status card: standard or dark hero card. */
+    statusCard: 'standard' | 'hero'
   }
   icons: {
     /** Icon on the "Table N" chip in the guest header. */
@@ -93,6 +111,11 @@ export interface Theme {
   copy: {
     searchPlaceholder: Localized
     infoLabel: Localized
+    statusPreparing?: Localized
+    placeOrder?: Localized
+    dealsTitle?: Localized
+    quickBannerTitle?: Localized
+    quickBannerSubtitle?: Localized
   }
   assets: {
     /** Used when restaurants.logo_url is empty. Path under /public. */

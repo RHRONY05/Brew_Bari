@@ -32,6 +32,13 @@ export const menuwalaTheme: Theme = {
   },
   layout: {
     offerDecoration: 'none',
+    offerStyle: 'banner',
+    categoryNav: 'chips',
+    itemCard: 'standard',
+    dealsRow: false,
+    quickPicks: 'section',
+    cartUpsell: false,
+    statusCard: 'standard',
   },
   icons: {
     venue: 'utensils',

@@ -83,6 +83,22 @@ const hasanProtilipi = localFont({
   declarations: [{ prop: 'unicode-range', value: 'U+0980-09FF, U+200C-200D, U+25CC' }],
 })
 
+const alinurNobin = localFont({
+  src: [
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '400', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '500', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '600', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '700', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '800', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode.ttf', weight: '900', style: 'normal' },
+    { path: '../app/fonts/Li-Alinur-Nobin-Unicode-Italic.ttf', weight: '400', style: 'italic' },
+  ],
+  variable: '--ff-alinur-nobin',
+  display: 'swap',
+  preload: false,
+  declarations: [{ prop: 'unicode-range', value: 'U+0980-09FF, U+200C-200D, U+25CC' }],
+})
+
 /** Put on <html> so every font's CSS variable exists on every page. */
 export const fontVariableClasses = [
   cinzel,
@@ -93,6 +109,7 @@ export const fontVariableClasses = [
   hindSiliguri,
   anekBangla,
   hasanProtilipi,
+  alinurNobin,
 ]
   .map((f) => f.variable)
   .join(' ')

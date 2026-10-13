@@ -12,6 +12,13 @@ export const brewBariTheme: Theme = {
   },
   layout: {
     offerDecoration: 'liquid-splash',
+    offerStyle: 'banner',
+    categoryNav: 'chips',
+    itemCard: 'standard',
+    dealsRow: false,
+    quickPicks: 'section',
+    cartUpsell: false,
+    statusCard: 'standard',
   },
   icons: {
     venue: 'coffee',

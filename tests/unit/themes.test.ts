@@ -5,6 +5,7 @@ import { menuPath, tablePath, menuUrl, tableUrl } from '@/lib/site-urls'
 describe('theme registry', () => {
   it('returns the registered theme for a known key', () => {
     expect(getTheme('brew-bari').key).toBe('brew-bari')
+    expect(getTheme('grill-ghar').key).toBe('grill-ghar')
   })
 
   it('falls back to the default theme for unknown or empty keys', () => {
@@ -17,6 +18,17 @@ describe('theme registry', () => {
     for (const [key, theme] of Object.entries(THEMES)) {
       expect(theme.key).toBe(key)
     }
+  })
+
+  it('grill-ghar theme maps to alinur-nobin and flame red brand', () => {
+    const gg = getTheme('grill-ghar')
+    const css = themeCss(gg)
+    expect(css).toContain('--theme-font-bengali:var(--ff-alinur-nobin);')
+    expect(css).toContain('--brand:#D2291C;')
+    expect(gg.layout.offerStyle).toBe('hero')
+    expect(gg.layout.categoryNav).toBe('round-icons')
+    expect(gg.layout.itemCard).toBe('bold')
+    expect(gg.layout.dealsRow).toBe(true)
   })
 })
 

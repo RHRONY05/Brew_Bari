@@ -32,7 +32,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - Logo `public/images/brand/grill-ghar.svg` (flame mark in a rounded red square; own simple artwork).
   - **AC:** typecheck green; `/brew-bari` pixel-identical to before at 375 px (compare screenshots); full Brew Bari e2e green.
 
-- [ ] **G3 Seed, staff, images** · spec: `03-DATA.md` §3–§5
+- [x] **G3 Seed, staff, images** · completed: Antigravity · spec: `03-DATA.md` §3–§5
   - `supabase/seed-grill-ghar.sql` (restaurant, categories, 28 items with BN, offers, tables 1–12 + 99). Apply via MCP `execute_sql`.
   - Staff users (admin + counter) → `.env.local` only (`TEST_GG_*`), names in `.env.example`.
   - Images: find, **look at**, download, optimise (`scripts/optimize-menu-images.mjs`, `sharp`), store, set `image_url`, credit in `IMAGE-CREDITS.md`. All 28 items + 3 offers.

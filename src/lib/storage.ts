@@ -38,8 +38,8 @@ export async function processImageFile(
         }
 
         // Determine destination dimensions
-        let dstWidth = Math.min(srcWidth, maxDimension);
-        let dstHeight = dstWidth / aspectRatio;
+        const dstWidth = Math.min(srcWidth, maxDimension);
+        const dstHeight = dstWidth / aspectRatio;
 
         const canvas = document.createElement('canvas');
         canvas.width = Math.round(dstWidth);

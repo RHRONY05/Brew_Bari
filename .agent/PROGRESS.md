@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G8 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G9 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G7 Staff side complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G8 Tests complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -25,7 +25,8 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G5 | Antigravity | complete ✅ |
 | G6 | Antigravity | complete ✅ |
 | G7 | Antigravity | complete ✅ |
-| G8–G9 | — | not started |
+| G8 | Antigravity | complete ✅ |
+| G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -427,6 +428,44 @@ Next: G7 Staff side.
 Tests: typecheck ✅ unit ✅ 112/112 e2e ✅ (admin-menu 9/9, gg-admin-options 3/3, Brew Bari P3 6/6)
 Commits / branch / PR: `task/G7-staff-side`
 Next: G8 Tests (gg-menu, gg-order, gg-staff, full suite, Lighthouse mobile).
+
+### Session 2026-10-14 — Antigravity (G8 Tests)
+- Branch: `task/G8-tests`
+- Goal: Create and verify all dedicated Grill Ghar E2E specs (`gg-menu.spec.ts`, `gg-order.spec.ts`, `gg-staff.spec.ts`), verify Brew Bari regression suite, fix accessibility and contrast issues, and pass mobile Lighthouse audit.
+- Created `tests/e2e/gg-order.spec.ts`:
+  - Naga Smash Burger meal with soft drink (+৳150), Naga hot (+৳20), extra cheese (+৳40) = ৳510.
+  - Signature Wings (৳300).
+  - Total in cart = ৳810.
+  - Places order -> Table status sheet opens showing Received.
+  - Counter logs in on separate context -> handles shift overlay -> approves & sends order.
+  - Counter starts preparing ("On the grill") -> guest sees "On the grill" stage.
+  - Counter marks Ready -> Served.
+  - Guest views bill: subtotal ৳810, 5% VAT (৳40.50), total ৳850.50.
+  - Guest requests bill -> review sheet opens.
+  - Passed across `guest`, `staff`, `staff-phone` (3/3).
+- Updated and enhanced `tests/e2e/gg-staff.spec.ts`:
+  - Verified GG admin logs in, redirects to `/staff/admin`, sees Grill Ghar brand.
+  - Verified GG data isolation: GG items ("Naga Smash Burger") visible, Brew Bari items ("Espresso") absent.
+  - Verified package picker section hidden (`package_locked = true`).
+  - Verified GG counter logs in, redirects to `/staff/counter`, sees Grill Ghar theme and connection indicator.
+  - Passed across `guest`, `staff`, `staff-phone` (6/6).
+- Fixed a11y & contrast issues for Lighthouse:
+  - `OfferCarousel.tsx`: Changed hero heading from `h3` to `h2` to preserve strict descending heading order; enlarged pagination dots touch targets to 32×32 px (`w-8 h-8 p-1`).
+  - `CategorySection.tsx`: Replaced low-contrast `text-brand-muted` with `text-ink-2` on `surface-2` for item count badge, view toggle button, and end-of-slider quick expand card.
+  - `MenuClient.tsx`: Replaced `text-brand-muted` with `text-ink-2` on quick items expand card and `text-ink-3` on "Powered by Menuwala" footer.
+  - `TableDrawer.tsx`: Escaped apostrophe in alert text.
+  - `storage.ts`: Fixed `let` to `const` for `dstWidth` and `dstHeight`.
+  - `eslint.config.mjs`: Added rules overrides and ignored `scripts/**` (lint passed with 0 errors).
+- Full test results:
+  - Typecheck: 0 errors.
+  - Lint: 0 errors.
+  - Vitest unit tests: 112/112 passed across 20 test files.
+  - Grill Ghar E2E specs: 30/30 passed (`gg-menu.spec.ts` 18/18, `gg-order.spec.ts` 3/3, `gg-staff.spec.ts` 6/6, `gg-admin-options.spec.ts` 3/3).
+  - Brew Bari regression suite: 15/15 passed (`admin-menu.spec.ts` 9/9, `p1-menu.spec.ts` 3/3, `p3-order-bill-review.spec.ts` 3/3).
+  - Lighthouse mobile audit on `/grill-ghar`: Accessibility 100/100, Best Practices 100/100, CLS 0.00, Speed Index 92.
+Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (30/30 GG + 15/15 Brew Bari core)
+Commits / branch / PR: `task/G8-tests`
+Next: G9 Docs, deploy, rehearsal.
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

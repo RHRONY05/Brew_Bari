@@ -198,9 +198,9 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
                   {badge}
                 </span>
               )}
-              <h3 className="font-heading font-black text-[23px] sm:text-[26px] leading-[1.02] tracking-wide text-brand-ink uppercase whitespace-pre-line">
+              <h2 className="font-heading font-black text-[23px] sm:text-[26px] leading-[1.02] tracking-wide text-brand-ink uppercase whitespace-pre-line">
                 {title}
-              </h3>
+              </h2>
               {subtitle && (
                 <p className="text-[12px] leading-snug text-brand-ink/90 line-clamp-2">
                   {subtitle}
@@ -236,7 +236,7 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
                   e.stopPropagation();
                   setActiveIndex(idx);
                 }}
-                className="h-7 px-1 flex items-center justify-center cursor-pointer group"
+                className="w-8 h-8 p-1 flex items-center justify-center cursor-pointer group"
               >
                 <span
                   className={`h-1.5 rounded-full transition-all duration-300 ${
@@ -329,7 +329,7 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
                 e.stopPropagation();
                 setActiveIndex(idx);
               }}
-              className="h-7 px-1 flex items-center justify-center cursor-pointer group"
+              className="w-8 h-8 p-1 flex items-center justify-center cursor-pointer group"
             >
               <span
                 className={`h-1.5 rounded-full transition-all duration-300 ${

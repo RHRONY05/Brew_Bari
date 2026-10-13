@@ -61,7 +61,7 @@ export function CategorySection({
             {catTitle}
           </h2>
           <span
-            className="h-5.5 px-2.5 rounded-full bg-surface-2 text-brand-muted text-[12px] font-extrabold flex items-center justify-center shrink-0"
+            className="h-5.5 px-2.5 rounded-full bg-surface-2 text-ink-2 text-[12px] font-extrabold flex items-center justify-center shrink-0"
             title={`${items.length} items`}
           >
             {locale === 'bn' ? `${items.length}টি` : `${items.length}`}
@@ -96,7 +96,7 @@ export function CategorySection({
             type="button"
             data-testid={`toggle-view-${category.id}`}
             onClick={() => setIsExpanded((prev) => !prev)}
-            className="h-7.5 px-2.5 rounded-full bg-surface-2 border border-line/60 text-brand-muted hover:bg-accent hover:text-ink text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
+            className="h-7.5 px-2.5 rounded-full bg-surface-2 border border-line/60 text-ink-2 hover:bg-accent hover:text-ink text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
           >
             {isExpanded ? (
               <>
@@ -149,9 +149,9 @@ export function CategorySection({
             <button
               type="button"
               onClick={() => setIsExpanded(true)}
-              className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-line hover:border-brand-muted bg-white/70 hover:bg-bg p-4 flex flex-col items-center justify-center text-center gap-2 text-brand-muted transition-all cursor-pointer shadow-2xs"
+              className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-line hover:border-brand-muted bg-white/70 hover:bg-bg p-4 flex flex-col items-center justify-center text-center gap-2 text-ink-2 transition-all cursor-pointer shadow-2xs"
             >
-              <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-brand-muted font-extrabold text-[13px]">
+              <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-ink font-extrabold text-[13px]">
                 +{items.length}
               </div>
               <span className="text-[12px] font-extrabold text-ink">

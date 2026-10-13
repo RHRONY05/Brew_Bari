@@ -526,7 +526,7 @@ export function MenuClient({
                       <button
                         type="button"
                         onClick={() => setIsQuickExpanded((prev) => !prev)}
-                        className="h-7.5 px-2.5 rounded-full bg-surface-2 border border-line/60 text-brand-muted hover:bg-accent hover:text-ink text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
+                        className="h-7.5 px-2.5 rounded-full bg-surface-2 border border-line/60 text-ink-2 hover:bg-accent hover:text-ink text-[12px] font-extrabold flex items-center gap-1 active:scale-95 transition-all shadow-2xs cursor-pointer"
                       >
                         {isQuickExpanded ? (
                           <>
@@ -577,9 +577,9 @@ export function MenuClient({
                         <button
                           type="button"
                           onClick={() => setIsQuickExpanded(true)}
-                          className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-line hover:border-brand-muted bg-white/70 hover:bg-bg p-4 flex flex-col items-center justify-center text-center gap-2 text-brand-muted transition-all cursor-pointer shadow-2xs"
+                          className="w-[130px] shrink-0 snap-start rounded-3xl border-2 border-dashed border-line hover:border-brand-muted bg-white/70 hover:bg-bg p-4 flex flex-col items-center justify-center text-center gap-2 text-ink-2 transition-all cursor-pointer shadow-2xs"
                         >
-                          <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-brand-muted font-extrabold text-[13px]">
+                          <div className="w-10 h-10 rounded-full bg-surface-2 flex items-center justify-center text-ink font-extrabold text-[13px]">
                             +{quickItems.length}
                           </div>
                           <span className="text-[12px] font-extrabold text-ink">
@@ -619,7 +619,7 @@ export function MenuClient({
           {/* Footer */}
           <footer className="pt-6 pb-2 text-center text-[12px] leading-relaxed text-ink-3 border-t border-line/60">
             {footerLine && <div>{footerLine}</div>}
-            <div className="mt-1 text-[11px] font-semibold text-brand-muted">
+            <div className="mt-1 text-[11px] font-semibold text-ink-3">
               Powered by Menuwala
             </div>
           </footer>

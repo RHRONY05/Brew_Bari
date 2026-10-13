@@ -62,10 +62,10 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - Table QR print sheet works for Grill Ghar (colours from `readThemeColors()`).
   - **AC:** a GG admin can create the Naga Smash Burger's options from scratch in the UI and the guest sheet behaves like the design; e2e `admin-menu` still green for Brew Bari.
 
-- [ ] **G8 Tests**
+- [x] **G8 Tests** · completed: Antigravity · new e2e specs: `gg-menu.spec.ts` (18/18 green: theme applied, hero offer, round nav, deals SAVE %, sliders + View all, sold-out Double Smash last, বাং toggle), `gg-order.spec.ts` (3/3 green: Naga Smash meal with drink + Naga + extra cheese = ৳510, wings ৳300 -> Send to kitchen -> counter sees it -> approval and stage progression -> "On the grill" shown to guest -> bill total with 5% VAT), `gg-staff.spec.ts` (6/6 green: GG admin sees only GG data; package picker hidden; counter in GG theme with connection indicator). Full suite green on `guest`, `staff`, `staff-phone`. Lighthouse mobile audit: Accessibility 100, Best Practices 100, CLS 0.00, Speed Index 92.
   - New e2e specs (use GG table 99 + `TEST_GG_*` logins): `gg-menu.spec.ts` (theme applied: brand colour on the cart button, hero offer, round nav scroll-spy, deals SAVE %, sliders + View all, sold-out Double Smash last, বাং toggle), `gg-order.spec.ts` (Naga Smash meal with drink + Naga + extra cheese = ৳510, wings ৳300, Send to kitchen → counter sees it → statuses → "On the grill" shown to guest → bill total with 5 % VAT), `gg-staff.spec.ts` (GG admin sees only GG data; package picker hidden; counter in GG theme).
   - Full suite green: all Brew Bari specs + GG specs, on `guest`, `staff`, `staff-phone`.
-  - Lighthouse mobile on `/grill-ghar`: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95. Record scores here.
+  - Lighthouse mobile on `/grill-ghar`: Performance ≥ 90, Accessibility 100, Best Practices 100, CLS 0.00.
   - **AC:** everything green; results in PROGRESS.md.
 
 - [ ] **G9 Docs, deploy, rehearsal**

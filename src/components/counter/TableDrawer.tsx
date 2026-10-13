@@ -165,7 +165,7 @@ export function TableDrawer({
               <div className="flex items-start gap-2.5">
                 <AlertCircle className="w-5 h-5 text-warning shrink-0 mt-0.5" />
                 <div className="text-[13px] text-warning font-medium leading-relaxed">
-                  A guest has scanned this table's QR code. Confirm they are seated, then approve this session.
+                  A guest has scanned this table&apos;s QR code. Confirm they are seated, then approve this session.
                 </div>
               </div>
               <button

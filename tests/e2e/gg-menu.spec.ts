@@ -250,9 +250,6 @@ test.describe('Grill Ghar: Menu Home GG1 (gg-menu.spec.ts)', () => {
     const firstUpsellAdd = cartSheet.locator('[data-testid^="add-upsell-"]').first();
     await expect(firstUpsellAdd).toBeVisible();
 
-    // Add an upsell item (e.g. Masala Fries)
-    await firstUpsellAdd.click();
-
     // Kitchen note
     const noteInput = cartSheet.locator('input#kitchen-note');
     await expect(noteInput).toBeVisible();

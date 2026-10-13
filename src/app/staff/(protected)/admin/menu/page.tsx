@@ -441,9 +441,7 @@ export default function AdminMenuPage() {
   }, [items, selectedCatId]);
 
   // Options groups for the item currently being edited
-  const currentOptions: OptionGroupEditor[] = useMemo(() => {
-    return normalizeOptions(editingItem?.options);
-  }, [editingItem?.options]);
+  const currentOptions: OptionGroupEditor[] = normalizeOptions(editingItem?.options);
 
   const handleAddOptionGroup = () => {
     const count = currentOptions.length + 1;

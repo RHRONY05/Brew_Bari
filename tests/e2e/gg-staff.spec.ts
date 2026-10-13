@@ -43,6 +43,10 @@ test.describe('Grill Ghar: Staff Authentication & Package Locking (gg-staff.spec
     // Verify Grill Ghar branding in AdminNav (in whichever nav header/aside is currently visible)
     await expect(page.locator('header:visible, aside:visible').getByText('Grill Ghar').first()).toBeVisible({ timeout: 10000 });
 
+    // Verify GG admin sees only GG data (Naga Smash Burger visible, Brew Bari coffee not visible)
+    await expect(page.getByText('Naga Smash Burger').first()).toBeVisible({ timeout: 10000 });
+    await expect(page.getByText('Espresso')).toHaveCount(0);
+
     // Navigate to Settings
     await page.goto('/staff/admin/settings');
     await expect(page.locator('h1:has-text("Settings")')).toBeVisible({ timeout: 10000 });
@@ -68,5 +72,18 @@ test.describe('Grill Ghar: Staff Authentication & Package Locking (gg-staff.spec
 
     // Verify Grill Ghar branding
     await expect(page.locator('header:visible, aside:visible, main:visible').getByText('Grill Ghar').first()).toBeVisible({ timeout: 10000 });
+
+    // Handle shift overlay if present
+    const startShiftBtn = page.getByTestId('start-shift-button');
+    try {
+      await startShiftBtn.waitFor({ state: 'visible', timeout: 5000 });
+      await startShiftBtn.click();
+      await expect(page.getByTestId('start-shift-overlay')).not.toBeVisible({ timeout: 5000 });
+    } catch {
+      // Already started or overlay not displayed
+    }
+
+    // Verify live indicator
+    await expect(page.getByTestId('connection-indicator')).toBeVisible();
   });
 });

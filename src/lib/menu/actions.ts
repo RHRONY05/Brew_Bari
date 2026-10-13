@@ -5,11 +5,12 @@ import { menuPath } from '@/lib/site-urls';
 
 export async function revalidateMenuAction(restaurantId: string | undefined, slug: string) {
   try {
+    const tagRevalidate = revalidateTag as unknown as (tag: string, profile?: string) => void;
     if (restaurantId) {
-      (revalidateTag as any)(`menu:${restaurantId}`, 'max');
+      tagRevalidate(`menu:${restaurantId}`, 'max');
     }
-    (revalidateTag as any)(`menu-slug:${slug}`, 'max');
-    (revalidateTag as any)(`menu-data-${slug}`, 'max');
+    tagRevalidate(`menu-slug:${slug}`, 'max');
+    tagRevalidate(`menu-data-${slug}`, 'max');
   } catch (e) {
     console.error('revalidateTag error:', e);
   }

@@ -9,15 +9,16 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | | |
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
-| **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — planned & designed, ready to build |
-| **Next task(s) to pick** | G0 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). Start at [restaurants/grill-ghar/README.md](restaurants/grill-ghar/README.md). |
-| **Blocked on** | Font licence question (see the bottom of the Grill Ghar task list) blocks shipping, not building. |
-| **Last updated** | 2026-10-14 by Claude Code (Grill Ghar plan + design, docs reorganised) |
+| **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
+| **Next task(s) to pick** | G1 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). Start at [restaurants/grill-ghar/README.md](restaurants/grill-ghar/README.md). |
+| **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
+| **Last updated** | 2026-10-14 by Antigravity (G0 baseline established) |
 
 ## Grill Ghar status
 | Task | Agent | State |
 |---|---|---|
-| G0–G9 | — | not started |
+| G0 | Antigravity | complete ✅ |
+| G1–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -284,6 +285,19 @@ Did:
 - Grill Ghar designed (4 guest screens, canvas "Grill Ghar UI", sources in `restaurants/grill-ghar/design/`) and planned: README (goal), 01-BRIEF, 03-DATA (options model v2, seed, images), 05-UI-DESIGN (theme + layout options), 07-TASKS (G0–G9), 08-DEMO-SCRIPT, 09-HANDOFF.
 Tests: n/a (docs only)
 Next: human answers the font licence question, then starts Antigravity with the prompt in `restaurants/grill-ghar/09-HANDOFF.md`.
+
+### 2026-10-14 — Antigravity — G0 Preflight & baseline
+Did:
+- Verified Supabase MCP connected (`vaxjsaknytquzcfxsukv` free tier), Vercel & GitHub access.
+- Merged `docs/grill-ghar-plan` cleanly into `main` and pushed to remote origin.
+- Unpacked Li Alinur Nobin Unicode TTFs into `src/app/fonts/` (`Li-Alinur-Nobin-Unicode.ttf` & `Li-Alinur-Nobin-Unicode-Italic.ttf`), removed zip from `public/fonts/`.
+- Executed full baseline verification:
+  - typecheck: ✅ 0 errors
+  - lint: ⚠️ 50 pre-existing errors, 34 warnings (recorded baseline)
+  - unit tests: ✅ 83/83 passed across 17 test files
+  - e2e tests: ✅ 87/87 passed across guest (Pixel 7), staff (desktop 1280x800), and staff-phone (390x844).
+Tests: typecheck ✅ lint ⚠️ (50 pre-existing) unit ✅ 83/83 e2e ✅ 87/87
+Next: G1 Options model v2 + spice level (shared, DB).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

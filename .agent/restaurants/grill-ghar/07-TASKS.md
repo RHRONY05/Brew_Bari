@@ -12,7 +12,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
 
 ---
 
-- [ ] **G0 Preflight & baseline**
+- [x] **G0 Preflight & baseline** — typecheck passed, lint 50 pre-existing errors, 83/83 unit tests passed, 87/87 e2e tests passed. Alinur Nobin Unicode fonts unpacked to src/app/fonts/.
   - Read `.agent/agent.md`, this folder's `README.md` and every file it lists, `platform/00-AGENT-RULES.md`, `platform/10-PLATFORM.md`.
   - Check: Supabase MCP works (project `vaxjsaknytquzcfxsukv`), git clean on `main`, `.env.local` has the Brew Bari test logins, browser testing works.
   - Run the full suite on `main` **before any change**: `typecheck`, `lint`, `test`, `test:e2e`. Record the results in PROGRESS.md as the baseline (if anything already fails, list it — don't fix unrelated failures silently).

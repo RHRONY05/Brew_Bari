@@ -159,4 +159,58 @@ test.describe('Grill Ghar: Menu Home GG1 (gg-menu.spec.ts)', () => {
       'Search coffee, juice, bites…'
     );
   });
+
+  test('item detail GG2: cards, conditional drink, spice chips, dynamic add meal button', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/grill-ghar/t/token_gg_99');
+
+    // Click Naga Smash Burger
+    await page.getByRole('heading', { name: 'Naga Smash Burger' }).first().click();
+
+    // Sheet opens
+    const sheet = page.getByTestId('item-detail-sheet');
+    await expect(sheet).toBeVisible();
+
+    // Make it a meal cards visible
+    await expect(sheet.getByText('Make it a meal?')).toBeVisible();
+    await expect(sheet.getByText('Just the burger')).toBeVisible();
+    await expect(sheet.getByText('Meal', { exact: true })).toBeVisible();
+    await expect(sheet.getByText('SAVE ৳50')).toBeVisible();
+
+    // Initially solo: drink not visible, add button enabled
+    await expect(sheet.getByText('Your meal drink')).toHaveCount(0);
+    const addBtn = page.getByTestId('item-sheet-add-button');
+    await expect(addBtn).toBeEnabled();
+    await expect(addBtn).toHaveText(/Add to cart/i);
+    await expect(addBtn).toHaveText(/৳320/);
+
+    // Click Meal card
+    await sheet.getByText('Meal', { exact: true }).click();
+
+    // Drink group appears, and Add button is disabled until drink is chosen
+    await expect(sheet.getByText('Your meal drink')).toBeVisible();
+    await expect(addBtn).toBeDisabled();
+
+    // Pick Cola
+    await sheet.getByText(/Cola/i).first().click();
+
+    // Now enabled, price is ৳470, button says "Add meal"
+    await expect(addBtn).toBeEnabled();
+    await expect(addBtn).toHaveText(/Add meal/i);
+    await expect(addBtn).toHaveText(/৳470/);
+
+    // Pick Naga spice chip
+    await sheet.getByRole('button', { name: 'Naga' }).click();
+
+    // Add to cart
+    await addBtn.click();
+
+    // Sheet closes, cart shows item added
+    await expect(sheet).not.toBeVisible();
+    const actionCart = page.getByTestId('action-view-order');
+    await expect(actionCart).toBeVisible();
+    await expect(actionCart).toHaveText(/৳470/);
+  });
 });

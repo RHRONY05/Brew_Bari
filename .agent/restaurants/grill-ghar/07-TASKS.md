@@ -45,7 +45,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - **Tests:** component tests for `ItemCard` bold variant (chilis, sold-out), deals row (SAVE % maths, hidden when no deals), round nav (active state).
   - **AC:** matches `Main.dc.html` at 375×812 in EN and বাং; no horizontal page overflow at 320, 375, 768, 1440; Brew Bari menu unchanged.
 
-- [ ] **G5 Item detail (GG2)** · design: `design/ItemDetail.dc.html`
+- [x] **G5 Item detail (GG2)** · completed: Antigravity · design: `design/ItemDetail.dc.html`
   - Render groups by `display` (`cards` / `list` / `chips` / multi tiles), `show_if` show/hide with reduced-motion-safe animation, `compare_delta` struck price + SAVE badge, `heat` chilis, add button label "Add meal" when the meal choice is picked.
   - **Tests:** `item-sheet.test.tsx`: picking Meal shows drink + raises price by 150; back to solo hides drink and drops its price; Add disabled until required active groups are chosen; Brew Bari item sheet unchanged.
   - **AC:** matches design; order placed from this sheet is priced correctly by the server.

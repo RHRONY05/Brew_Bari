@@ -17,7 +17,7 @@ interface ItemCardProps {
   onAddDirectly?: (item: MenuItem) => void;
 }
 
-const SPICE_WORDS: Record<'en' | 'bn', string[]> = {
+export const SPICE_WORDS: Record<'en' | 'bn', string[]> = {
   en: ['Not spicy', 'Mild', 'Medium', 'Hot', 'Naga hot'],
   bn: ['ঝাল নেই', 'মৃদু', 'মাঝারি', 'ঝাল', 'নাগা ঝাল'],
 };

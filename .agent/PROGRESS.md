@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G5 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G6 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G4 Menu home GG1 complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G5 Item detail GG2 complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -22,8 +22,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G2 | Antigravity | complete ✅ |
 | G3 | Antigravity | complete ✅ |
 | G4 | Antigravity | complete ✅ |
-| G5 | Antigravity | in progress 🟡 |
-| G6–G9 | — | not started |
+| G5 | Antigravity | complete ✅ |
+| G6 | Antigravity | in progress 🟡 |
+| G7–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -351,6 +352,26 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ 104/104 e2e ✅ (12/12 GG menu + 45/45 Brew Bari + 6/6 GG staff)
 Commits / branch / PR: `task/G4-menu-home`
 Next: G5 Item detail (GG2).
+
+### 2026-10-14 — Antigravity — G5 Item detail (GG2)
+Did:
+- Implemented option group displays in `src/components/menu/ItemDetailSheet.tsx` based on `group.display`:
+  - `cards`: 2-column cards for "Make it a meal?", struck price (`choice.compare_delta`), and `SAVE ৳...` badge.
+  - `list`: Vertical radio list with dot indicators and price deltas (used for drinks, dips, flavours).
+  - `chips`: Grid of chili chips with `heat` count (1–4 chili icons) and active brand fill (used for spice level).
+  - `multi-tiles`: 2-column checkbox tiles with checkmark indicators (used for add-on extras).
+  - `pills`: Preserved as the backward-compatible fallback for Brew Bari.
+- Implemented `show_if` conditional visibility with smooth, reduced-motion-safe height/fade entrance animation (`.animate-group-reveal` in `globals.css`).
+- Integrated `activeGroups` & `cleanSelections` so unselecting parent options clears child selections and recalculates line prices accurately.
+- Implemented dynamic Add button labeling ("Add meal" when meal choice is picked, "Add to cart" otherwise, and Brew Bari "Add").
+- Disabled Add button whenever required active option groups are unfulfilled.
+- Updated special instructions textarea and bottom stepper/button to adapt to `theme.layout.itemCard === 'bold'`.
+- Added unit tests in `tests/unit/item-sheet.test.tsx` (106/106 unit tests green across 19 files).
+- Added GG2 E2E test in `tests/e2e/gg-menu.spec.ts` (15/15 green across guest, staff, and staff-phone).
+- Verified Brew Bari ordering suite (`p3-order-bill-review.spec.ts`, `sold-out-race.spec.ts`, `p1-menu.spec.ts` 9/9 green).
+Tests: typecheck ✅ lint ✅ unit ✅ 106/106 e2e ✅ (15/15 GG menu + 9/9 Brew Bari core)
+Commits / branch / PR: `task/G5-item-detail`
+Next: G6 Cart & order tracking (GG3, GG4).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

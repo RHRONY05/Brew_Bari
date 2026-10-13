@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Grill Ghar item detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&amp;family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#3a2620}
+a{color:#D2291C;text-decoration:none}a:hover{color:#8E1A12}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 1240px; box-sizing: border-box; background: rgba(43,21,16,0.55); font-family: Poppins, sans-serif; color: #2B1510; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 40px">
+  <section role="dialog" aria-modal="true" aria-labelledby="item-h" style="background: #FFF5EA; border-radius: 28px 28px 0 0; display: flex; flex-direction: column; position: relative; flex: 1">
+    <div aria-hidden="true" style="width: 44px; height: 5px; border-radius: 3px; background: #E2C3AD; align-self: center; margin: 10px 0 0"></div>
+    <a href="Main.dc.html" aria-label="Close" style="position: absolute; top: 22px; right: 16px; width: 40px; height: 40px; border-radius: 50%; background: rgba(255,255,255,0.95); display: flex; align-items: center; justify-content: center; color: #2B1510; box-shadow: 0 4px 12px rgba(43,21,16,0.15); z-index: 2">
+      <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+    </a>
+
+    <!-- Photo -->
+    <div style="margin: 12px 16px 0; height: 220px; border-radius: 22px; background: #FBE3CC; display: flex; align-items: center; justify-content: center; flex-direction: column; gap: 6px; position: relative">
+      <span style="position: absolute; top: 12px; left: 12px; background: #FFB22C; color: #2B1510; font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em">New</span>
+      <svg aria-hidden="true" width="70" height="70" viewBox="0 0 24 24" fill="none" stroke="#B5462E" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h16a1 1 0 0 0 1-1c0-3.3-4-6-9-6s-9 2.7-9 6a1 1 0 0 0 1 1z"></path><path d="M3 14h18"></path><path d="M4 17h16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"></path></svg>
+      <span style="font-size: 10px; font-weight: 600; color: #B5462E; text-transform: uppercase; letter-spacing: 0.06em">Photo: Naga Smash Burger</span>
+    </div>
+
+    <!-- Title block -->
+    <div style="padding: 16px 16px 4px; display: flex; flex-direction: column; gap: 6px">
+      <h2 id="item-h" style="margin: 0; font-family: Cinzel, serif; font-weight: 800; font-size: 24px; line-height: 1.15">Naga Smash Burger</h2>
+      <p style="margin: 0; font-size: 13.5px; line-height: 1.5; color: #6B4A3F">Two smashed beef patties, naga-chili mayo, cheddar, pickled onion, toasted brioche.</p>
+      <div style="display: flex; gap: 8px; flex-wrap: wrap; padding-top: 4px">
+        <span style="display: inline-flex; align-items: center; gap: 5px; background: #FFFFFF; border: 1px solid #F0DCC8; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+          ~12 min
+        </span>
+        <span style="display: inline-flex; align-items: center; gap: 5px; background: #FFFFFF; border: 1px solid #F0DCC8; font-size: 12px; font-weight: 600; padding: 5px 10px; border-radius: 999px; color: #D2291C">
+          <svg aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3c-.6 1-.5 2 .2 2.7C14 6 11 9 9.5 13 8 16.8 5.5 19 3 20c4.5 1.3 10.3.2 13.9-4 2.6-3 3.5-6.5 2.6-9.2.9-.4 1.4-1.1 1.5-2-.9.4-1.9.3-2.6-.3C18 4 17.5 3.6 17 3z"></path></svg>
+          Spicy
+        </span>
+        <span style="font-weight: 800; font-size: 18px; margin-left: auto">৳320</span>
+      </div>
+    </div>
+
+    <!-- Make it a meal -->
+    <fieldset style="border: 0; margin: 0; padding: 18px 16px 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="padding: 0 0 10px; font-weight: 700; font-size: 15px">Make it a meal?</legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <button type="button" onClick="{{pickSolo}}" aria-pressed="{{soloPressed}}" style="{{soloStyle}}">
+          <span style="font-weight: 700; font-size: 14px">Just the burger</span>
+          <span style="font-size: 12px; color: #6B4A3F">No sides</span>
+          <span style="font-weight: 700; font-size: 13px; margin-top: 6px">+৳0</span>
+        </button>
+        <button type="button" onClick="{{pickMeal}}" aria-pressed="{{mealPressed}}" style="{{mealStyle}}">
+          <span style="position: absolute; top: -9px; right: 10px; background: #FFB22C; color: #2B1510; font-size: 10px; font-weight: 800; padding: 3px 8px; border-radius: 999px">SAVE ৳50</span>
+          <span style="font-weight: 700; font-size: 14px">Meal</span>
+          <span style="font-size: 12px; color: #6B4A3F">Fries + drink</span>
+          <span style="font-weight: 700; font-size: 13px; margin-top: 6px">+৳150 <span style="text-decoration: line-through; color: #8A6A5E; font-weight: 500">৳200</span></span>
+        </button>
+      </div>
+    </fieldset>
+
+    <!-- Drink (only when meal) -->
+    <sc-if value="{{meal}}" hint-placeholder-val="{{true}}">
+      <fieldset style="border: 0; margin: 0; padding: 16px 16px 0">
+        <legend style="padding: 0 0 10px; display: flex; align-items: center; gap: 8px; width: 100%">
+          <span style="font-weight: 700; font-size: 15px">Your meal drink</span>
+          <span style="font-size: 11px; font-weight: 700; color: #8E1A12; background: #FBE3CC; padding: 2px 8px; border-radius: 999px">Required</span>
+        </legend>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          <sc-for list="{{drinks}}" as="d" hint-placeholder-count="4">
+            <button type="button" onClick="{{d.pick}}" aria-pressed="{{d.pressed}}" style="display: flex; align-items: center; gap: 12px; min-height: 48px; padding: 0 14px; background: #FFFFFF; border-radius: 14px; border: {{d.border}}; font: 500 14px Poppins, sans-serif; color: #2B1510; text-align: left">
+              <span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 50%; border: {{d.dotBorder}}; box-sizing: border-box; flex-shrink: 0"></span>
+              <span style="flex: 1">{{d.label}}</span>
+              <span style="font-weight: 600; font-size: 13px; color: #6B4A3F">{{d.extra}}</span>
+            </button>
+          </sc-for>
+        </div>
+      </fieldset>
+    </sc-if>
+
+    <!-- Spice level -->
+    <fieldset style="border: 0; margin: 0; padding: 18px 16px 0">
+      <legend style="padding: 0 0 10px; display: flex; align-items: center; gap: 8px; width: 100%">
+        <span style="font-weight: 700; font-size: 15px">Spice level</span>
+        <span style="font-size: 11px; font-weight: 700; color: #8E1A12; background: #FBE3CC; padding: 2px 8px; border-radius: 999px">Required</span>
+      </legend>
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{spices}}" as="s" hint-placeholder-count="4">
+          <button type="button" onClick="{{s.pick}}" aria-pressed="{{s.pressed}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 10px 4px; min-height: 60px; border-radius: 14px; border: {{s.border}}; background: {{s.bg}}; color: {{s.ink}}; font: 600 12.5px Poppins, sans-serif">
+            <span style="display: flex; gap: 1px" aria-hidden="true">
+              <sc-for list="{{s.chilis}}" as="ch" hint-placeholder-count="1">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3c-.6 1-.5 2 .2 2.7C14 6 11 9 9.5 13 8 16.8 5.5 19 3 20c4.5 1.3 10.3.2 13.9-4 2.6-3 3.5-6.5 2.6-9.2.9-.4 1.4-1.1 1.5-2-.9.4-1.9.3-2.6-.3C18 4 17.5 3.6 17 3z"></path></svg>
+              </sc-for>
+            </span>
+            {{s.label}}
+          </button>
+        </sc-for>
+      </div>
+    </fieldset>
+
+    <!-- Add-ons -->
+    <fieldset style="border: 0; margin: 0; padding: 18px 16px 0">
+      <legend style="padding: 0 0 10px; display: flex; align-items: center; gap: 8px; width: 100%">
+        <span style="font-weight: 700; font-size: 15px">Add extra</span>
+        <span style="font-size: 12px; color: #6B4A3F">Pick any</span>
+      </legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <sc-for list="{{addons}}" as="a" hint-placeholder-count="4">
+          <button type="button" onClick="{{a.toggle}}" aria-pressed="{{a.pressed}}" style="display: flex; align-items: center; gap: 10px; min-height: 52px; padding: 0 12px; background: #FFFFFF; border-radius: 14px; border: {{a.border}}; font: 500 13.5px Poppins, sans-serif; color: #2B1510; text-align: left">
+            <span aria-hidden="true" style="width: 20px; height: 20px; border-radius: 6px; background: {{a.boxBg}}; border: {{a.boxBorder}}; box-sizing: border-box; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#FFF5EA" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>
+            </span>
+            <span style="flex: 1; display: flex; flex-direction: column; line-height: 1.2">
+              <span>{{a.label}}</span>
+              <span style="font-size: 12px; font-weight: 600; color: #6B4A3F">+৳{{a.price}}</span>
+            </span>
+          </button>
+        </sc-for>
+      </div>
+    </fieldset>
+
+    <!-- Note -->
+    <div style="padding: 18px 16px 0; display: flex; flex-direction: column; gap: 8px">
+      <label for="kitchen-note" style="font-weight: 700; font-size: 15px">Note for the kitchen <span style="font-weight: 400; font-size: 12px; color: #6B4A3F">(optional)</span></label>
+      <textarea id="kitchen-note" rows="2" placeholder="e.g. no onion, well done" style="resize: none; border: 1px solid #F0DCC8; border-radius: 14px; background: #FFFFFF; padding: 12px 14px; font: 400 14px Poppins, sans-serif; color: #2B1510"></textarea>
+    </div>
+
+    <!-- Sticky add bar -->
+    <div style="position: sticky; bottom: 0; margin-top: auto; padding: 14px 16px 18px; background: #FFF5EA; border-top: 1px solid #F0DCC8; display: flex; gap: 12px; align-items: center">
+      <div role="group" aria-label="Quantity" style="display: flex; align-items: center; background: #FFFFFF; border: 1px solid #F0DCC8; border-radius: 16px; height: 54px">
+        <button type="button" aria-label="Decrease quantity" onClick="{{dec}}" style="width: 44px; height: 54px; border: 0; background: transparent; color: #2B1510; display: flex; align-items: center; justify-content: center">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"></path></svg>
+        </button>
+        <span style="min-width: 22px; text-align: center; font-weight: 700; font-size: 16px">{{qty}}</span>
+        <button type="button" aria-label="Increase quantity" onClick="{{inc}}" style="width: 44px; height: 54px; border: 0; background: transparent; color: #2B1510; display: flex; align-items: center; justify-content: center">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+        </button>
+      </div>
+      <a href="Cart.dc.html" style="flex: 1; height: 54px; border-radius: 16px; background: {{addBg}}; color: #FFF5EA; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; font-weight: 700; font-size: 15px; box-shadow: 0 8px 20px rgba(210,41,28,0.3)">
+        <span>{{addLabel}}</span>
+        <span>৳{{total}}</span>
+      </a>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { meal: true, drink: 'coke', spice: 'naga', addons: { cheese: true }, qty: 1 };
+  }
+  renderVals() {
+    const s = this.state;
+    const base = 320;
+    const cardBase = 'position: relative; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; text-align: left; padding: 14px; border-radius: 16px; font-family: Poppins, sans-serif; color: #2B1510; min-height: 96px; ';
+    const on = cardBase + 'background: #FFFFFF; border: 2px solid #D2291C; box-shadow: 0 6px 16px rgba(210,41,28,0.15);';
+    const off = cardBase + 'background: #FFFFFF; border: 1.5px solid #F0DCC8;';
+
+    const drinkList = [['coke', 'Coca-Cola 250 ml', 0], ['sprite', 'Sprite 250 ml', 0], ['lassi', 'Mango lassi', 30], ['water', 'Mineral water', 0]];
+    const drinks = drinkList.map(([id, label, extra]) => {
+      const sel = s.drink === id;
+      return {
+        label, extra: extra ? '+৳' + extra : '', pressed: sel ? 'true' : 'false',
+        border: sel ? '2px solid #D2291C' : '1.5px solid #F0DCC8',
+        dotBorder: sel ? '6px solid #D2291C' : '2px solid #CDB2A2',
+        pick: () => this.setState({ drink: id }),
+      };
+    });
+
+    const spiceList = [['mild', 'Mild', 1], ['medium', 'Medium', 2], ['hot', 'Hot', 3], ['naga', 'Naga', 4]];
+    const spices = spiceList.map(([id, label, n]) => {
+      const sel = s.spice === id;
+      return {
+        label, pressed: sel ? 'true' : 'false',
+        chilis: Array.from({ length: n }, (_, i) => i),
+        bg: sel ? '#D2291C' : '#FFFFFF',
+        ink: sel ? '#FFF5EA' : '#2B1510',
+        border: sel ? '2px solid #D2291C' : '1.5px solid #F0DCC8',
+        pick: () => this.setState({ spice: id }),
+      };
+    });
+
+    const addonList = [['cheese', 'Extra cheese', 40], ['patty', 'Extra patty', 120], ['jalapeno', 'Jalapeños', 30], ['egg', 'Fried egg', 30]];
+    const addons = addonList.map(([id, label, price]) => {
+      const sel = !!s.addons[id];
+      return {
+        label, price, pressed: sel ? 'true' : 'false',
+        border: sel ? '2px solid #D2291C' : '1.5px solid #F0DCC8',
+        boxBg: sel ? '#D2291C' : '#FFFFFF',
+        boxBorder: sel ? '0' : '2px solid #CDB2A2',
+        toggle: () => this.setState({ addons: { ...s.addons, [id]: !sel } }),
+      };
+    });
+
+    let unit = base;
+    if (s.meal) unit += 150 + (s.drink === 'lassi' ? 30 : 0);
+    addonList.forEach(([id, , price]) => { if (s.addons[id]) unit += price; });
+    const total = (unit * s.qty).toLocaleString('en-IN');
+
+    return {
+      meal: s.meal,
+      soloStyle: s.meal ? off : on,
+      mealStyle: s.meal ? on : off,
+      soloPressed: s.meal ? 'false' : 'true',
+      mealPressed: s.meal ? 'true' : 'false',
+      pickSolo: () => this.setState({ meal: false }),
+      pickMeal: () => this.setState({ meal: true }),
+      drinks, spices, addons,
+      qty: s.qty,
+      inc: () => this.setState({ qty: Math.min(20, s.qty + 1) }),
+      dec: () => this.setState({ qty: Math.max(1, s.qty - 1) }),
+      total,
+      addLabel: s.meal ? 'Add meal' : 'Add to cart',
+      addBg: '#D2291C',
+    };
+  }
+}
+</script>
+</body>
+</html>

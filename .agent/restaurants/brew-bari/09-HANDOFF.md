@@ -1,5 +1,7 @@
 # 09 — Handoff to Antigravity (for the human)
 
+> **Archive: Brew Bari build (2026-10-12, finished, tag `brew-bari-v1`).** Kept as the record. Paths here are from before the 2026-10-14 reorganisation: shared docs (00–04, 06, 10) are now in `.agent/platform/`, Brew Bari's own files are in this folder, routes are `/<slug>` (see `platform/10-PLATFORM.md`). Do not pick tasks from here.
+
 This file is for **you**, not the agents. It says how to start the build and how to keep it on track. The prompts are copy-paste ready.
 
 ## How the pieces fit

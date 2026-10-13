@@ -1,5 +1,7 @@
 # 07 — Tasks
 
+> **Archive: Brew Bari build (2026-10-12, finished, tag `brew-bari-v1`).** Kept as the record. Paths here are from before the 2026-10-14 reorganisation: shared docs (00–04, 06, 10) are now in `.agent/platform/`, Brew Bari's own files are in this folder, routes are `/<slug>` (see `platform/10-PLATFORM.md`). Do not pick tasks from here.
+
 Rules: see 00-AGENT-RULES.md. Pick a task whose **Depends on** are all `[x]`. Mark it `— in progress: <agent>` when you start, tick `[x]` + one-line note when done.
 
 **Lanes** (can run in parallel once M0 is done): **A** = database & API · **B** = guest UI · **C** = staff UI. Within a lane, go in order.

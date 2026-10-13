@@ -1,6 +1,6 @@
 # 06 — Testing
 
-Three layers. Each task in 07-TASKS.md names the tests it must add or pass.
+Three layers. Each task in a restaurant's `restaurants/<slug>/07-TASKS.md` names the tests it must add or pass. Brew Bari's specs (below) are the regression suite: they must stay green whatever restaurant you are building.
 
 | Layer | Tool | Runs against | Command |
 |---|---|---|---|
@@ -90,7 +90,7 @@ Projects: `guest` (device: Pixel 7 — 412×915, touch), `staff` (Desktop Chrome
 | `auth.spec.ts` | `/staff/counter` redirects to login when logged out; counter role cannot open `/staff/admin` |
 
 ## 5. Non-functional checks (task T7.3)
-- **Lighthouse (mobile)** on `/m/brew-bari`: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95. Record scores in 07-TASKS.md.
+- **Lighthouse (mobile)** on `/m/brew-bari`: Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 95. Record scores in the restaurant's 07-TASKS.md.
 - **Bundle**: `next build` output — `/m/[slug]` first-load JS ≤ 150 KB gz.
 - **Long-running counter**: leave the board open 30 min with a request every 2 min (script) — no missed events, memory stable, reconnect after toggling Wi-Fi off/on.
 - **Manual device check**: one real Android phone (Chrome) + one iPhone (Safari) scanning a printed QR; Bangla renders correctly; sheets don't fight the browser's bottom bar (use `dvh` + safe-area insets).

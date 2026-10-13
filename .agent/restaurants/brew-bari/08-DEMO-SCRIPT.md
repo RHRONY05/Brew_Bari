@@ -1,5 +1,7 @@
 # 08 — Demo script (≈ 5 minutes)
 
+> **Archive: Brew Bari build (2026-10-12, finished, tag `brew-bari-v1`).** Kept as the record. Paths here are from before the 2026-10-14 reorganisation: shared docs (00–04, 06, 10) are now in `.agent/platform/`, Brew Bari's own files are in this folder, routes are `/<slug>` (see `platform/10-PLATFORM.md`). Do not pick tasks from here.
+
 The finished product must support this pitch exactly. Agents: use it as the final acceptance test (T7.5).
 
 **Setup:** salesperson's laptop (or tablet) shows the **Counter board** logged in as admin, "Start shift" pressed, sound on. Printed table QR card (Table 1) on the owner's table. Package set to **P3**. Phone charged, on 4G.

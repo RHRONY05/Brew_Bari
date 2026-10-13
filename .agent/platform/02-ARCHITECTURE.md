@@ -4,7 +4,7 @@
 | Layer | Choice | Notes |
 |---|---|---|
 | Framework | **Next.js** (latest stable, App Router), **React 19**, **TypeScript strict** | RSC for menu pages; client components only for interaction |
-| Styling | **Tailwind CSS v4** + **shadcn/ui** | Tokens from 05-UI-DESIGN.md mapped to CSS variables |
+| Styling | **Tailwind CSS v4** + **shadcn/ui** | Tokens as CSS variables: defaults in `globals.css`, per-restaurant overrides in `src/themes` (see [10-PLATFORM.md](10-PLATFORM.md)) |
 | Icons | `lucide-react` | |
 | Fonts | `next/font/google`: **Plus Jakarta Sans** (Latin) + **Hind Siliguri** (Bangla) | |
 | Backend | **Supabase**: Postgres + RLS + RPC functions, Auth (staff), Realtime (counter), Storage (images) | Cloud project managed via Supabase MCP |

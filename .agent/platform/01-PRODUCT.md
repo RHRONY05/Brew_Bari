@@ -5,7 +5,7 @@ Replace the thick printed menu with a QR code. A guest scans, sees a beautiful m
 
 **Market:** cafés and restaurants in Chattogram, Bangladesh. Owners are not technical; staff use cheap Android phones/tablets; guests use Android phones on 4G. Bangla matters.
 
-**This repo is the demo** that Turjo shows to owners. The demo shop is **Brew Bari — Coffee & Juice** (fictional), GEC Circle, Chattogram.
+**This repo is the demo** that Turjo shows to owners. Since 2026-10-14 it is the multi-restaurant platform **Menuwala** ([10-PLATFORM.md](10-PLATFORM.md)). This file is the product for **every** restaurant; examples use restaurant #1, **Brew Bari — Coffee & Juice** (fictional, GEC Circle, Chattogram). What a restaurant adds or changes is in its own `restaurants/<slug>/01-BRIEF.md`.
 
 ## Packages (the core of the sales pitch)
 The café's package is a single setting (`restaurants.package` = 1, 2 or 3). All code paths check it through `features(pkg)`.
@@ -61,7 +61,7 @@ Google and Facebook do not allow third-party apps to post reviews on a user's be
 - **Owner / admin** — edits the menu, prices, offers, tables, settings. Not technical; uses a phone or laptop.
 
 ## User stories & acceptance criteria
-IDs are referenced by tasks in 07-TASKS.md.
+IDs are referenced by the tasks in each restaurant's `restaurants/<slug>/07-TASKS.md`.
 
 ### Guest — menu (all packages)
 - **US-01 Open the menu.** Scanning the shop QR opens `/m/brew-bari`; scanning a table QR opens `/t/<token>`. *AC:* first meaningful content < 2.5 s on a mid-range phone over 4G; no login, no pop-ups, no cookie banner (no tracking).

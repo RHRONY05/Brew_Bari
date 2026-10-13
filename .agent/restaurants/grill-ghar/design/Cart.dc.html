@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Grill Ghar cart</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&amp;family=Poppins:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#3a2620}
+a{color:#D2291C;text-decoration:none}a:hover{color:#8E1A12}
+.no-sb::-webkit-scrollbar{display:none}
+</style>
+</helmet>
+<div style="width: 390px; min-height: 980px; box-sizing: border-box; background: rgba(43,21,16,0.55); font-family: Poppins, sans-serif; color: #2B1510; display: flex; flex-direction: column; justify-content: flex-end; padding-top: 40px">
+  <section role="dialog" aria-modal="true" aria-labelledby="cart-h" style="background: #FFF5EA; border-radius: 28px 28px 0 0; display: flex; flex-direction: column; flex: 1">
+    <div aria-hidden="true" style="width: 44px; height: 5px; border-radius: 3px; background: #E2C3AD; align-self: center; margin: 10px 0 0"></div>
+    <header style="display: flex; align-items: center; gap: 10px; padding: 14px 16px 6px">
+      <h2 id="cart-h" style="margin: 0; flex: 1; font-family: Cinzel, serif; font-weight: 800; font-size: 22px">Your order</h2>
+      <span style="background: #2B1510; color: #FFF5EA; font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px">Table 7</span>
+      <a href="Main.dc.html" aria-label="Close" style="width: 40px; height: 40px; border-radius: 50%; background: #FFFFFF; border: 1px solid #F0DCC8; display: flex; align-items: center; justify-content: center; color: #2B1510">
+        <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+      </a>
+    </header>
+
+    <!-- Lines -->
+    <ul style="list-style: none; margin: 0; padding: 8px 16px 0; display: flex; flex-direction: column; gap: 10px">
+      <sc-for list="{{lines}}" as="l" hint-placeholder-count="2">
+        <li style="background: #FFFFFF; border: 1px solid #F0DCC8; border-radius: 18px; padding: 12px; display: flex; gap: 12px">
+          <div style="width: 64px; height: 64px; border-radius: 14px; background: #FBE3CC; flex-shrink: 0; display: flex; align-items: center; justify-content: center">
+            <svg aria-hidden="true" width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#B5462E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="{{l.icon}}"></path></svg>
+          </div>
+          <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+            <div style="display: flex; align-items: center; gap: 6px">
+              <span style="font-weight: 700; font-size: 14px; line-height: 1.25">{{l.name}}</span>
+              <sc-if value="{{l.isMeal}}" hint-placeholder-val="{{true}}">
+                <span style="background: #FFB22C; color: #2B1510; font-size: 10px; font-weight: 800; padding: 2px 7px; border-radius: 999px; text-transform: uppercase">Meal</span>
+              </sc-if>
+            </div>
+            <div style="font-size: 12px; color: #6B4A3F; line-height: 1.4">{{l.options}}</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; padding-top: 4px">
+              <div role="group" aria-label="Quantity of {{l.name}}" style="display: flex; align-items: center; border: 1px solid #F0DCC8; border-radius: 12px; height: 36px">
+                <button type="button" aria-label="Decrease" onClick="{{l.dec}}" style="width: 36px; height: 36px; border: 0; background: transparent; color: #2B1510; display: flex; align-items: center; justify-content: center">
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M5 12h14"></path></svg>
+                </button>
+                <span style="min-width: 18px; text-align: center; font-weight: 700; font-size: 14px">{{l.qty}}</span>
+                <button type="button" aria-label="Increase" onClick="{{l.inc}}" style="width: 36px; height: 36px; border: 0; background: transparent; color: #2B1510; display: flex; align-items: center; justify-content: center">
+                  <svg aria-hidden="true" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                </button>
+              </div>
+              <span style="font-weight: 800; font-size: 15px">৳{{l.total}}</span>
+            </div>
+          </div>
+        </li>
+      </sc-for>
+    </ul>
+
+    <!-- Goes well with -->
+    <section aria-labelledby="upsell-h" style="padding: 18px 0 0">
+      <h3 id="upsell-h" style="margin: 0; padding: 0 16px 10px; font-weight: 700; font-size: 15px">Goes well with</h3>
+      <div class="no-sb" style="display: flex; gap: 10px; overflow-x: auto; padding: 0 16px 4px; scrollbar-width: none">
+        <sc-for list="{{upsell}}" as="u" hint-placeholder-count="3">
+          <div style="flex-shrink: 0; width: 200px; background: #FFFFFF; border: 1px solid #F0DCC8; border-radius: 16px; padding: 10px; display: flex; align-items: center; gap: 10px">
+            <div style="width: 46px; height: 46px; border-radius: 12px; background: #FBE3CC; flex-shrink: 0; display: flex; align-items: center; justify-content: center">
+              <svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#B5462E" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="{{u.icon}}"></path></svg>
+            </div>
+            <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; line-height: 1.25">
+              <span style="font-weight: 600; font-size: 13px">{{u.name}}</span>
+              <span style="font-weight: 700; font-size: 13px; color: #6B4A3F">৳{{u.price}}</span>
+            </div>
+            <button type="button" aria-label="Add {{u.name}}" onClick="{{u.add}}" style="width: 36px; height: 36px; border-radius: 50%; border: 0; background: #D2291C; display: flex; align-items: center; justify-content: center; flex-shrink: 0">
+              <svg aria-hidden="true" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFF5EA" stroke-width="2.8" stroke-linecap="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+            </button>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <!-- Order note -->
+    <div style="padding: 18px 16px 0; display: flex; flex-direction: column; gap: 8px">
+      <label for="order-note" style="font-weight: 700; font-size: 15px">Note for the kitchen <span style="font-weight: 400; font-size: 12px; color: #6B4A3F">(optional)</span></label>
+      <textarea id="order-note" rows="2" placeholder="e.g. bring the wings first" style="resize: none; border: 1px solid #F0DCC8; border-radius: 14px; background: #FFFFFF; padding: 12px 14px; font: 400 14px Poppins, sans-serif; color: #2B1510"></textarea>
+    </div>
+
+    <!-- Totals + place order -->
+    <div style="margin-top: auto; padding: 16px 16px 18px; display: flex; flex-direction: column; gap: 12px">
+      <div style="background: #FFFFFF; border: 1px solid #F0DCC8; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px">
+        <div style="display: flex; justify-content: space-between; font-size: 14px; color: #6B4A3F"><span>Subtotal · {{count}} items</span><span style="color: #2B1510; font-weight: 600">৳{{subtotal}}</span></div>
+        <sc-if value="{{hasSavings}}" hint-placeholder-val="{{true}}">
+          <div style="display: flex; justify-content: space-between; font-size: 14px; color: #2E7D32; font-weight: 600"><span>You save with meals</span><span>৳{{savings}}</span></div>
+        </sc-if>
+        <div style="font-size: 12px; color: #6B4A3F">VAT 5% is added on the bill. Pay at the counter.</div>
+      </div>
+      <a href="Status.dc.html" style="height: 56px; border-radius: 18px; background: #D2291C; color: #FFF5EA; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; font-weight: 700; font-size: 16px; box-shadow: 0 10px 24px rgba(210,41,28,0.32)">
+        <span style="display: inline-flex; align-items: center; gap: 10px">
+          <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c1 3.5 5 5.5 5 10a5 5 0 0 1-10 0c0-2.2 1.2-3.6 2.4-4.6.3 1.7 1.1 2.6 2.1 3.1C11 9 11 6 12 3z"></path></svg>
+          Send to kitchen
+        </span>
+        <span>৳{{subtotal}}</span>
+      </a>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":980}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { qty: { burger: 1, wings: 1, shake: 0, fries: 0, lassi: 0 } };
+  }
+  renderVals() {
+    const q = this.state.qty;
+    const burgerIcon = 'M4 11h16a1 1 0 0 0 1-1c0-3.3-4-6-9-6s-9 2.7-9 6a1 1 0 0 0 1 1zM3 14h18M4 17h16v1a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z';
+    const chickenIcon = 'M15.4 15.6c-2.7 2.7-6.4 3.3-8.3 1.4s-1.3-5.6 1.4-8.3 6.4-3.3 8.3-1.4 1.3 5.6-1.4 8.3zM7.1 17l-3.6 3.6M4 18.5l1.5 1.5';
+    const shakeIcon = 'M7 8h10l-1.5 13h-7L7 8zM6 8h12M12 8l2-6';
+    const friesIcon = 'M5 10h14l-2 11H7L5 10zM7 10 6 3M10 10V2M14 10V2M17 10l1-7';
+    const catalog = {
+      burger: { name: 'Naga Smash Burger', options: 'Meal: fries + Coca-Cola · Naga hot · Extra cheese', unit: 510, meal: true, saves: 50, icon: burgerIcon },
+      wings: { name: 'Hot Wings · 6 pc', options: 'Hot · Garlic dip', unit: 300, meal: false, saves: 0, icon: chickenIcon },
+      shake: { name: 'Oreo Shake', options: '', unit: 220, meal: false, saves: 0, icon: shakeIcon },
+      fries: { name: 'Masala Fries', options: '', unit: 150, meal: false, saves: 0, icon: friesIcon },
+      lassi: { name: 'Mango Lassi', options: '', unit: 150, meal: false, saves: 0, icon: shakeIcon },
+    };
+    const set = (id, n) => this.setState({ qty: { ...q, [id]: Math.max(0, Math.min(20, n)) } });
+    const ids = Object.keys(catalog).filter((id) => q[id] > 0);
+    const lines = ids.map((id) => {
+      const c = catalog[id];
+      return {
+        name: c.name, options: c.options || 'Regular', isMeal: c.meal, icon: c.icon, qty: q[id],
+        total: (c.unit * q[id]).toLocaleString('en-IN'),
+        inc: () => set(id, q[id] + 1),
+        dec: () => set(id, q[id] - 1),
+      };
+    });
+    const upsell = ['shake', 'fries', 'lassi'].filter((id) => q[id] === 0).map((id) => ({
+      name: catalog[id].name, price: catalog[id].unit, icon: catalog[id].icon, add: () => set(id, 1),
+    }));
+    let sub = 0, saves = 0, count = 0;
+    ids.forEach((id) => { sub += catalog[id].unit * q[id]; saves += catalog[id].saves * q[id]; count += q[id]; });
+    return {
+      lines, upsell, count,
+      subtotal: sub.toLocaleString('en-IN'),
+      savings: saves,
+      hasSavings: saves > 0,
+    };
+  }
+}
+</script>
+</body>
+</html>

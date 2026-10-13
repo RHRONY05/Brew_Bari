@@ -9,6 +9,8 @@ Then run `supabase/seed.sql` (via `execute_sql`) once.
 
 The SQL below is the **intended design**. Agents may fix syntax/bugs found while applying it, but must not change behaviour or names without updating this file and 04-API.md.
 
+**Later migrations** change parts of this design. Read them in `supabase/migrations/` (newest wins): `20261014000005_multi_restaurant.sql` (see [10-PLATFORM.md](10-PLATFORM.md)); `20261015000006_option_rules.sql` (Grill Ghar, see §8 below once added).
+
 ## Entity overview
 ```
 restaurants 1─* categories 1─* menu_items
@@ -704,6 +706,8 @@ alter publication supabase_realtime add table public.service_requests, public.ta
 | Regenerate QR | `update tables set qr_token = encode(gen_random_bytes(12),'hex') where id=$1` (do this through a tiny admin RPC or `execute` in a server action; `gen_random_bytes` is fine in SQL — from JS generate 24 hex chars with `crypto.getRandomValues`) |
 
 ## 6. Seed data — `supabase/seed.sql`
+> This is **Brew Bari's** seed (restaurant #1). Every other restaurant has its own `supabase/seed-<slug>.sql`, specified in its `restaurants/<slug>/` docs.
+
 Images are `null` in the seed; task T6.6 uploads photos and updates `image_url`. Staff users are created in Supabase Auth by the agent (MCP/Dashboard), then linked with the `insert into staff` at the bottom. **Never put passwords in the repo.**
 
 ```sql

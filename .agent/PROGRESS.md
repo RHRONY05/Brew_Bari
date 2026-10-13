@@ -1,20 +1,25 @@
 # PROGRESS — the project's memory
 
 **Every agent reads this first and updates it before ending any session.** It is the single place a human or a new agent looks to know: what's done, what's in progress, what's next, and what went wrong.
-`07-TASKS.md` is the *plan* (what to build). This file is the *state* (where we are).
+The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to build). This file is the *state* (where we are), for the whole platform.
 
 ---
 
 ## Now
 | | |
 |---|---|
-| **Phase** | Brew Bari complete (tag `brew-bari-v1`). **Platform refactor done (Menuwala, multi-restaurant).** |
-| **Current milestone** | Grill Ghar (restaurant #2, fast food, P3 locked) — planning & design not started |
-| **Next task(s) to pick** | Wait for the human/Claude Code to write the Grill Ghar plan. Read [10-PLATFORM.md](10-PLATFORM.md) first. |
-| **Blocked on** | — |
-| **Last updated** | 2026-10-14 by Claude Code (multi-restaurant platform refactor) |
+| **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
+| **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — planned & designed, ready to build |
+| **Next task(s) to pick** | G0 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). Start at [restaurants/grill-ghar/README.md](restaurants/grill-ghar/README.md). |
+| **Blocked on** | Font licence question (see the bottom of the Grill Ghar task list) blocks shipping, not building. |
+| **Last updated** | 2026-10-14 by Claude Code (Grill Ghar plan + design, docs reorganised) |
 
-## Lane status
+## Grill Ghar status
+| Task | Agent | State |
+|---|---|---|
+| G0–G9 | — | not started |
+
+## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
 |---|---|---|---|---|
 | Setup (M0) | Antigravity | Foundation scaffold | main | complete ✅ |
@@ -43,6 +48,8 @@ Agents append here when they make a choice the docs didn't cover (one line each,
 - 2026-10-14 — Platform: one codebase for all restaurants (Menuwala). URLs `/<slug>` + `/<slug>/t/<token>`; themes in `src/themes`; platform-managed DB fields guarded by trigger. See 10-PLATFORM.md.
 - 2026-10-14 — Removed demo staff passwords from the public home page and the login quick-fill (they were in client code and in the public git history).
 - 2026-10-14 — E2E suite runs serially (`workers: 1`) and resets table 99 before each table-service spec: specs share live data and the 15-requests/10-min rate limit made later specs fail.
+- 2026-10-14 — Docs split into `.agent/platform/` (shared code, all restaurants) and `.agent/restaurants/<slug>/` (one restaurant). `agent.md` names the active restaurant. Brew Bari's old docs are kept under `restaurants/brew-bari/` with a banner.
+- 2026-10-14 — Grill Ghar: flame red + mustard theme, Cinzel / Poppins / Li Alinur Nobin, every category a slider, options model v2 (`show_if`, `display`, `compare_delta`, `heat`) + `menu_items.spice_level`. See `restaurants/grill-ghar/`.
 
 ## Session log
 Newest at the bottom. One entry per agent session. Keep entries short.
@@ -271,6 +278,13 @@ Tests: typecheck ✅ lint ✅ (no new errors; 50 pre-existing vs 55 before) unit
 Problems / surprises: the e2e suite was NOT green before this work (13/72 failed on `brew-bari-v1`): wrong assertions (print page image count, "BB" text) and shared table-99 state + rate limit. Fixed those tests.
 Next: plan & design Grill Ghar.
 
+### 2026-10-14 — Claude Code — Grill Ghar plan, design, docs reorganisation
+Did:
+- Docs reorganised: shared docs → `platform/`, Brew Bari docs/designs → `restaurants/brew-bari/` (banner added), `rules/brew-bari.md` → `rules/menuwala.md`; `agent.md`, rules, workflows point at the active restaurant.
+- Grill Ghar designed (4 guest screens, canvas "Grill Ghar UI", sources in `restaurants/grill-ghar/design/`) and planned: README (goal), 01-BRIEF, 03-DATA (options model v2, seed, images), 05-UI-DESIGN (theme + layout options), 07-TASKS (G0–G9), 08-DEMO-SCRIPT, 09-HANDOFF.
+Tests: n/a (docs only)
+Next: human answers the font licence question, then starts Antigravity with the prompt in `restaurants/grill-ghar/09-HANDOFF.md`.
+
 ## Open problems / known bugs
 | # | Found in | Problem | Status |
 |---|---|---|---|
@@ -278,6 +292,7 @@ Next: plan & design Grill Ghar.
 | 2 | Supabase advisor | Leaked-password protection is off. | Open — enable in Supabase → Authentication → Settings. |
 | 4 | Security (2026-10-14) | Table QR tokens for Brew Bari tables 1–3 were hard-coded in the public cart sheet, so they are in the public git history. | Open — regenerate them in Admin → Tables & QR → "New QR" (and reprint if cards were printed). |
 | 5 | Local folders (2026-10-14) | `D:\Projects\Coffe_house` was accidentally wiped by Claude Code (`git worktree remove --force` on a temporary checkout followed the old `brew-bari: file:../Coffe_house` self-link). Restored from GitHub (`main` 5eddc1e) + `.env.local` from `coffe-lane-b`. Untracked local files that were never committed could not be recovered. `D:\Projects\coffe-lane-b` and `coffe-lane-c` are now orphaned old worktrees (their lanes are merged). | Restored. Human: delete the two lane folders when convenient (check nothing of yours is inside first). Never `git worktree remove --force` a folder that contains `node_modules` links. |
+| 6 | Licence (2026-10-14) | Lipighor fonts (Li Hasan Protilipi in use; Li Alinur Nobin planned for Grill Ghar) say they may not be put on a website without Lipighor's consent. `public/fonts/AlinurTumatul.zip` is committed in `public/`, so it is downloadable from the live site and from the public repo. | Open — human: confirm web-embedding licence with Lipighor; remove font zips from `public/` (and consider purging them from git history). |
 | 3 | Dev only | Next.js logs "could not validate instant navigation" for `/staff/admin/*` because staff pages wait for the restaurant to load. No effect on build/production. | Known, accepted |
 
 

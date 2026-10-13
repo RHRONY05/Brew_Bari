@@ -1,5 +1,7 @@
 # Design source files
 
+> Brew Bari's screens (restaurant #1). Other restaurants reuse them for every screen they did not redraw. Shared docs mentioned below are in `.agent/platform/`; `05-UI-DESIGN.md` is `../05-UI-DESIGN.md`.
+
 These are the source files of the Claude Design canvas "Brew Bari UI" (https://claude.ai/artifact/QdYT3Ufcx86yhnXdGr41JM — private, agents cannot open it). **Read the files here instead.**
 
 Each `*.dc.html` file is one screen. They are **reference markup, not app code** — they run on a design runtime (`support.js`) that is not in this repo, so they won't render if opened directly. Read them for:

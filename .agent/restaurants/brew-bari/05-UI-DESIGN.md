@@ -1,5 +1,7 @@
 # 05 — UI design
 
+> **Brew Bari's UI spec** (restaurant #1). Still live: other restaurants reuse these layouts for every screen they did not redraw, with their own theme tokens. Since 2026-10-14 the shared docs (00–04, 06, 10) are in `.agent/platform/`; links like `02-ARCHITECTURE.md` below mean `../../platform/02-ARCHITECTURE.md`. Colours and fonts now come from `src/themes/`, not hard-coded values.
+
 > **Mockups:** source files are in **`.agent/design/`** (one `.dc.html` per screen — read `design/README.md`). The live canvas https://claude.ai/artifact/QdYT3Ufcx86yhnXdGr41JM is private to the owner; agents use the local files.
 > Artboards:
 > - **Guest (phone):** G1 Menu home · G2 Item detail · G3 Cart · G4 Table status · G5 Bill · G6 Feedback & review · G7 Café info

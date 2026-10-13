@@ -13,9 +13,37 @@ import {
   LayoutGrid,
   Flame,
   Sparkles,
+  ChefHat,
+  Hamburger,
+  Drumstick,
+  Sandwich,
   type LucideIcon,
 } from 'lucide-react';
 import { VenueIcon } from '@/themes/ThemeContext';
+
+export function FriesIcon({
+  className,
+  size = 24,
+  ...props
+}: React.ComponentProps<'svg'> & { size?: number }) {
+  return (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M5 10h14l-2 11H7L5 10zM7 10 6 3M10 10V2M14 10V2M17 10l1-7" />
+    </svg>
+  );
+}
 
 export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   // Emojis from database seed
@@ -29,6 +57,10 @@ export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   '⚡': Zap,
   '🔥': Flame,
   '✨': Sparkles,
+  '🍔': Hamburger,
+  '🍗': Drumstick,
+  '🍟': FriesIcon as unknown as LucideIcon,
+  '🌯': Sandwich,
 
   // Icon keys
   coffee: Coffee,
@@ -41,14 +73,20 @@ export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   zap: Zap,
   flame: Flame,
   sparkles: Sparkles,
+  meal: ChefHat,
+  burger: Hamburger,
+  burgers: Hamburger,
+  chicken: Drumstick,
+  shawarma: Sandwich,
+  fries: FriesIcon as unknown as LucideIcon,
+  shake: CupSoda,
+  shakes: CupSoda,
 
   // By English category name
   'hot coffee': Coffee,
   'cold coffee': Snowflake,
   'fresh juice': Citrus,
   'shakes & smoothies': CupSoda,
-  'shakes': CupSoda,
-  'smoothies': CupSoda,
   'tea': Leaf,
   'bites & desserts': Cookie,
   'bakery': Cookie,
@@ -56,6 +94,11 @@ export const CATEGORY_ICON_MAP: Record<string, LucideIcon> = {
   'combos': Gift,
   'quick': Zap,
   'all': LayoutGrid,
+  'set meals': ChefHat,
+  'fried chicken': Drumstick,
+  'shawarma & wraps': Sandwich,
+  'fries & sides': FriesIcon as unknown as LucideIcon,
+  'shakes & drinks': CupSoda,
 };
 
 export const CATEGORY_ICON_PRESETS = [

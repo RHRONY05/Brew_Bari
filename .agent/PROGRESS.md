@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G3 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G4 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G2 Theme & options scaffold complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G3 Seed, staff, images complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -20,7 +20,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G0 | Antigravity | complete ✅ |
 | G1 | Antigravity | complete ✅ |
 | G2 | Antigravity | complete ✅ |
-| G3–G9 | — | not started |
+| G3 | Antigravity | complete ✅ |
+| G4 | Antigravity | in progress 🟡 |
+| G5–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -326,7 +328,18 @@ Did:
 - Executed full 87-test Brew Bari Playwright E2E suite across guest Pixel 7, staff desktop, and staff phone (87/87 passed).
 Tests: typecheck ✅ lint ✅ unit ✅ 94/94 e2e ✅ 87/87 (full Brew Bari suite)
 Commits / branch / PR: `task/G2-theme-scaffold`
-Next: G3 Seed, staff, images.
+### 2026-10-14 — Antigravity — G3 Seed, staff, images
+Did:
+- Sourced, visually verified (halal, logo-free), and optimized 31 images (28 menu items, 3 offers) with sharp to WebP (500x500 for items <= 40KB, 800x800 for offers). Documented all attributions in `.agent/restaurants/grill-ghar/IMAGE-CREDITS.md`.
+- Authored and applied `supabase/seed-grill-ghar.sql` via Supabase MCP `execute_sql` (1 restaurant `grill-ghar` package 3 locked 5% VAT, 6 categories, 28 items, 3 offers, 13 tables 1–12 + 99).
+- Created staff users `admin@grillghar.test` and `counter@grillghar.test` in Supabase Auth & public.staff. Passwords stored solely in `.env.local` (`TEST_GG_*`), names in `.env.example`. Tested token auth.
+- Added custom `FriesIcon` in `src/components/ui/category-icon.tsx` mapped to `fries` category.
+- Created `tests/e2e/gg-staff.spec.ts` verifying GG admin & counter login, theme application, and package picker hidden (`package_locked = true`).
+- Updated `playwright.config.ts` to support `reuseExistingServer: !process.env.CI`.
+- Verified SQL tests (`09_multi_restaurant.sql` 11/11 green), typecheck (0 errors), unit tests (94/94 green), e2e tests (45/45 Brew Bari + 6/6 GG staff).
+Tests: typecheck ✅ lint ✅ unit ✅ 94/94 SQL ✅ (09) e2e ✅ (45/45 Brew Bari + 6/6 GG staff)
+Commits / branch / PR: `task/G3-seed-staff-images`
+Next: G4 Menu home (GG1).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

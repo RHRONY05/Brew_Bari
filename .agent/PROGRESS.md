@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G7 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G8 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G6 Cart & tracking GG3, GG4 complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G7 Staff side complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -24,7 +24,8 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G4 | Antigravity | complete ✅ |
 | G5 | Antigravity | complete ✅ |
 | G6 | Antigravity | complete ✅ |
-| G7–G9 | — | not started |
+| G7 | Antigravity | complete ✅ |
+| G8–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -397,6 +398,35 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 GG menu + 9/9 Brew Bari core)
 Commits / branch / PR: `task/G6-cart-tracking`
 Next: G7 Staff side.
+
+### Session 2026-10-14 — Antigravity (G7 Staff side)
+- Branch: `task/G7-staff-side`
+- Goal: Admin menu editor upgrades (`spice_level`, `pairs-well` tag, OptionsBuilder with `display`, `show_if`, `description_*`, `compare_delta`, `heat` and Zod schema validation), staff screen audit, theme consistency, and QR print colors.
+- Upgraded `src/app/staff/(protected)/admin/menu/page.tsx`:
+  - Added `spice_level` select (None, 1–4) with database persistence on save.
+  - Added `'pairs-well'` to `AVAILABLE_TAGS` for meal upsells.
+  - Replaced hardcoded `Coffee` icons with dynamic `VenueIcon` for item thumbnail and editor preview.
+  - Upgraded `OptionsBuilder`:
+    - Full support for `id` slugification, `name_en`, `name_bn`, `type` (`single` | `multi`), `required` toggle.
+    - `display` selection: default (pills), `cards` (max 3), `list`, `chips`.
+    - `show_if` conditional logic: selects an earlier parent group and specific parent choice.
+    - Choice details: `name_en`, `name_bn`, `price_delta`, `description_en`, `description_bn`, `compare_delta` (unbundled was price), and `heat` (0–4 chili scale).
+    - Validation on save via `ItemOptions.safeParse(cleaned)` reporting human-readable Zod errors.
+- Updated `src/themes/grill-ghar.ts`:
+  - Added `paper: '#FFF5EA'`, `'paper-line': '#F0DCC8'`, and `'paper-ink': '#6B4A3F'` tokens so `readThemeColors()` uses authentic Grill Ghar warm paper tokens on QR print sheets and downloaded PNG table cards.
+- Updated `src/lib/menu/actions.ts`:
+  - Revalidated table service routes `/[slug]/t/[token]`.
+- Created `tests/e2e/gg-admin-options.spec.ts`:
+  - E2E test proving a Grill Ghar admin can create Naga Smash Burger options from scratch in the UI and the guest sheet renders the cards, savings badge, chips, and conditional drink list matching the design.
+  - Green across `guest`, `staff`, and `staff-phone` (3/3).
+- Verified Brew Bari:
+  - `tests/e2e/admin-menu.spec.ts`: 9/9 green.
+  - `tests/e2e/p3-order-bill-review.spec.ts` & `tests/e2e/sold-out-race.spec.ts`: 6/6 green.
+  - All 112 unit tests in Vitest passing.
+  - TypeScript typecheck passing cleanly.
+Tests: typecheck ✅ unit ✅ 112/112 e2e ✅ (admin-menu 9/9, gg-admin-options 3/3, Brew Bari P3 6/6)
+Commits / branch / PR: `task/G7-staff-side`
+Next: G8 Tests (gg-menu, gg-order, gg-staff, full suite, Lighthouse mobile).
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

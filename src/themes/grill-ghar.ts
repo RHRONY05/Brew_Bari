@@ -33,6 +33,9 @@ export const grillGharTheme: Theme = {
     'r-lg': '20px',
     'r-xl': '28px',
     radius: '16px',
+    paper: '#FFF5EA',
+    'paper-line': '#F0DCC8',
+    'paper-ink': '#6B4A3F',
   },
   fonts: {
     heading: 'cinzel',

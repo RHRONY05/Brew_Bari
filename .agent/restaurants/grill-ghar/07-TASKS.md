@@ -56,7 +56,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - **Tests:** unit tests for savings maths and upsell filtering (excludes in-cart and sold-out items, max 6).
   - **AC:** matches both designs; the full P3 flow (order → staff accepts → preparing → ready → served → bill → review) works for Grill Ghar table 99.
 
-- [ ] **G7 Staff side**
+- [x] **G7 Staff side** — completed: Antigravity · admin menu form upgraded with spice_level, pairs-well tag, OptionsBuilder supports display, show_if, description, compare_delta, heat with ItemOptions Zod validation; VenueIcon used instead of hardcoded Coffee; paper tokens configured for QR print cards; 112 unit tests green; admin-menu 9/9 green; gg-admin-options 3/3 green; Brew Bari ordering green.
   - Admin item form: `spice_level` select (None, 1–4), `pairs-well` tag in the tag picker, OptionsBuilder supports `display`, `show_if` (pick an earlier group + choice), choice `description_*`, `compare_delta`, `heat`. Validate with the zod schema.
   - Check counter (desktop + phone), all admin pages, login, bill, review, info and the invalid-QR page with the GG theme: AA contrast, no Brew Bari wording/icons, Alinur Nobin renders where Bangla appears.
   - Table QR print sheet works for Grill Ghar (colours from `readThemeColors()`).

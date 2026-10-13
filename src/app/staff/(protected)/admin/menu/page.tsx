@@ -8,7 +8,6 @@ import { useStaffRestaurant } from '@/components/staff/StaffRestaurantContext';
 import type { Database } from '@/types/database';
 import {
   Plus,
-  Coffee,
   Pencil,
   Trash2,
   Image as ImageIcon,
@@ -19,26 +18,96 @@ import {
   AlertCircle,
   Loader2,
   LayoutGrid,
+  ChevronDown,
 } from 'lucide-react';
 import { CategoryIcon, CATEGORY_ICON_PRESETS } from '@/components/ui/category-icon';
+import { VenueIcon } from '@/themes/ThemeContext';
+import { ItemOptions } from '@/lib/schemas';
 
 type MenuItemRow = Database['public']['Tables']['menu_items']['Row'];
 type CategoryRow = Database['public']['Tables']['categories']['Row'];
 
-interface OptionChoice {
-  title: string;
-  price: number;
-}
-
-interface OptionGroup {
+interface OptionChoiceEditor {
   id: string;
-  title: string;
-  required: boolean;
-  type: 'single' | 'multiple';
-  choices: OptionChoice[];
+  name_en: string;
+  name_bn?: string;
+  price_delta: number;
+  description_en?: string;
+  description_bn?: string;
+  compare_delta?: number | null;
+  heat?: number | null;
 }
 
-const AVAILABLE_TAGS = ['Hot', 'Iced', 'Bestseller', 'New', 'Seasonal', 'Veg'];
+interface OptionGroupEditor {
+  id: string;
+  name_en: string;
+  name_bn?: string;
+  type: 'single' | 'multi';
+  required: boolean;
+  display?: 'list' | 'cards' | 'chips' | '';
+  show_if?: { group: string; choice: string } | null;
+  choices: OptionChoiceEditor[];
+}
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9-]/g, '-')
+    .replace(/-+/g, '-')
+    .replace(/^-|-$/g, '')
+    .slice(0, 30);
+}
+
+function normalizeOptions(raw: unknown): OptionGroupEditor[] {
+  if (!raw || !Array.isArray(raw)) return [];
+  return raw.map((g: any, gIdx: number) => {
+    const groupId = slugify(g.id || g.name_en || g.title) || `group-${gIdx + 1}`;
+    const name_en = g.name_en || g.title || '';
+    const name_bn = g.name_bn || '';
+    const type = g.type === 'multiple' || g.type === 'multi' ? 'multi' : 'single';
+    const required = g.required ?? true;
+    const display = g.display || '';
+    const show_if =
+      g.show_if?.group && g.show_if?.choice
+        ? { group: g.show_if.group, choice: g.show_if.choice }
+        : null;
+
+    const choices: OptionChoiceEditor[] = Array.isArray(g.choices)
+      ? g.choices.map((c: any, cIdx: number) => {
+          const choiceId = slugify(c.id || c.name_en || c.title) || `choice-${cIdx + 1}`;
+          const cNameEn = c.name_en || c.title || '';
+          const cNameBn = c.name_bn || '';
+          const priceDelta = Number(c.price_delta !== undefined ? c.price_delta : (c.price ?? 0));
+          return {
+            id: choiceId,
+            name_en: cNameEn,
+            name_bn: cNameBn,
+            price_delta: priceDelta,
+            description_en: c.description_en || '',
+            description_bn: c.description_bn || '',
+            compare_delta:
+              c.compare_delta !== undefined && c.compare_delta !== null
+                ? Number(c.compare_delta)
+                : null,
+            heat: c.heat !== undefined && c.heat !== null ? Number(c.heat) : null,
+          };
+        })
+      : [];
+
+    return {
+      id: groupId,
+      name_en,
+      name_bn,
+      type,
+      required,
+      display,
+      show_if,
+      choices,
+    };
+  });
+}
+
+const AVAILABLE_TAGS = ['Hot', 'Iced', 'Bestseller', 'New', 'Seasonal', 'Veg', 'pairs-well'];
 
 export default function AdminMenuPage() {
   const { restaurant } = useStaffRestaurant();
@@ -143,6 +212,7 @@ export default function AdminMenuPage() {
       is_available: true,
       is_active: true,
       image_url: null,
+      spice_level: null,
     });
     setErrorMessage(null);
     setIsEditorOpen(true);
@@ -196,6 +266,68 @@ export default function AdminMenuPage() {
       return;
     }
 
+    // Clean up and validate options using Zod schema
+    let formattedOptions: any[] = [];
+    if (currentOptions.length > 0) {
+      const cleaned = currentOptions.map((g, gIdx) => {
+        const groupId = slugify(g.id || g.name_en) || `group-${gIdx + 1}`;
+        const choices = (g.choices || []).map((c, cIdx) => {
+          const choiceId = slugify(c.id || c.name_en) || `choice-${cIdx + 1}`;
+          const choiceObj: any = {
+            id: choiceId,
+            name_en: (c.name_en || '').trim(),
+            price_delta: Number(c.price_delta || 0),
+          };
+          if (c.name_bn?.trim()) choiceObj.name_bn = c.name_bn.trim();
+          if (c.description_en?.trim()) choiceObj.description_en = c.description_en.trim();
+          if (c.description_bn?.trim()) choiceObj.description_bn = c.description_bn.trim();
+          if (
+            c.compare_delta !== undefined &&
+            c.compare_delta !== null &&
+            Number(c.compare_delta) > Number(c.price_delta || 0)
+          ) {
+            choiceObj.compare_delta = Number(c.compare_delta);
+          }
+          if (
+            c.heat !== undefined &&
+            c.heat !== null &&
+            Number(c.heat) >= 1 &&
+            Number(c.heat) <= 4
+          ) {
+            choiceObj.heat = Number(c.heat);
+          }
+          return choiceObj;
+        });
+
+        const groupObj: any = {
+          id: groupId,
+          name_en: (g.name_en || '').trim(),
+          type: g.type === 'multi' ? 'multi' : 'single',
+          required: Boolean(g.required),
+          choices,
+        };
+        if (g.name_bn?.trim()) groupObj.name_bn = g.name_bn.trim();
+        if (g.display && ['list', 'cards', 'chips'].includes(g.display)) {
+          groupObj.display = g.display;
+        }
+        if (g.show_if?.group && g.show_if?.choice) {
+          groupObj.show_if = {
+            group: g.show_if.group,
+            choice: g.show_if.choice,
+          };
+        }
+        return groupObj;
+      });
+
+      const parsed = ItemOptions.safeParse(cleaned);
+      if (!parsed.success) {
+        const err = parsed.error.issues.map((e) => e.message).join('; ');
+        setErrorMessage(`Invalid options: ${err}`);
+        return;
+      }
+      formattedOptions = parsed.data;
+    }
+
     try {
       setIsSaving(true);
       setErrorMessage(null);
@@ -206,8 +338,8 @@ export default function AdminMenuPage() {
         const { error } = await supabase
           .from('menu_items')
           .update({
-            name_en: editingItem.name_en,
-            name_bn: editingItem.name_bn || '',
+            name_en: editingItem.name_en.trim(),
+            name_bn: editingItem.name_bn?.trim() || '',
             category_id: editingItem.category_id,
             price: Number(editingItem.price),
             compare_at_price: editingItem.compare_at_price ? Number(editingItem.compare_at_price) : null,
@@ -215,7 +347,8 @@ export default function AdminMenuPage() {
             description_en: editingItem.description_en || '',
             description_bn: editingItem.description_bn || '',
             tags: editingItem.tags || [],
-            options: (editingItem.options as any) || [],
+            options: formattedOptions as any,
+            spice_level: editingItem.spice_level !== undefined ? editingItem.spice_level : null,
             is_available: Boolean(editingItem.is_available),
             image_url: editingItem.image_url || null,
             updated_at: new Date().toISOString(),
@@ -227,8 +360,8 @@ export default function AdminMenuPage() {
         // Insert
         const { error } = await supabase.from('menu_items').insert({
           restaurant_id: restaurantId,
-          name_en: editingItem.name_en,
-          name_bn: editingItem.name_bn || '',
+          name_en: editingItem.name_en.trim(),
+          name_bn: editingItem.name_bn?.trim() || '',
           category_id: editingItem.category_id,
           price: Number(editingItem.price),
           compare_at_price: editingItem.compare_at_price ? Number(editingItem.compare_at_price) : null,
@@ -236,7 +369,8 @@ export default function AdminMenuPage() {
           description_en: editingItem.description_en || '',
           description_bn: editingItem.description_bn || '',
           tags: editingItem.tags || [],
-          options: (editingItem.options as any) || [],
+          options: formattedOptions as any,
+          spice_level: editingItem.spice_level !== undefined ? editingItem.spice_level : null,
           is_available: Boolean(editingItem.is_available ?? true),
           is_active: true,
           image_url: editingItem.image_url || null,
@@ -307,20 +441,23 @@ export default function AdminMenuPage() {
   }, [items, selectedCatId]);
 
   // Options groups for the item currently being edited
-  const currentOptions: OptionGroup[] = useMemo(() => {
-    if (!editingItem?.options || !Array.isArray(editingItem.options)) return [];
-    return editingItem.options as unknown as OptionGroup[];
+  const currentOptions: OptionGroupEditor[] = useMemo(() => {
+    return normalizeOptions(editingItem?.options);
   }, [editingItem?.options]);
 
   const handleAddOptionGroup = () => {
-    const newGroup: OptionGroup = {
-      id: `opt-${Date.now()}`,
-      title: 'Size',
+    const count = currentOptions.length + 1;
+    const newGroup: OptionGroupEditor = {
+      id: `size-${count}`,
+      name_en: 'Size',
+      name_bn: 'সাইজ',
       required: true,
       type: 'single',
+      display: '',
+      show_if: null,
       choices: [
-        { title: 'Regular', price: 0 },
-        { title: 'Large', price: 60 },
+        { id: 'regular', name_en: 'Regular', name_bn: 'রেগুলার', price_delta: 0 },
+        { id: 'large', name_en: 'Large', name_bn: 'লার্জ', price_delta: 60 },
       ],
     };
     setEditingItem((prev) =>
@@ -329,38 +466,61 @@ export default function AdminMenuPage() {
   };
 
   const handleRemoveOptionGroup = (index: number) => {
-    const updated = currentOptions.filter((_, idx) => idx !== index);
+    const removedId = currentOptions[index]?.id;
+    const updated = currentOptions
+      .filter((_, idx) => idx !== index)
+      .map((g) => {
+        // Clear show_if if it referenced the removed group
+        if (g.show_if?.group === removedId) {
+          return { ...g, show_if: null };
+        }
+        return g;
+      });
     setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
   };
 
-  const handleUpdateOptionGroupTitle = (index: number, title: string) => {
+  const handleUpdateGroup = (index: number, patch: Partial<OptionGroupEditor>) => {
     const updated = [...currentOptions];
-    updated[index] = { ...updated[index], title };
+    updated[index] = { ...updated[index], ...patch };
+    setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
+  };
+
+  const handleAddChoice = (groupIndex: number) => {
+    const updated = [...currentOptions];
+    const cCount = updated[groupIndex].choices.length + 1;
+    updated[groupIndex] = {
+      ...updated[groupIndex],
+      choices: [
+        ...updated[groupIndex].choices,
+        {
+          id: `choice-${cCount}`,
+          name_en: 'New option',
+          price_delta: 30,
+        },
+      ],
+    };
+    setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
+  };
+
+  const handleRemoveChoice = (groupIndex: number, choiceIndex: number) => {
+    const updated = [...currentOptions];
+    const choices = updated[groupIndex].choices.filter((_, idx) => idx !== choiceIndex);
+    updated[groupIndex] = { ...updated[groupIndex], choices };
     setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
   };
 
   const handleUpdateChoice = (
     groupIndex: number,
     choiceIndex: number,
-    field: 'title' | 'price',
-    value: string | number
+    patch: Partial<OptionChoiceEditor>
   ) => {
     const updated = [...currentOptions];
     const choices = [...updated[groupIndex].choices];
     choices[choiceIndex] = {
       ...choices[choiceIndex],
-      [field]: field === 'price' ? Number(value) : value,
+      ...patch,
     };
     updated[groupIndex] = { ...updated[groupIndex], choices };
-    setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
-  };
-
-  const handleAddChoice = (groupIndex: number) => {
-    const updated = [...currentOptions];
-    updated[groupIndex] = {
-      ...updated[groupIndex],
-      choices: [...updated[groupIndex].choices, { title: 'New option', price: 30 }],
-    };
     setEditingItem((prev) => (prev ? { ...prev, options: updated as any } : null));
   };
 
@@ -476,7 +636,7 @@ export default function AdminMenuPage() {
                         className="w-full h-full object-cover"
                       />
                     ) : (
-                      <Coffee className="w-6 h-6" />
+                      <VenueIcon className="w-6 h-6" />
                     )}
                   </div>
 
@@ -577,7 +737,7 @@ export default function AdminMenuPage() {
                   className="w-full h-full object-cover"
                 />
               ) : (
-                <Coffee className="w-8 h-8" />
+                <VenueIcon className="w-8 h-8" />
               )}
               {isUploading && (
                 <div className="absolute inset-0 bg-black/40 flex items-center justify-center text-white">
@@ -687,6 +847,30 @@ export default function AdminMenuPage() {
                     {c.name_en}
                   </option>
                 ))}
+              </select>
+            </div>
+
+            <div className="col-span-2 flex flex-col gap-1">
+              <label htmlFor="spice" className="text-[12px] font-bold text-ink-2">
+                Spice level (chili heat rating)
+              </label>
+              <select
+                id="spice"
+                data-testid="item-spice-level-select"
+                value={editingItem.spice_level ?? ''}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    spice_level: e.target.value === '' ? null : Number(e.target.value),
+                  })
+                }
+                className="h-10 rounded-xl border border-line px-3 text-[14px] font-semibold text-ink focus:outline-brand-muted bg-white"
+              >
+                <option value="">None (not spicy / regular)</option>
+                <option value="1">1 - Mild 🌶️</option>
+                <option value="2">2 - Medium 🌶️🌶️</option>
+                <option value="3">3 - Hot 🌶️🌶️🌶️</option>
+                <option value="4">4 - Naga hot 🌶️🌶️🌶️🌶️</option>
               </select>
             </div>
 
@@ -814,48 +998,246 @@ export default function AdminMenuPage() {
             {currentOptions.map((group, gIdx) => (
               <div
                 key={group.id || gIdx}
-                className="border border-line rounded-xl p-3 bg-surface-subtle flex flex-col gap-2"
+                data-testid={`option-group-card-${gIdx}`}
+                className="border border-line rounded-xl p-3 bg-surface-subtle flex flex-col gap-2.5 shadow-2xs"
               >
-                <div className="flex justify-between items-center gap-2">
-                  <input
-                    value={group.title}
-                    onChange={(e) => handleUpdateOptionGroupTitle(gIdx, e.target.value)}
-                    className="h-8 rounded-lg border border-line px-2 text-[13px] font-bold text-ink bg-white flex-1"
-                    placeholder="Group title (e.g. Size, Milk)"
-                  />
+                {/* Group titles & remove */}
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 grid grid-cols-2 gap-2">
+                    <input
+                      data-testid={`option-group-title-${gIdx}`}
+                      value={group.name_en}
+                      onChange={(e) =>
+                        handleUpdateGroup(gIdx, {
+                          name_en: e.target.value,
+                          id: group.id || slugify(e.target.value),
+                        })
+                      }
+                      className="h-8 rounded-lg border border-line px-2 text-[13px] font-bold text-ink bg-white"
+                      placeholder="Group title (e.g. Size, Milk)"
+                    />
+                    <input
+                      data-testid={`option-group-title-bn-${gIdx}`}
+                      value={group.name_bn || ''}
+                      onChange={(e) => handleUpdateGroup(gIdx, { name_bn: e.target.value })}
+                      className="h-8 rounded-lg border border-line px-2 text-[13px] font-medium text-ink bg-white"
+                      placeholder="বাংলা নাম (ঐচ্ছিক)"
+                    />
+                  </div>
                   <button
                     type="button"
+                    aria-label={`Remove option group ${group.name_en || gIdx + 1}`}
                     onClick={() => handleRemoveOptionGroup(gIdx)}
-                    className="w-7 h-7 rounded-md text-danger hover:bg-danger-soft flex items-center justify-center shrink-0"
+                    className="w-7 h-7 rounded-md text-danger hover:bg-danger-soft flex items-center justify-center shrink-0 transition-colors"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
                   </button>
                 </div>
 
-                <div className="flex flex-col gap-1.5 pl-1">
-                  {group.choices.map((choice, cIdx) => (
-                    <div key={cIdx} className="flex items-center gap-2">
-                      <input
-                        value={choice.title}
-                        onChange={(e) =>
-                          handleUpdateChoice(gIdx, cIdx, 'title', e.target.value)
+                {/* Group Controls: Slug ID, Type, Display, Required */}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 items-center text-[11.5px]">
+                  <input
+                    data-testid={`option-group-id-${gIdx}`}
+                    value={group.id}
+                    onChange={(e) => handleUpdateGroup(gIdx, { id: slugify(e.target.value) })}
+                    className="h-7.5 rounded-md border border-line px-2 text-[11px] font-mono text-ink-2 bg-white"
+                    placeholder="slug-id"
+                    title="Group identifier slug"
+                  />
+                  <select
+                    data-testid={`option-group-type-${gIdx}`}
+                    value={group.type}
+                    onChange={(e) => {
+                      const newType = e.target.value as 'single' | 'multi';
+                      const patch: Partial<OptionGroupEditor> = { type: newType };
+                      if (newType === 'multi' && group.display === 'cards') {
+                        patch.display = '';
+                      }
+                      handleUpdateGroup(gIdx, patch);
+                    }}
+                    className="h-7.5 rounded-md border border-line px-1.5 font-bold text-ink bg-white"
+                  >
+                    <option value="single">Single (radio)</option>
+                    <option value="multi">Multiple (checkbox)</option>
+                  </select>
+                  <select
+                    data-testid={`option-group-display-${gIdx}`}
+                    value={group.display || ''}
+                    onChange={(e) =>
+                      handleUpdateGroup(gIdx, {
+                        display: e.target.value as any,
+                      })
+                    }
+                    className="h-7.5 rounded-md border border-line px-1.5 font-bold text-ink bg-white"
+                  >
+                    <option value="">Display: Default</option>
+                    <option value="cards">Display: Cards (max 3)</option>
+                    <option value="list">Display: List</option>
+                    <option value="chips">Display: Chips</option>
+                  </select>
+                  <label className="flex items-center gap-1.5 font-bold text-ink cursor-pointer select-none px-1">
+                    <input
+                      data-testid={`option-group-required-${gIdx}`}
+                      type="checkbox"
+                      checked={group.required}
+                      onChange={(e) => handleUpdateGroup(gIdx, { required: e.target.checked })}
+                      className="rounded accent-brand w-3.5 h-3.5"
+                    />
+                    <span>Required</span>
+                  </label>
+                </div>
+
+                {/* Conditional Visibility (show_if): only available if there are earlier groups */}
+                {gIdx > 0 && (
+                  <div className="flex flex-wrap items-center gap-1.5 text-[11px] bg-white/70 p-2 rounded-lg border border-line/60">
+                    <span className="font-bold text-ink-2 shrink-0">Show conditionally:</span>
+                    <select
+                      data-testid={`option-group-show-if-group-${gIdx}`}
+                      value={group.show_if?.group || ''}
+                      onChange={(e) => {
+                        const pGroup = e.target.value;
+                        if (!pGroup) {
+                          handleUpdateGroup(gIdx, { show_if: null });
+                        } else {
+                          const parentGroupObj = currentOptions
+                            .slice(0, gIdx)
+                            .find((og) => og.id === pGroup);
+                          const firstChoiceId = parentGroupObj?.choices[0]?.id || '';
+                          handleUpdateGroup(gIdx, {
+                            show_if: { group: pGroup, choice: firstChoiceId },
+                          });
                         }
-                        className="h-7.5 rounded-md border border-line px-2 text-[12px] font-semibold text-ink bg-white flex-1"
-                        placeholder="Choice (e.g. Regular)"
-                      />
-                      <div className="flex items-center gap-1 shrink-0">
-                        <span className="text-[11px] text-ink-2 font-bold">+৳</span>
+                      }}
+                      className="h-7 rounded border border-line px-1.5 font-semibold text-ink bg-white flex-1"
+                    >
+                      <option value="">Always visible (no parent)</option>
+                      {currentOptions.slice(0, gIdx).map((og) => (
+                        <option key={og.id} value={og.id}>
+                          If [{og.name_en || og.id}] is...
+                        </option>
+                      ))}
+                    </select>
+                    {group.show_if?.group && (
+                      <select
+                        data-testid={`option-group-show-if-choice-${gIdx}`}
+                        value={group.show_if.choice}
+                        onChange={(e) =>
+                          handleUpdateGroup(gIdx, {
+                            show_if: { group: group.show_if!.group, choice: e.target.value },
+                          })
+                        }
+                        className="h-7 rounded border border-line px-1.5 font-semibold text-ink bg-white flex-1"
+                      >
+                        {currentOptions
+                          .find((og) => og.id === group.show_if?.group)
+                          ?.choices.map((c) => (
+                            <option key={c.id} value={c.id}>
+                              Choice: {c.name_en || c.id}
+                            </option>
+                          ))}
+                      </select>
+                    )}
+                  </div>
+                )}
+
+                {/* Choices List */}
+                <div className="flex flex-col gap-2 pt-1 border-t border-line/50">
+                  {group.choices.map((choice, cIdx) => (
+                    <div
+                      key={choice.id || cIdx}
+                      data-testid={`choice-card-${gIdx}-${cIdx}`}
+                      className="bg-white p-2 rounded-lg border border-line/60 flex flex-col gap-1.5"
+                    >
+                      <div className="flex items-center gap-1.5">
                         <input
-                          type="number"
-                          value={choice.price}
+                          data-testid={`choice-name-en-${gIdx}-${cIdx}`}
+                          value={choice.name_en}
                           onChange={(e) =>
-                            handleUpdateChoice(gIdx, cIdx, 'price', e.target.value)
+                            handleUpdateChoice(gIdx, cIdx, {
+                              name_en: e.target.value,
+                              id: choice.id || slugify(e.target.value),
+                            })
                           }
-                          className="w-14 h-7.5 rounded-md border border-line px-1 text-[12px] font-bold text-ink bg-white text-right"
+                          className="h-7.5 rounded-md border border-line px-2 text-[12px] font-semibold text-ink bg-white flex-1"
+                          placeholder="Choice (e.g. Regular)"
                         />
+                        <input
+                          data-testid={`choice-name-bn-${gIdx}-${cIdx}`}
+                          value={choice.name_bn || ''}
+                          onChange={(e) => handleUpdateChoice(gIdx, cIdx, { name_bn: e.target.value })}
+                          className="h-7.5 rounded-md border border-line px-2 text-[12px] font-normal text-ink bg-white w-24"
+                          placeholder="বাংলা (ঐচ্ছিক)"
+                        />
+                        <div className="flex items-center gap-0.5 shrink-0">
+                          <span className="text-[11px] text-ink-2 font-bold">+৳</span>
+                          <input
+                            data-testid={`choice-price-${gIdx}-${cIdx}`}
+                            type="number"
+                            value={choice.price_delta}
+                            onChange={(e) =>
+                              handleUpdateChoice(gIdx, cIdx, { price_delta: Number(e.target.value) })
+                            }
+                            className="w-14 h-7.5 rounded-md border border-line px-1 text-[12px] font-bold text-ink bg-white text-right"
+                          />
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Remove choice ${choice.name_en || cIdx + 1}`}
+                          data-testid={`delete-choice-${gIdx}-${cIdx}`}
+                          onClick={() => handleRemoveChoice(gIdx, cIdx)}
+                          className="w-6 h-6 rounded text-ink-3 hover:text-danger flex items-center justify-center shrink-0 transition-colors"
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+
+                      {/* Subtext, compare price, and heat row */}
+                      <div className="flex flex-wrap items-center gap-1.5 text-[11px]">
+                        <input
+                          data-testid={`choice-desc-en-${gIdx}-${cIdx}`}
+                          value={choice.description_en || ''}
+                          onChange={(e) =>
+                            handleUpdateChoice(gIdx, cIdx, { description_en: e.target.value })
+                          }
+                          className="h-6 rounded border border-line px-1.5 text-[11px] text-ink-2 bg-surface-subtle flex-1 min-w-[120px]"
+                          placeholder="Subtext (e.g. + Fries & drink)"
+                        />
+                        <div className="flex items-center gap-1 shrink-0">
+                          <span className="text-[10px] text-ink-3">Was +৳</span>
+                          <input
+                            data-testid={`choice-compare-${gIdx}-${cIdx}`}
+                            type="number"
+                            value={choice.compare_delta ?? ''}
+                            onChange={(e) =>
+                              handleUpdateChoice(gIdx, cIdx, {
+                                compare_delta: e.target.value ? Number(e.target.value) : null,
+                              })
+                            }
+                            placeholder="200"
+                            className="w-12 h-6 rounded border border-line px-1 text-[11px] text-ink bg-surface-subtle text-right"
+                            title="Compare at price delta (must be > price delta)"
+                          />
+                        </div>
+                        <select
+                          data-testid={`choice-heat-${gIdx}-${cIdx}`}
+                          value={choice.heat ?? ''}
+                          onChange={(e) =>
+                            handleUpdateChoice(gIdx, cIdx, {
+                              heat: e.target.value ? Number(e.target.value) : null,
+                            })
+                          }
+                          className="h-6 rounded border border-line px-1 text-[11px] font-medium text-ink bg-surface-subtle shrink-0"
+                        >
+                          <option value="">No heat</option>
+                          <option value="1">🌶️ Mild (1)</option>
+                          <option value="2">🌶️🌶️ Medium (2)</option>
+                          <option value="3">🌶️🌶️🌶️ Hot (3)</option>
+                          <option value="4">🌶️🌶️🌶️🌶️ Naga (4)</option>
+                        </select>
                       </div>
                     </div>
                   ))}
+
                   <button
                     type="button"
                     onClick={() => handleAddChoice(gIdx)}

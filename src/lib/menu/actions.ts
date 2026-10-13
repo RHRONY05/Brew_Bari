@@ -16,7 +16,10 @@ export async function revalidateMenuAction(restaurantId: string | undefined, slu
 
   try {
     revalidatePath(menuPath(slug), 'page');
+    revalidatePath(`/${slug}`, 'page');
+    revalidatePath(`/${slug}/t/[token]`, 'page');
     revalidatePath('/[slug]', 'page');
+    revalidatePath('/[slug]/t/[token]', 'page');
   } catch (e) {
     console.error('revalidatePath error:', e);
   }

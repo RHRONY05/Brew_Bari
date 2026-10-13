@@ -130,6 +130,80 @@ export function getCartTotals(items: CartItem[]): { count: number; subtotal: num
   return { count, subtotal };
 }
 
+/**
+ * Computes total meal savings in cart based on compare_delta of selected choices.
+ */
+export function calculateMealSavings(items: CartItem[]): number {
+  let totalSavings = 0;
+  for (const line of items) {
+    if (!line.choices || line.choices.length === 0) continue;
+    const parsedGroups = ItemOptionsSchema.safeParse(line.item.options);
+    if (!parsedGroups.success) continue;
+
+    let lineSavingsPerUnit = 0;
+    for (const choiceStr of line.choices) {
+      const [groupId, choiceId] = choiceStr.split(':');
+      const group = parsedGroups.data.find((g) => g.id === groupId);
+      const choice = group?.choices.find((c) => c.id === choiceId);
+      if (
+        choice &&
+        choice.compare_delta !== undefined &&
+        choice.compare_delta > choice.price_delta
+      ) {
+        lineSavingsPerUnit += choice.compare_delta - choice.price_delta;
+      }
+    }
+    totalSavings += lineSavingsPerUnit * line.quantity;
+  }
+  return totalSavings;
+}
+
+/**
+ * Returns true if a cart line is a meal (has a non-zero choice on a cards group or meal choice).
+ */
+export function isMealLine(line: CartItem): boolean {
+  if (!line.choices || line.choices.length === 0) return false;
+  const parsedGroups = ItemOptionsSchema.safeParse(line.item.options);
+  if (!parsedGroups.success) return false;
+
+  for (const choiceStr of line.choices) {
+    const [groupId, choiceId] = choiceStr.split(':');
+    const group = parsedGroups.data.find((g) => g.id === groupId);
+    if (!group) continue;
+    const choice = group.choices.find((c) => c.id === choiceId);
+    if (!choice) continue;
+    if (
+      (group.display === 'cards' && choice.price_delta > 0) ||
+      (groupId === 'meal' && choiceId === 'meal')
+    ) {
+      return true;
+    }
+  }
+  return false;
+}
+
+/**
+ * Filters menu items for the 'Goes well with' cart upsell:
+ * - Excludes items already in the cart
+ * - Excludes sold-out items (is_available = false)
+ * - Must have 'pairs-well' tag
+ * - Returns at most 6 items
+ */
+export function filterCartUpsell(
+  menuItems: MenuItem[],
+  cartItems: CartItem[]
+): MenuItem[] {
+  const inCartItemIds = new Set(cartItems.map((c) => c.item.id));
+  return menuItems
+    .filter((it) => {
+      if (!it.is_available) return false;
+      if (inCartItemIds.has(it.id)) return false;
+      const tags = Array.isArray(it.tags) ? it.tags : [];
+      return tags.includes('pairs-well');
+    })
+    .slice(0, 6);
+}
+
 const STORAGE_PREFIX = 'brew_bari_cart';
 
 export function saveCartToStorage(sessionId: string | null | undefined, items: CartItem[]): void {

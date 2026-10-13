@@ -19,6 +19,7 @@ import { ActionBar } from './ActionBar';
 import { CartSheet } from './CartSheet';
 import { sortForGuest, quickPicks } from '@/lib/menu/sort';
 import { pick } from '@/lib/i18n';
+import { ItemOptions as ItemOptionsSchema } from '@/lib/schemas';
 import {
   addToCart,
   updateCartQuantity,
@@ -165,6 +166,20 @@ export function MenuClient({
     );
     setCartItems(updated);
     saveCartToStorage(tableContext?.sessionId, updated);
+  };
+
+  const handleAddUpsell = (item: MenuItem) => {
+    const parsedOptions = ItemOptionsSchema.safeParse(item.options);
+    const hasRequired = parsedOptions.success && parsedOptions.data.some((g) => g.required);
+    if (hasRequired) {
+      handleItemSelect(item);
+    } else {
+      handleAddToCart({
+        item,
+        quantity: 1,
+        choices: [],
+      });
+    }
   };
 
   const handleUpdateQuantity = (lineId: string, qty: number) => {
@@ -637,6 +652,8 @@ export function MenuClient({
         kitchenNote={kitchenNote}
         soldOutItemIds={soldOutItemIds}
         isPlacingOrder={isPlacingOrder}
+        menuItems={menu.items}
+        onAddUpsellItem={handleAddUpsell}
         onKitchenNoteChange={setKitchenNote}
         onUpdateQuantity={handleUpdateQuantity}
         onPlaceOrder={onPlaceOrder ? handlePlaceOrder : undefined}

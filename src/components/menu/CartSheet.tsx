@@ -2,15 +2,20 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { Minus, Plus, Bell } from 'lucide-react';
+import { Minus, Plus, Bell, Flame } from 'lucide-react';
 import { BottomSheet } from '@/components/ui/bottom-sheet';
 import type { CartItem } from '@/lib/cart/store';
-import { getCartTotals } from '@/lib/cart/store';
+import {
+  getCartTotals,
+  calculateMealSavings,
+  isMealLine,
+  filterCartUpsell,
+} from '@/lib/cart/store';
 import { formatTaka } from '@/lib/money';
 import { pick } from '@/lib/i18n';
 import { ItemOptions as ItemOptionsSchema } from '@/lib/schemas';
-import { VenueIcon } from '@/themes/ThemeContext';
-
+import { VenueIcon, useTheme } from '@/themes/ThemeContext';
+import type { MenuItem } from '@/lib/menu/data';
 
 interface CartSheetProps {
   items: CartItem[];
@@ -21,6 +26,8 @@ interface CartSheetProps {
   kitchenNote: string;
   soldOutItemIds?: string[];
   isPlacingOrder?: boolean;
+  menuItems?: MenuItem[];
+  onAddUpsellItem?: (item: MenuItem) => void;
   onKitchenNoteChange: (note: string) => void;
   onUpdateQuantity: (lineId: string, quantity: number) => void;
   onPlaceOrder?: () => void;
@@ -37,14 +44,20 @@ export function CartSheet({
   kitchenNote,
   soldOutItemIds = [],
   isPlacingOrder = false,
+  menuItems = [],
+  onAddUpsellItem,
   onKitchenNoteChange,
   onUpdateQuantity,
   onPlaceOrder,
   onCallWaiter,
   onClose,
 }: CartSheetProps) {
+  const theme = useTheme();
+  const isBold = theme.layout.itemCard === 'bold';
   const { count, subtotal } = getCartTotals(items);
+  const mealSavings = calculateMealSavings(items);
   const hasSoldOut = items.some((line) => soldOutItemIds.includes(line.item.id));
+  const upsellItems = theme.layout.cartUpsell ? filterCartUpsell(menuItems, items) : [];
 
   const formatChoicesSummary = (item: CartItem): string => {
     if (!item.choices || item.choices.length === 0) return '';
@@ -122,9 +135,19 @@ export function CartSheet({
                   {/* Details */}
                   <div className="flex-1 min-w-0 flex flex-col gap-0.5">
                     <div className="flex justify-between items-baseline gap-2">
-                      <span className="font-bold text-[15px] text-ink truncate">
-                        {itemName}
-                      </span>
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="font-bold text-[15px] text-ink truncate">
+                          {itemName}
+                        </span>
+                        {isMealLine(line) && (
+                          <span
+                            data-testid={`meal-badge-${line.item.id}`}
+                            className="px-2 py-0.5 rounded-full bg-accent text-accent-ink text-[10px] font-extrabold uppercase tracking-wide shrink-0"
+                          >
+                            {locale === 'bn' ? 'মিল' : 'Meal'}
+                          </span>
+                        )}
+                      </div>
                       <span className="font-extrabold text-[15px] text-ink tabular-nums">
                         {formatTaka(line.lineTotal, locale)}
                       </span>
@@ -189,6 +212,58 @@ export function CartSheet({
 
         {items.length > 0 && (
           <>
+            {/* Goes well with slider */}
+            {theme.layout.cartUpsell && upsellItems.length > 0 && (
+              <section aria-labelledby="upsell-h" className="pt-2">
+                <h3 id="upsell-h" className="font-bold text-[15px] text-ink pb-2.5">
+                  {locale === 'bn' ? 'সাথে দারুণ মানাবে' : 'Goes well with'}
+                </h3>
+                <div className="flex gap-2.5 overflow-x-auto no-scrollbar pb-1 -mx-1 px-1">
+                  {upsellItems.map((u) => {
+                    const uName = pick(u, 'name', locale);
+                    return (
+                      <div
+                        key={u.id}
+                        data-testid={`cart-upsell-item-${u.id}`}
+                        className="shrink-0 w-[200px] bg-white border border-line rounded-2xl p-2.5 flex items-center gap-2.5 shadow-2xs"
+                      >
+                        <div className="relative w-[46px] h-[46px] rounded-xl bg-surface-2 shrink-0 flex items-center justify-center overflow-hidden text-brand-muted">
+                          {u.image_url ? (
+                            <Image
+                              src={u.image_url}
+                              alt={uName}
+                              fill
+                              className="object-cover"
+                              sizes="46px"
+                            />
+                          ) : (
+                            <VenueIcon className="w-5 h-5 stroke-[1.5]" />
+                          )}
+                        </div>
+                        <div className="flex-1 min-w-0 flex flex-col leading-tight">
+                          <span className="font-semibold text-[13px] text-ink truncate">
+                            {uName}
+                          </span>
+                          <span className="font-bold text-[13px] text-ink-2">
+                            {formatTaka(u.price, locale)}
+                          </span>
+                        </div>
+                        <button
+                          type="button"
+                          aria-label={`Add ${uName}`}
+                          data-testid={`add-upsell-${u.id}`}
+                          onClick={() => onAddUpsellItem?.(u)}
+                          className="w-9 h-9 rounded-full bg-brand text-brand-ink flex items-center justify-center shrink-0 hover:bg-brand-muted active:scale-95 transition-all shadow-xs cursor-pointer"
+                        >
+                          <Plus className="w-4 h-4 stroke-[2.8]" />
+                        </button>
+                      </div>
+                    );
+                  })}
+                </div>
+              </section>
+            )}
+
             {/* Kitchen note input */}
             <div className="flex flex-col gap-1.5 pt-2 border-t border-line/50">
               <label htmlFor="kitchen-note" className="text-[13px] font-bold text-ink">
@@ -210,19 +285,36 @@ export function CartSheet({
             </div>
 
             {/* Subtotal & tax notice */}
-            <div className="pt-2">
-              <div className="flex justify-between items-baseline text-[15.5px]">
-                <span className="font-semibold text-ink-2">
-                  {locale === 'bn' ? 'সাবটোটাল' : 'Subtotal'}
+            <div className="p-3.5 sm:p-4 rounded-2xl bg-white border border-line flex flex-col gap-2">
+              <div className="flex justify-between items-baseline text-[14px] text-ink-2">
+                <span>
+                  {locale === 'bn'
+                    ? `সাবটোটাল · ${count}টি আইটেম`
+                    : `Subtotal · ${count} ${count === 1 ? 'item' : 'items'}`}
                 </span>
-                <span className="font-extrabold text-ink text-lg tabular-nums">
+                <span className="font-semibold text-ink text-[15px] tabular-nums">
                   {formatTaka(subtotal, locale)}
                 </span>
               </div>
-              <div className="text-[12px] text-ink-3 mt-0.5">
-                {locale === 'bn'
-                  ? 'ভ্যাট বিলে যোগ করা হবে। দাম রেস্টুরেন্ট নিশ্চিত করবে।'
-                  : 'VAT is added on the bill. Prices are confirmed by the restaurant.'}
+
+              {mealSavings > 0 && (
+                <div
+                  data-testid="meal-savings-row"
+                  className="flex justify-between items-baseline text-[14px] text-success font-semibold"
+                >
+                  <span>{locale === 'bn' ? 'মিলে আপনার সঞ্চয়' : 'You save with meals'}</span>
+                  <span className="tabular-nums">- {formatTaka(mealSavings, locale)}</span>
+                </div>
+              )}
+
+              <div className="text-[12px] text-ink-3">
+                {isBold
+                  ? locale === 'bn'
+                    ? 'ভ্যাট ৫% বিলে যোগ করা হবে। কাউন্টারে পরিশোধ করুন।'
+                    : 'VAT 5% is added on the bill. Pay at the counter.'
+                  : locale === 'bn'
+                    ? 'ভ্যাট বিলে যোগ করা হবে। দাম রেস্টুরেন্ট নিশ্চিত করবে।'
+                    : 'VAT is added on the bill. Prices are confirmed by the restaurant.'}
               </div>
             </div>
 
@@ -247,25 +339,57 @@ export function CartSheet({
                   data-testid="place-order-button"
                   disabled={hasSoldOut || isPlacingOrder}
                   onClick={onPlaceOrder}
-                  className="w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className={
+                    isBold
+                      ? 'w-full h-14 rounded-2xl bg-brand text-brand-ink font-bold text-[16px] flex items-center justify-between px-5 shadow-[0_10px_24px_rgba(var(--brand-rgb,210_41_28)/0.32)] hover:bg-brand-muted active:scale-[0.99] transition-all disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer'
+                      : 'w-full h-13 rounded-full bg-accent text-ink font-extrabold text-[16px] flex items-center justify-center gap-2 hover:bg-accent-strong active:scale-98 transition-all shadow-[0_4px_14px_rgb(var(--accent-rgb)/0.35)] disabled:opacity-50 disabled:cursor-not-allowed'
+                  }
                 >
-                  <span>
-                    {isPlacingOrder
-                      ? locale === 'bn'
-                        ? 'অর্ডার দেওয়া হচ্ছে…'
-                        : 'Placing order…'
-                      : packageTier === 2
-                        ? locale === 'bn'
-                          ? 'ওয়েটার ডেকে অর্ডার দিন'
-                          : 'Call waiter with order'
-                        : locale === 'bn'
-                          ? 'অর্ডার দিন'
-                          : 'Place order'}
-                  </span>
-                  {!isPlacingOrder && (
+                  {isBold ? (
                     <>
-                      <span>·</span>
-                      <span className="tabular-nums">{formatTaka(subtotal, locale)}</span>
+                      <span className="inline-flex items-center gap-2.5">
+                        <Flame className="w-5 h-5 stroke-[2.2]" />
+                        <span>
+                          {isPlacingOrder
+                            ? locale === 'bn'
+                              ? 'অর্ডার দেওয়া হচ্ছে…'
+                              : 'Placing order…'
+                            : packageTier === 2
+                              ? locale === 'bn'
+                                ? 'ওয়েটার ডেকে অর্ডার দিন'
+                                : 'Call waiter with order'
+                              : theme.copy.placeOrder
+                                ? theme.copy.placeOrder[locale]
+                                : locale === 'bn'
+                                  ? 'কিচেনে পাঠান'
+                                  : 'Send to kitchen'}
+                        </span>
+                      </span>
+                      {!isPlacingOrder && (
+                        <span className="tabular-nums font-extrabold">{formatTaka(subtotal, locale)}</span>
+                      )}
+                    </>
+                  ) : (
+                    <>
+                      <span>
+                        {isPlacingOrder
+                          ? locale === 'bn'
+                            ? 'অর্ডার দেওয়া হচ্ছে…'
+                            : 'Placing order…'
+                          : packageTier === 2
+                            ? locale === 'bn'
+                              ? 'ওয়েটার ডেকে অর্ডার দিন'
+                              : 'Call waiter with order'
+                            : locale === 'bn'
+                              ? 'অর্ডার দিন'
+                              : 'Place order'}
+                      </span>
+                      {!isPlacingOrder && (
+                        <>
+                          <span>·</span>
+                          <span className="tabular-nums">{formatTaka(subtotal, locale)}</span>
+                        </>
+                      )}
                     </>
                   )}
                 </button>

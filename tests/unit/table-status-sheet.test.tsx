@@ -2,6 +2,8 @@ import { describe, it, expect } from 'vitest';
 import { render, screen } from '@testing-library/react';
 import React from 'react';
 import { TableStatusSheet } from '@/components/table/TableStatusSheet';
+import { ThemeProvider } from '@/themes/ThemeContext';
+import { grillGharTheme } from '@/themes/grill-ghar';
 import type { SessionRequestJson } from '@/lib/schemas';
 
 describe('TableStatusSheet Component', () => {
@@ -151,5 +153,75 @@ describe('TableStatusSheet Component', () => {
 
     expect(screen.getByText('জমা দেওয়া হয়েছে (অপেক্ষমাণ)')).toBeDefined();
     expect(screen.getByText('অনুমোদিত · সারিবদ্ধ')).toBeDefined();
+  });
+
+  it('renders hero status card and 5-step vertical stepper for Grill Ghar theme', () => {
+    const requests: SessionRequestJson[] = [
+      {
+        id: 'req-gg-1',
+        type: 'order',
+        status: 'preparing',
+        subtotal: 810,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      },
+    ];
+
+    const { rerender } = render(
+      <ThemeProvider value={grillGharTheme}>
+        <TableStatusSheet
+          tableNumber={7}
+          requests={requests}
+          isOpen={true}
+          locale="en"
+          onCallWaiter={() => {}}
+          onViewBill={() => {}}
+          onClose={() => {}}
+        />
+      </ThemeProvider>
+    );
+
+    // Hero card renders
+    expect(screen.getByTestId('hero-status-card')).toBeDefined();
+    // "On the grill" appears in hero card and in stepper
+    const prepTexts = screen.getAllByText('On the grill');
+    expect(prepTexts.length).toBeGreaterThanOrEqual(1);
+
+    // 5 stages in vertical stepper
+    expect(screen.getByText('Received')).toBeDefined();
+    expect(screen.getByText('Accepted')).toBeDefined();
+    expect(screen.getByText('Ready')).toBeDefined();
+    expect(screen.getByText('Served')).toBeDefined();
+
+    // Order summary and action buttons
+    expect(screen.getByText('Order total')).toBeDefined();
+    expect(screen.getByTestId('status-order-more-button')).toBeDefined();
+    expect(screen.getByTestId('status-call-waiter-button')).toBeDefined();
+    expect(screen.getByTestId('status-request-bill-link')).toBeDefined();
+
+    // Bengali version
+    rerender(
+      <ThemeProvider value={grillGharTheme}>
+        <TableStatusSheet
+          tableNumber={7}
+          requests={requests}
+          isOpen={true}
+          locale="bn"
+          onCallWaiter={() => {}}
+          onViewBill={() => {}}
+          onClose={() => {}}
+        />
+      </ThemeProvider>
+    );
+
+    const prepTextsBn = screen.getAllByText('গ্রিলে চলছে');
+    expect(prepTextsBn.length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText('গৃহীত')).toBeDefined();
+    expect(screen.getByText('অনুমোদিত')).toBeDefined();
+    expect(screen.getByText('প্রস্তুত')).toBeDefined();
+    expect(screen.getByText('খাবার উপভোগ করুন')).toBeDefined();
+    expect(screen.getByText('আরও অর্ডার করুন')).toBeDefined();
+    expect(screen.getByText('ওয়েটার ডাকুন')).toBeDefined();
+    expect(screen.getByText('বিল চান')).toBeDefined();
   });
 });

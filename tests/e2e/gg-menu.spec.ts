@@ -213,4 +213,91 @@ test.describe('Grill Ghar: Menu Home GG1 (gg-menu.spec.ts)', () => {
     await expect(actionCart).toBeVisible();
     await expect(actionCart).toHaveText(/৳470/);
   });
+
+  test('cart GG3 & order tracking GG4: MEAL badge, savings row, upsell, send to kitchen, hero status card', async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 375, height: 812 });
+    await page.goto('/grill-ghar/t/token_gg_99');
+
+    // 1. Add Naga Smash Burger meal to cart
+    await page.getByRole('heading', { name: 'Naga Smash Burger' }).first().click();
+    const itemSheet = page.getByTestId('item-detail-sheet');
+    await expect(itemSheet).toBeVisible();
+    await itemSheet.getByText('Meal', { exact: true }).click();
+    await itemSheet.getByText(/Cola/i).first().click();
+    await page.getByTestId('item-sheet-add-button').click();
+    await expect(itemSheet).not.toBeVisible();
+
+    // 2. Open Cart
+    const actionCart = page.getByTestId('action-view-order');
+    await expect(actionCart).toBeVisible();
+    await actionCart.click();
+
+    const cartSheet = page.getByTestId('cart-sheet');
+    await expect(cartSheet).toBeVisible();
+
+    // Check MEAL badge
+    await expect(cartSheet.getByText('Meal', { exact: true })).toBeVisible();
+
+    // Check Meal savings row
+    await expect(cartSheet.getByTestId('meal-savings-row')).toBeVisible();
+    await expect(cartSheet.getByText('You save with meals')).toBeVisible();
+    await expect(cartSheet.getByText('- ৳50')).toBeVisible();
+
+    // Check Goes well with upsell slider
+    await expect(cartSheet.getByText('Goes well with')).toBeVisible();
+    const firstUpsellAdd = cartSheet.locator('[data-testid^="add-upsell-"]').first();
+    await expect(firstUpsellAdd).toBeVisible();
+
+    // Add an upsell item (e.g. Masala Fries)
+    await firstUpsellAdd.click();
+
+    // Kitchen note
+    const noteInput = cartSheet.locator('input#kitchen-note');
+    await expect(noteInput).toBeVisible();
+    await noteInput.fill('Please pack extra napkins');
+
+    // Place order CTA with Send to kitchen copy
+    const placeBtn = cartSheet.getByTestId('place-order-button');
+    await expect(placeBtn).toBeVisible();
+    await expect(placeBtn).toHaveText(/Send to kitchen/i);
+
+    // Click Place order
+    await placeBtn.click();
+
+    // 3. TableStatusSheet (GG4) opens automatically on order placement
+    const statusSheet = page.getByTestId('table-status-sheet');
+    await expect(statusSheet).toBeVisible();
+
+    // Hero status card is rendered
+    const heroCard = statusSheet.getByTestId('hero-status-card');
+    await expect(heroCard).toBeVisible();
+    await expect(heroCard.getByText('Order received')).toBeVisible();
+
+    // 5-step vertical stepper elements
+    await expect(statusSheet.getByText('Received', { exact: true })).toBeVisible();
+    await expect(statusSheet.getByText('Accepted', { exact: true })).toBeVisible();
+    await expect(statusSheet.getByText('Ready', { exact: true })).toBeVisible();
+    await expect(statusSheet.getByText('Served', { exact: true })).toBeVisible();
+
+    // Order summary and action buttons
+    await expect(statusSheet.getByText('Order total')).toBeVisible();
+    await expect(statusSheet.getByTestId('status-call-waiter-button')).toBeVisible();
+    const orderMoreBtn = statusSheet.getByTestId('status-order-more-button');
+    await expect(orderMoreBtn).toBeVisible();
+
+    // 4. Clicking "Order more" returns to menu
+    await orderMoreBtn.click();
+    await expect(statusSheet).not.toBeVisible();
+
+    // 5. On menu, live tracking pill is visible
+    const statusPill = page.getByTestId('floating-status-pill');
+    await expect(statusPill).toBeVisible();
+    await expect(statusPill).toHaveText(/Track →/i);
+
+    // Clicking status pill re-opens status sheet
+    await statusPill.click();
+    await expect(statusSheet).toBeVisible();
+  });
 });

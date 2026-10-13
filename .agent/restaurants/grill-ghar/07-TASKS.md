@@ -50,7 +50,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - **Tests:** `item-sheet.test.tsx`: picking Meal shows drink + raises price by 150; back to solo hides drink and drops its price; Add disabled until required active groups are chosen; Brew Bari item sheet unchanged.
   - **AC:** matches design; order placed from this sheet is priced correctly by the server.
 
-- [ ] **G6 Cart & order tracking (GG3, GG4)** · design: `design/Cart.dc.html`, `design/Status.dc.html`
+- [x] **G6 Cart & order tracking (GG3, GG4)** · completed: Antigravity · design: `design/Cart.dc.html`, `design/Status.dc.html`
   - Cart: MEAL badge, "Goes well with" (`cartUpsell`, GG-05), meal savings (GG-06), CTA copy from `theme.copy.placeOrder`.
   - Tracking: `statusCard: 'hero'`, "On the grill" via `theme.copy.statusPreparing`, progress bar, "Order more", live pill restyle (GG-07).
   - **Tests:** unit tests for savings maths and upsell filtering (excludes in-cart and sold-out items, max 6).

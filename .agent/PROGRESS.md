@@ -10,9 +10,9 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G6 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
+| **Next task(s) to pick** | G7 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G5 Item detail GG2 complete) |
+| **Last updated** | 2026-10-14 by Antigravity (G6 Cart & tracking GG3, GG4 complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -23,7 +23,7 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G3 | Antigravity | complete ✅ |
 | G4 | Antigravity | complete ✅ |
 | G5 | Antigravity | complete ✅ |
-| G6 | Antigravity | in progress 🟡 |
+| G6 | Antigravity | complete ✅ |
 | G7–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
@@ -372,6 +372,31 @@ Did:
 Tests: typecheck ✅ lint ✅ unit ✅ 106/106 e2e ✅ (15/15 GG menu + 9/9 Brew Bari core)
 Commits / branch / PR: `task/G5-item-detail`
 Next: G6 Cart & order tracking (GG3, GG4).
+
+### 2026-10-14 — Antigravity — G6 Cart & order tracking (GG3, GG4)
+Did:
+- Implemented cart helpers in `src/lib/cart/store.ts`:
+  - `calculateMealSavings`: computes total meal savings from `compare_delta` of selected choices.
+  - `isMealLine`: identifies whether a cart item has an active meal selection.
+  - `filterCartUpsell`: filters available items tagged with `pairs-well`, excluding in-cart items, capped at 6.
+- Updated `src/components/menu/CartSheet.tsx`:
+  - Accent `MEAL` / `মিল` badge on meal items.
+  - "Goes well with" horizontal slider when `theme.layout.cartUpsell` is active, with quick-add button.
+  - Totals box with "You save with meals" (`-৳...`) row in success color.
+  - "Send to kitchen" CTA button with Flame icon and `theme.copy.placeOrder` label for fast-food theme.
+- Updated `src/components/menu/MenuClient.tsx`:
+  - Wired `menuItems` and `handleAddUpsell` to `<CartSheet />`.
+- Updated `src/components/table/TableStatusSheet.tsx` & `TableProvider.tsx`:
+  - `statusCard: 'hero'`: dark hero card with progress bar, stage title, and subtext.
+  - 5-stage vertical stepper: Received (`new`), Accepted (`acknowledged`), On the grill (`preparing`), Ready (`ready`), Served (`done`).
+  - Active status text and toast use `theme.copy.statusPreparing` ("On the grill" / "গ্রিলে চলছে").
+  - Outlined "Call waiter", brand "Order more", and underline "Request the bill" actions.
+- Added unit tests in `tests/unit/cart.test.ts`, `tests/unit/cart-sheet.test.tsx`, and `tests/unit/table-status-sheet.test.tsx` (all 112 unit tests green across 20 files).
+- Added GG3/GG4 E2E test in `tests/e2e/gg-menu.spec.ts` (18/18 green across guest, staff, and staff-phone).
+- Verified Brew Bari ordering and regression suite (9/9 green across all projects).
+Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 GG menu + 9/9 Brew Bari core)
+Commits / branch / PR: `task/G6-cart-tracking`
+Next: G7 Staff side.
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

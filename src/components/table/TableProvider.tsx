@@ -7,6 +7,7 @@ import { getDeviceId } from '@/lib/device-id';
 import { getErrorMessage } from '@/lib/errors';
 import { getSupabaseBrowserClient } from '@/lib/supabase/client';
 import { playChime } from '@/lib/audio';
+import { useTheme } from '@/themes/ThemeContext';
 import type { TableContextResult, SessionRequestJson, SessionStatus } from '@/lib/schemas';
 import type { CartLineType } from '@/lib/schemas';
 
@@ -69,6 +70,8 @@ export function TableProvider({
   }, [session?.id]);
 
 
+  const theme = useTheme();
+
   // Active status summary for floating pill
   const activeStatusText = React.useMemo(() => {
     const latestOrder = requests.find((r) => r.type === 'order');
@@ -80,6 +83,9 @@ export function TableProvider({
         return locale === 'bn' ? 'অর্ডার অনুমোদিত হয়েছে' : 'Order approved';
       }
       if (latestOrder.status === 'preparing') {
+        if (theme?.copy?.statusPreparing) {
+          return theme.copy.statusPreparing[locale] ?? (locale === 'bn' ? 'গ্রিলে চলছে' : 'On the grill');
+        }
         return locale === 'bn' ? 'অর্ডার তৈরি হচ্ছে' : 'Order preparing';
       }
       if (latestOrder.status === 'ready') {
@@ -111,7 +117,7 @@ export function TableProvider({
     }
 
     return null;
-  }, [requests, locale]);
+  }, [requests, locale, theme]);
 
   // Refresh status RPC
   const refreshStatus = useCallback(async () => {
@@ -249,7 +255,14 @@ export function TableProvider({
             );
             playChime();
           } else if (r.status === 'preparing') {
-            toast.info(locale === 'bn' ? 'আপনার অর্ডার তৈরি হচ্ছে! ☕' : 'Your order is being prepared! ☕');
+            const prepText = theme?.copy?.statusPreparing
+              ? locale === 'bn'
+                ? `আপনার অর্ডার ${theme.copy.statusPreparing.bn}! 🔥`
+                : `Your order is ${theme.copy.statusPreparing.en.toLowerCase()}! 🔥`
+              : locale === 'bn'
+                ? 'আপনার অর্ডার তৈরি হচ্ছে! ☕'
+                : 'Your order is being prepared! ☕';
+            toast.info(prepText);
             playChime();
           } else if (r.status === 'ready') {
             toast.success(locale === 'bn' ? 'আপনার অর্ডার প্রস্তুত! 🎉' : 'Your order is ready! 🎉');
@@ -288,7 +301,7 @@ export function TableProvider({
       }
       prevStatusesRef.current[r.id] = r.status;
     });
-  }, [requests, locale]);
+  }, [requests, locale, theme.copy.statusPreparing]);
 
   // Realtime channel subscription for instant status update broadcasts
   useEffect(() => {

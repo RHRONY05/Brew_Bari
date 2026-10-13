@@ -148,12 +148,12 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
     return () => clearInterval(timer);
   }, [offers.length, activeIndex]);
 
+  const theme = useTheme();
+  const isHero = theme.layout.offerStyle === 'hero';
+
   if (!offers || offers.length === 0) {
     return null;
   }
-
-  const theme = useTheme();
-  const isHero = theme.layout.offerStyle === 'hero';
 
   const current = offers[activeIndex];
   const title = pick(current, 'title', locale);

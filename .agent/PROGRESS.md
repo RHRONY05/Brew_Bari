@@ -276,6 +276,8 @@ Next: plan & design Grill Ghar.
 |---|---|---|---|
 | 1 | Security (2026-10-14) | Demo staff passwords were in client code on the live site and are in the **public** git history. | **Open — human must change both staff passwords** (Supabase → Authentication → Users) and update `.env.local`. |
 | 2 | Supabase advisor | Leaked-password protection is off. | Open — enable in Supabase → Authentication → Settings. |
+| 4 | Security (2026-10-14) | Table QR tokens for Brew Bari tables 1–3 were hard-coded in the public cart sheet, so they are in the public git history. | Open — regenerate them in Admin → Tables & QR → "New QR" (and reprint if cards were printed). |
+| 5 | Local folders (2026-10-14) | `D:\Projects\Coffe_house` was accidentally wiped by Claude Code (`git worktree remove --force` on a temporary checkout followed the old `brew-bari: file:../Coffe_house` self-link). Restored from GitHub (`main` 5eddc1e) + `.env.local` from `coffe-lane-b`. Untracked local files that were never committed could not be recovered. `D:\Projects\coffe-lane-b` and `coffe-lane-c` are now orphaned old worktrees (their lanes are merged). | Restored. Human: delete the two lane folders when convenient (check nothing of yours is inside first). Never `git worktree remove --force` a folder that contains `node_modules` links. |
 | 3 | Dev only | Next.js logs "could not validate instant navigation" for `/staff/admin/*` because staff pages wait for the restaurant to load. No effect on build/production. | Known, accepted |
 
 

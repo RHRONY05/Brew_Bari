@@ -3,6 +3,8 @@ import {
   calculateItemPrice,
   validateOptionRequirements,
   formatSelectedChoicesForCart,
+  activeGroups,
+  cleanSelections,
 } from '@/lib/menu/options';
 import type { OptionGroup } from '@/lib/schemas';
 
@@ -93,5 +95,101 @@ describe('menu options logic', () => {
     });
 
     expect(formatted).toEqual(['size:large', 'milk:oat', 'extras:shot', 'extras:caramel']);
+  });
+
+  describe('options model v2 conditional active groups and show_if', () => {
+    const v2BurgerGroups: OptionGroup[] = [
+      {
+        id: 'meal',
+        name_en: 'Make it a meal?',
+        name_bn: 'মিল করবেন?',
+        type: 'single',
+        required: true,
+        display: 'cards',
+        choices: [
+          { id: 'solo', name_en: 'Just the burger', price_delta: 0 },
+          { id: 'meal', name_en: 'Meal', price_delta: 150, compare_delta: 200 },
+        ],
+      },
+      {
+        id: 'drink',
+        name_en: 'Your meal drink',
+        name_bn: 'মিলের ড্রিংক',
+        type: 'single',
+        required: true,
+        display: 'list',
+        show_if: { group: 'meal', choice: 'meal' },
+        choices: [
+          { id: 'cola', name_en: 'Cola', price_delta: 0 },
+          { id: 'lassi', name_en: 'Lassi', price_delta: 30 },
+        ],
+      },
+      {
+        id: 'extras',
+        name_en: 'Extras',
+        type: 'multi',
+        required: false,
+        choices: [
+          { id: 'cheese', name_en: 'Cheese', price_delta: 40 },
+        ],
+      },
+    ];
+
+    it('inactive group is not required when parent choice is not selected', () => {
+      const soloValidation = validateOptionRequirements(v2BurgerGroups, { meal: 'solo' });
+      expect(soloValidation.isValid).toBe(true);
+      expect(soloValidation.missingGroupIds).toEqual([]);
+
+      const active = activeGroups(v2BurgerGroups, { meal: 'solo' });
+      expect(active.map((g) => g.id)).toEqual(['meal', 'extras']);
+    });
+
+    it('child group becomes active and required when parent choice matches show_if', () => {
+      const active = activeGroups(v2BurgerGroups, { meal: 'meal' });
+      expect(active.map((g) => g.id)).toEqual(['meal', 'drink', 'extras']);
+
+      const missingDrink = validateOptionRequirements(v2BurgerGroups, { meal: 'meal' });
+      expect(missingDrink.isValid).toBe(false);
+      expect(missingDrink.missingGroupIds).toEqual(['drink']);
+
+      const withDrink = validateOptionRequirements(v2BurgerGroups, { meal: 'meal', drink: 'cola' });
+      expect(withDrink.isValid).toBe(true);
+    });
+
+    it('calculates price correctly with/without meal and active choices', () => {
+      const basePrice = 280;
+
+      // Solo: 280 + 0 = 280
+      const soloPrice = calculateItemPrice(basePrice, v2BurgerGroups, { meal: 'solo' });
+      expect(soloPrice.totalPrice).toBe(280);
+
+      // Meal + lassi (+150 + 30) = 460
+      const mealPrice = calculateItemPrice(basePrice, v2BurgerGroups, {
+        meal: 'meal',
+        drink: 'lassi',
+      });
+      expect(mealPrice.totalPrice).toBe(460);
+
+      // Inactive choices (e.g. stale drink with solo) are ignored in pricing
+      const staleDrink = calculateItemPrice(basePrice, v2BurgerGroups, {
+        meal: 'solo',
+        drink: 'lassi',
+      });
+      expect(staleDrink.totalPrice).toBe(280);
+    });
+
+    it('cleanSelections clears child selection when parent changes away from show_if choice', () => {
+      const selected = { meal: 'meal', drink: 'lassi', extras: ['cheese'] };
+      const updated = { ...selected, meal: 'solo' };
+      const cleaned = cleanSelections(v2BurgerGroups, updated);
+      expect(cleaned).toEqual({ meal: 'solo', extras: ['cheese'] });
+      expect(cleaned.drink).toBeUndefined();
+    });
+
+    it('formatSelectedChoicesForCart excludes inactive choices', () => {
+      const selected = { meal: 'solo', drink: 'lassi', extras: ['cheese'] };
+      const formatted = formatSelectedChoicesForCart(v2BurgerGroups, selected);
+      expect(formatted).toEqual(['meal:solo', 'extras:cheese']);
+    });
   });
 });

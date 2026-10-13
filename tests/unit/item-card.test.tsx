@@ -16,6 +16,7 @@ const mockItem: MenuItem = {
   compare_at_price: null,
   image_url: null,
   prep_minutes: 4,
+  spice_level: null,
   tags: ['bestseller'],
   options: [],
   is_available: true,

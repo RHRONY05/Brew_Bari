@@ -22,6 +22,7 @@ const mockItem: MenuItem = {
   compare_at_price: null,
   image_url: null,
   prep_minutes: 2,
+  spice_level: null,
   tags: ['hot'],
   options: [
     {

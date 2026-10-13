@@ -11,6 +11,7 @@ import {
   calculateItemPrice,
   validateOptionRequirements,
   formatSelectedChoicesForCart,
+  cleanSelections,
   type SelectedOptions,
 } from '@/lib/menu/options';
 import { formatTaka } from '@/lib/money';
@@ -34,10 +35,19 @@ interface ItemDetailSheetProps {
 function getInitialSelected(optionGroups: OptionGroup[]): SelectedOptions {
   const initial: SelectedOptions = {};
   for (const group of optionGroups) {
-    if (group.required && group.type === 'single' && group.choices.length > 0) {
-      initial[group.id] = group.choices[0].id;
-    } else if (group.type === 'multi') {
-      initial[group.id] = [];
+    let isActive = true;
+    if (group.show_if) {
+      const parentSel = initial[group.show_if.group];
+      isActive =
+        parentSel === group.show_if.choice ||
+        (Array.isArray(parentSel) && parentSel.includes(group.show_if.choice));
+    }
+    if (isActive) {
+      if (group.required && group.type === 'single' && group.choices.length > 0) {
+        initial[group.id] = group.choices[0].id;
+      } else if (group.type === 'multi') {
+        initial[group.id] = [];
+      }
     }
   }
   return initial;
@@ -80,10 +90,13 @@ function ItemDetailContent({
   const { isValid, missingGroupIds } = validateOptionRequirements(optionGroups, selected);
 
   const toggleSingleChoice = (groupId: string, choiceId: string) => {
-    setSelected((prev) => ({
-      ...prev,
-      [groupId]: choiceId,
-    }));
+    setSelected((prev) => {
+      const updated = {
+        ...prev,
+        [groupId]: choiceId,
+      };
+      return cleanSelections(optionGroups, updated);
+    });
   };
 
   const toggleMultiChoice = (groupId: string, choiceId: string) => {
@@ -92,10 +105,10 @@ function ItemDetailContent({
       const updated = current.includes(choiceId)
         ? current.filter((id) => id !== choiceId)
         : [...current, choiceId];
-      return {
+      return cleanSelections(optionGroups, {
         ...prev,
         [groupId]: updated,
-      };
+      });
     });
   };
 

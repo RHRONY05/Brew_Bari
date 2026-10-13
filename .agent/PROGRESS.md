@@ -10,15 +10,16 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 |---|---|
 | **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
 | **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G1 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). Start at [restaurants/grill-ghar/README.md](restaurants/grill-ghar/README.md). |
+| **Next task(s) to pick** | G2 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
 | **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G0 baseline established) |
+| **Last updated** | 2026-10-14 by Antigravity (G1 Options model v2 complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
 |---|---|---|
 | G0 | Antigravity | complete ✅ |
-| G1–G9 | — | not started |
+| G1 | Antigravity | complete ✅ |
+| G2–G9 | — | not started |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -298,6 +299,20 @@ Did:
   - e2e tests: ✅ 87/87 passed across guest (Pixel 7), staff (desktop 1280x800), and staff-phone (390x844).
 Tests: typecheck ✅ lint ⚠️ (50 pre-existing) unit ✅ 83/83 e2e ✅ 87/87
 Next: G1 Options model v2 + spice level (shared, DB).
+
+### 2026-10-14 — Antigravity — G1 Options model v2 + spice level
+Did:
+- Migration `supabase/migrations/20261015000006_option_rules.sql`: added `menu_items.spice_level smallint check (between 0 and 4)` and updated `price_cart` to enforce `show_if` active/inactive conditional group logic. Applied via Supabase MCP `apply_migration`.
+- Regenerated TypeScript types via MCP `generate_typescript_types` into `src/types/database.ts`.
+- Verified advisors via MCP `get_advisors` (0 errors, warnings clean).
+- Updated `src/lib/schemas.ts`: added `display`, `show_if`, `description_en/bn`, `compare_delta`, `heat`, plus zod refinements (`compare_delta > price_delta`, cards display <= 3 choices, `show_if` references earlier group and valid choice).
+- Updated `src/lib/menu/options.ts`: added `activeGroups`, `cleanSelections`, and updated pricing, requirements validation, and cart formatting to evaluate active groups only. Updated `ItemDetailSheet.tsx` to clear child selections on parent change.
+- Created and executed `supabase/tests/10_option_rules.sql` via MCP `execute_sql` (all 5 cases passed: solo base price, meal+drink pricing, missing drink error, drink without meal error, price tampering protection). Re-ran `04_place_order.sql` and `09_multi_restaurant.sql` (both 100% green).
+- Added unit tests in `tests/unit/options.test.ts` and `tests/unit/schemas.test.ts` (93/93 unit tests passed).
+- Verified Brew Bari ordering E2E tests (`p3-order-bill-review.spec.ts` and `sold-out-race.spec.ts`) — all 6 tests passed across guest Pixel 7, staff desktop, and staff phone.
+Tests: typecheck ✅ lint ✅ unit ✅ 93/93 SQL ✅ (10, 04, 09) e2e ✅ (6/6 Brew Bari ordering)
+Commits / branch / PR: `task/G1-options-v2`
+Next: G2 Theme, font, logo, layout-option scaffold.
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

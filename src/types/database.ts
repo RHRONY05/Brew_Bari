@@ -128,6 +128,7 @@ export type Database = {
           price: number
           restaurant_id: string
           sort_order: number
+          spice_level: number | null
           tags: string[]
           updated_at: string
         }
@@ -148,6 +149,7 @@ export type Database = {
           price: number
           restaurant_id: string
           sort_order?: number
+          spice_level?: number | null
           tags?: string[]
           updated_at?: string
         }
@@ -168,6 +170,7 @@ export type Database = {
           price?: number
           restaurant_id?: string
           sort_order?: number
+          spice_level?: number | null
           tags?: string[]
           updated_at?: string
         }

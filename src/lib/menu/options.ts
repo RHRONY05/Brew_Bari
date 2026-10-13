@@ -5,7 +5,64 @@ export interface SelectedOptions {
 }
 
 /**
- * Calculates line price: (base_price + sum of price_deltas) * quantity.
+ * Returns only the option groups that are currently active based on selected options.
+ * A group without `show_if` is always active.
+ * A group with `show_if` is active only if its referenced parent group is active AND
+ * the parent group's referenced choice is selected.
+ */
+export function activeGroups(
+  groups: OptionGroup[],
+  selected: SelectedOptions
+): OptionGroup[] {
+  const active: OptionGroup[] = [];
+  const activeIds = new Set<string>();
+
+  for (const group of groups) {
+    if (!group.show_if) {
+      active.push(group);
+      activeIds.add(group.id);
+      continue;
+    }
+    const parentId = group.show_if.group;
+    if (!activeIds.has(parentId)) {
+      continue;
+    }
+    const parentSel = selected[parentId];
+    const isParentSelected =
+      parentSel === group.show_if.choice ||
+      (Array.isArray(parentSel) && parentSel.includes(group.show_if.choice));
+
+    if (isParentSelected) {
+      active.push(group);
+      activeIds.add(group.id);
+    }
+  }
+
+  return active;
+}
+
+/**
+ * Strips out selections for groups that are no longer active (e.g. when parent choice changes).
+ */
+export function cleanSelections(
+  groups: OptionGroup[],
+  selected: SelectedOptions
+): SelectedOptions {
+  const active = activeGroups(groups, selected);
+  const activeIds = new Set(active.map((g) => g.id));
+  const cleaned: SelectedOptions = {};
+
+  for (const [gid, val] of Object.entries(selected)) {
+    if (activeIds.has(gid)) {
+      cleaned[gid] = val;
+    }
+  }
+
+  return cleaned;
+}
+
+/**
+ * Calculates line price: (base_price + sum of price_deltas of active groups) * quantity.
  */
 export function calculateItemPrice(
   basePrice: number,
@@ -13,9 +70,10 @@ export function calculateItemPrice(
   selected: SelectedOptions,
   quantity = 1
 ): { unitPrice: number; totalPrice: number; delta: number } {
+  const liveGroups = activeGroups(groups, selected);
   let delta = 0;
 
-  for (const group of groups) {
+  for (const group of liveGroups) {
     const sel = selected[group.id];
     if (!sel) continue;
 
@@ -37,15 +95,16 @@ export function calculateItemPrice(
 }
 
 /**
- * Validates that all required option groups have a selection.
+ * Validates that all required active option groups have a selection.
  */
 export function validateOptionRequirements(
   groups: OptionGroup[],
   selected: SelectedOptions
 ): { isValid: boolean; missingGroupIds: string[] } {
+  const liveGroups = activeGroups(groups, selected);
   const missingGroupIds: string[] = [];
 
-  for (const group of groups) {
+  for (const group of liveGroups) {
     if (group.required) {
       const sel = selected[group.id];
       if (!sel || (Array.isArray(sel) && sel.length === 0)) {
@@ -61,15 +120,16 @@ export function validateOptionRequirements(
 }
 
 /**
- * Formats choices into "groupId:choiceId" string array for cart line.
+ * Formats active choices into "groupId:choiceId" string array for cart line.
  */
 export function formatSelectedChoicesForCart(
   groups: OptionGroup[],
   selected: SelectedOptions
 ): string[] {
+  const liveGroups = activeGroups(groups, selected);
   const result: string[] = [];
 
-  for (const group of groups) {
+  for (const group of liveGroups) {
     const sel = selected[group.id];
     if (!sel) continue;
 

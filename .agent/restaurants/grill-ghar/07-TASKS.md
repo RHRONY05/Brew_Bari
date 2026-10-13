@@ -19,7 +19,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - Check "Questions for the human" at the bottom of this file. Ask the human anything unanswered that blocks you, then continue with the rest.
   - **AC:** baseline entry in PROGRESS.md.
 
-- [ ] **G1 Options model v2 + spice level (shared, DB)** · spec: `03-DATA.md` §1–§2
+- [x] **G1 Options model v2 + spice level (shared, DB)** — migration applied, types regenerated, 10_option_rules.sql, 04_place_order.sql, 09_multi_restaurant.sql green; 93 unit tests passed; Brew Bari ordering e2e green.
   - Migration `supabase/migrations/20261015000006_option_rules.sql`: `menu_items.spice_level`, new `price_cart` with `show_if` rules. Apply via MCP, regenerate `src/types/database.ts`, run advisors.
   - `src/lib/schemas.ts`: new optional fields + refinements. `src/lib/menu/options.ts`: `activeGroups`, active-only pricing/validation/formatting, clear child on parent change.
   - **Tests:** `supabase/tests/10_option_rules.sql` (cases in 03-DATA §2); re-run `04_place_order.sql`, `09_multi_restaurant.sql`. Unit tests in `tests/unit/options.test.ts` + `schemas.test.ts` for: inactive group not required, child cleared when parent changes, price with/without meal, invalid `show_if` rejected by zod, Brew Bari's existing options still parse.

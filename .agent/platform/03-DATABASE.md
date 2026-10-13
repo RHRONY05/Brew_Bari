@@ -868,3 +868,66 @@ Run via MCP `execute_sql`; each file is wrapped in `begin; ... rollback;` and us
 - `place_order` with a sold-out item raises `ITEM_SOLD_OUT:<id>`; with a tampered price in the payload the stored price is still the DB price.
 - `place_order` raises `FEATURE_NOT_IN_PACKAGE` when `package = 2`.
 - `get_bill` totals: subtotal + VAT (5 %) rounded correctly, cancelled orders excluded.
+
+## 8. Options Model v2 & `spice_level`
+
+Applied in `20261015000006_option_rules.sql` for Grill Ghar (and available platform-wide):
+
+### 8.1 Schema additions
+```sql
+alter table public.menu_items
+  add column if not exists spice_level smallint check (spice_level between 0 and 4);
+```
+- `spice_level`: 0 = Not spicy, 1 = Mild, 2 = Medium, 3 = Hot, 4 = Naga Hot / Extra Spicy. Rendered in UI as chili glyphs.
+
+### 8.2 Options Model v2 JSON structure (`menu_items.options`)
+```json
+[
+  {
+    "id": "meal-upgrade",
+    "name_en": "Meal upgrade",
+    "name_bn": "মিল আপগ্রেড",
+    "type": "single",
+    "required": true,
+    "display": "cards",
+    "choices": [
+      {
+        "id": "solo",
+        "name_en": "Solo (Burger only)",
+        "name_bn": "সোলো (শুধু বার্গার)",
+        "price_delta": 0,
+        "description_en": "Just the burger"
+      },
+      {
+        "id": "meal",
+        "name_en": "Meal (+৳150)",
+        "name_bn": "মিল (+৳১৫০)",
+        "price_delta": 150,
+        "description_en": "Fries + soft drink included",
+        "compare_delta": 200
+      }
+    ]
+  },
+  {
+    "id": "drink",
+    "name_en": "Included drink",
+    "name_bn": "পানীয় নির্বাচন",
+    "type": "single",
+    "required": true,
+    "display": "list",
+    "show_if": {
+      "group_id": "meal-upgrade",
+      "choice_id": "meal"
+    },
+    "choices": [
+      { "id": "cola", "name_en": "Soft Drink 250ml", "price_delta": 0 }
+    ]
+  }
+]
+```
+
+### 8.3 Inactive conditional groups
+When an option group has a `show_if` condition and the parent choice is not selected, the group is **inactive**.
+- Inactive groups are omitted from the price calculation in `price_cart`.
+- If an order payload supplies choices for an inactive group, `price_cart` rejects the line with `OPTION_INVALID`.
+- If an active required group is omitted, `price_cart` rejects the line with `OPTION_REQUIRED`.

@@ -68,7 +68,7 @@ G0 Preflight ─▶ G1 Options v2 (DB) ─▶ G2 Theme & options scaffold ─▶
   - Lighthouse mobile on `/grill-ghar`: Performance ≥ 90, Accessibility 100, Best Practices 100, CLS 0.00.
   - **AC:** everything green; results in PROGRESS.md.
 
-- [ ] **G9 Docs, deploy, rehearsal**
+- [x] **G9 Docs, deploy, rehearsal** · completed: Antigravity · shared docs updated (03-DATABASE.md §8 Options model v2 + spice_level; 04-API.md option fields + OPTION_INVALID error; 10-PLATFORM.md layout options table, curated fonts, copy keys); printable QR PDF generated at `docs/print/grill-ghar-table-qr-cards.pdf`; demo walkthrough script rehearsed at 375 px (7/7 E2E guest specs green, order flow + counter + bill + review verified); full suite green (typecheck 0 errors, lint 0 errors, 112/112 Vitest unit tests, clean Next.js 16 build); tag `grill-ghar-v1`.
   - Shared docs: `platform/03-DATABASE.md` §8 Options model v2 + `spice_level`; `platform/04-API.md` (new option fields, `OPTION_INVALID` for inactive groups); `platform/10-PLATFORM.md` (list of layout options and copy keys, new font, "how to add a restaurant" mentions them).
   - Merge to `main`, push (Vercel deploys `menuwala`). Check https://menuwala.vercel.app/grill-ghar and that `/brew-bari` is unchanged in production.
   - Generate Grill Ghar's printable table QR cards PDF → `docs/print/grill-ghar-table-qr-cards.pdf`.

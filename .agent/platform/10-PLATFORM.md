@@ -51,18 +51,37 @@ How a theme is applied:
 Rules for components:
 - Colours only through tokens (`bg-brand`, `text-ink`, `shadow-[0_6px_20px_rgb(var(--shadow-rgb)/0.08)]`, `bg-[var(--offer-from)]`). **No hex values in components.** Canvas/QR code colours come from `readThemeColors()` (`src/lib/theme-colors.ts`), so colour tokens must be **hex**.
 - Restaurant name, logo, Wi-Fi, links come from the `restaurants` row; logo = `restaurant.logo_url || theme.assets.logo`.
-- Restaurant-type wording (search placeholder, "Café info") comes from `theme.copy`. Placeholder icons use `<VenueIcon />`.
-- A visual difference between restaurants = a new **option** in `Theme['layout']` implemented once in the component (e.g. `offerDecoration: 'liquid-splash' | 'none'`). Never fork a component per restaurant.
+- Restaurant-type wording (search placeholder, "Café info", status strings) comes from `theme.copy`. Placeholder icons use `<VenueIcon />`.
+- A visual difference between restaurants = a new **option** in `Theme['layout']` implemented once in the component. Never fork a component per restaurant.
+
+### Supported Theme Layout Options & Copy Keys
+| Key | Type | Description |
+|---|---|---|
+| `layout.offerStyle` | `'standard' \| 'hero'` | Standard banner carousel (Brew Bari) vs full-bleed hero offer with right-side photo bleed and price pill (Grill Ghar) |
+| `layout.categoryNav` | `'pills' \| 'round-icons'` | Horizontal text pills vs circular icons with indicator dot |
+| `layout.itemCard` | `'standard' \| 'bold'` | Standard card layout vs bold border card with spice flame tags and compact action |
+| `layout.dealsRow` | `boolean` | Renders top discount deals row with calculated SAVE % badge |
+| `layout.quickPicks` | `'slider' \| 'banner' \| 'none'` | Horizontal item slider vs banner view vs hidden |
+| `layout.cartUpsell` | `boolean` | "Goes well with" item carousel inside `CartSheet` excluding in-cart and sold-out items |
+| `layout.statusCard` | `'standard' \| 'hero'` | Standard horizontal stepper vs dark hero tracking card with animated progress bar |
+| `copy.placeOrder` | `string` | CTA label on cart sheet: "Place order" (café) vs "Send to kitchen" (kitchen grill) |
+| `copy.statusPreparing`| `string` | Preparing stage label: "Preparing" vs "On the grill" |
+| `icons.venueIcon` | `'coffee' \| 'utensils'` | Global restaurant icon for admin, placeholders, and brand accents |
+
+### Curated Fonts (`src/themes/fonts.ts`)
+- **Heading fonts**: `Cinzel`, `Libre_Baskerville`, `Plus_Jakarta_Sans`, `Poppins`, `Bricolage_Grotesque`.
+- **Bengali fonts**:
+  - `hasan-protilipi`: Li Hasan Protilipi (traditional, café warmth).
+  - `alinur-nobin`: Li Alinur Nobin (bold, fast-food, high visual energy for Grill Ghar).
+  - `hind-siliguri`: Google Font fallback.
 
 ## How to add a restaurant (checklist)
-1. **Theme**: create `src/themes/<key>.ts` (copy `brew-bari.ts`), set tokens (hex), fonts from `fonts.ts`, layout options, icons, copy, fallback logo in `public/images/brand/`. Register it in `THEMES` in `src/themes/index.ts`. Add new layout options to `types.ts` + the component if needed.
+1. **Theme**: create `src/themes/<key>.ts` (copy `brew-bari.ts` or `grill-ghar.ts`), set tokens (hex), fonts from `fonts.ts`, layout options, icons, copy, fallback logo in `public/images/brand/`. Register it in `THEMES` in `src/themes/index.ts`. Add new layout options to `types.ts` + the component if needed.
 2. **Fonts**: if the theme needs a font that isn't in `fonts.ts`, add it there (with `preload: false`) and to the font key types + `FONT_VARIABLES`.
-3. **Data** (Supabase MCP, as a seed SQL file in `supabase/seed-<slug>.sql`): `restaurants` row (`slug`, names EN/BN, `theme_key`, `package`, `package_locked`, `is_listed`, info, Wi-Fi, links, VAT), categories, menu items (EN/BN, prices, `prep_minutes`, options), offers, tables 1–N + test table 99.
+3. **Data** (Supabase MCP, as a seed SQL file in `supabase/seed-<slug>.sql`): `restaurants` row (`slug`, names EN/BN, `theme_key`, `package`, `package_locked`, `is_listed`, info, Wi-Fi, links, VAT), categories, menu items (EN/BN, prices, `prep_minutes`, `spice_level`, options model v2), offers, tables 1–N + test table 99.
 4. **Staff**: create admin + counter users in Supabase Auth, insert `staff` rows. Put credentials only in `.env.local` / a password manager — **never in code or docs**.
 5. **Images**: upload to Storage `menu-images/<restaurant_id>/…` and set `image_url`/`logo_url`.
-6. **Verify**: `/<slug>` renders with the new theme; `/brew-bari` is unchanged; run `supabase/tests/09_multi_restaurant.sql`; e2e suite green.
+6. **Verify**: `/<slug>` renders with the new theme; other restaurants remain unchanged; run `supabase/tests/09_multi_restaurant.sql`; dedicated e2e spec (`gg-menu`, `gg-order`, `gg-staff`) green.
 
 ## Not done yet (on purpose)
 - `custom_domain` mapping (column exists; proxy doesn't route by host yet).
-- Per-restaurant e2e suites: the existing suite covers Brew Bari; add a spec per new restaurant for its theme + flows.
-- Layout options beyond `offerDecoration` — add them when the next restaurant's design needs them (e.g. category nav `pills | icons`, item card `standard | deal`).

@@ -8,11 +8,11 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 ## Now
 | | |
 |---|---|
-| **Phase** | Brew Bari complete (tag `brew-bari-v1`). Platform refactor done (Menuwala). Docs reorganised (`platform/` + `restaurants/`). |
-| **Active restaurant** | **Grill Ghar** (restaurant #2, fast food, P3 locked) — in progress |
-| **Next task(s) to pick** | G9 in [restaurants/grill-ghar/07-TASKS.md](restaurants/grill-ghar/07-TASKS.md). |
-| **Blocked on** | None (Font licence resolved: using Alinur Nobin with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G8 Tests complete) |
+| **Phase** | Grill Ghar complete (tag `grill-ghar-v1`). Both restaurants (Brew Bari & Grill Ghar) complete and live on Menuwala platform. |
+| **Active restaurant** | None — Platform + 2 restaurants complete |
+| **Next task(s) to pick** | Demo walkthroughs, pitch rehearsal with Turjo, maintenance |
+| **Blocked on** | None (Font licence note: Li Alinur Nobin used with hind-siliguri fallback ready). |
+| **Last updated** | 2026-10-14 by Antigravity (G9 Docs, deploy, rehearsal complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |
@@ -26,7 +26,7 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | G6 | Antigravity | complete ✅ |
 | G7 | Antigravity | complete ✅ |
 | G8 | Antigravity | complete ✅ |
-| G9 | — | not started |
+| G9 | Antigravity | complete ✅ |
 
 ## Brew Bari — lane status (finished)
 | Lane | Owner (agent) | Current task | Branch | State |
@@ -466,6 +466,32 @@ Next: G8 Tests (gg-menu, gg-order, gg-staff, full suite, Lighthouse mobile).
 Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (30/30 GG + 15/15 Brew Bari core)
 Commits / branch / PR: `task/G8-tests`
 Next: G9 Docs, deploy, rehearsal.
+
+### 2026-10-14 05:56 — Antigravity — G9 (Docs, deploy, rehearsal)
+Did:
+- Updated shared platform documentation:
+  - `platform/03-DATABASE.md`: Documented §8 Options Model v2 (`show_if`, `display`, `compare_delta`, `heat`) and `spice_level` column in `menu_items`.
+  - `platform/04-API.md`: Documented v2 option schema extensions and `OPTION_INVALID` error code for inactive/hidden option groups.
+  - `platform/10-PLATFORM.md`: Added layout options reference table, curated fonts list, copy keys dictionary, and updated restaurant onboarding workflow.
+- Updated `scripts/generate-pdf.mjs` to dynamically load `.env.local` credentials and support generating PDFs for both Grill Ghar and Brew Bari without hardcoded credentials.
+- Generated Grill Ghar's printable table QR cards PDF: `docs/print/grill-ghar-table-qr-cards.pdf` (151 KB).
+- Rehearsed `08-DEMO-SCRIPT.md` at 375 px mobile viewport:
+  - Validated guest menu GG1 at 375×812 with Flame Red theme and Cinzel/Poppins/Alinur Nobin typography.
+  - Validated 1-tap Bangla toggle (`বাং`) switching all copy cleanly.
+  - Validated upsell flow with Naga Smash Burger meal (+150 taka, SAVE ৳50 badge, drink selection, Naga spice chip, extra cheese, dynamic CTA ৳510).
+  - Validated Hot Wings addition, cart view with "Goes well with" upsell and meal savings, send to kitchen.
+  - Validated counter lifecycle, "On the grill" hero tracking card with progress bar, served status, bill request with 5% VAT, and Google review sheet.
+- Verification & DoD:
+  - TypeScript typecheck: 0 errors (`npm run typecheck`).
+  - ESLint: 0 errors (`npm run lint`).
+  - Vitest unit tests: 112/112 passed across 20 test files (`npm run test`).
+  - Production build: Clean compilation with Turbopack across all 16 routes (`npm run build`).
+  - Guest E2E rehearsal: 7/7 passed.
+- Merged to `main`, pushed to `origin/main`, verified live deployment on Vercel, and created release tag `grill-ghar-v1`.
+Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ build ✅
+Commits / branch / PR: `task/G9-docs-deploy` -> `main`, tag `grill-ghar-v1`
+Next: All tasks complete! Pitch rehearsal with Turjo.
+
 
 ## Open problems / known bugs
 | # | Found in | Problem | Status |

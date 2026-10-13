@@ -15,13 +15,23 @@ export const OptionChoice = z.object({
   name_en: z.string().min(1).max(40),
   name_bn: z.string().max(40).optional(),
   price_delta: z.number().int().min(0).max(5000),
+  description_en: z.string().max(100).optional(),
+  description_bn: z.string().max(100).optional(),
+  compare_delta: z.number().int().min(0).max(5000).optional(),
+  heat: z.number().int().min(0).max(4).optional(),
 });
+
 export const OptionGroup = z.object({
   id: z.string().regex(/^[a-z0-9-]{1,30}$/),
   name_en: z.string().min(1).max(40),
   name_bn: z.string().max(40).optional(),
   type: z.enum(['single', 'multi']),
   required: z.boolean(),
+  display: z.enum(['cards', 'list', 'chips', 'pills']).optional(),
+  show_if: z.object({
+    group_id: z.string().regex(/^[a-z0-9-]{1,30}$/),
+    choice_id: z.string().regex(/^[a-z0-9-]{1,30}$/),
+  }).optional(),
   choices: z.array(OptionChoice).min(1).max(10),
 });
 export const ItemOptions = z.array(OptionGroup).max(6);

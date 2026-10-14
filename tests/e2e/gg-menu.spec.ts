@@ -32,7 +32,7 @@ test.describe('Grill Ghar: Menu Home GG1 (gg-menu.spec.ts)', () => {
     // Hero Offer Carousel
     const offerCarousel = page.locator('[data-testid="offer-carousel"]');
     await expect(offerCarousel).toBeVisible();
-    await expect(offerCarousel.getByText(/SMOKY\.|FAMILY|DUO/i).first()).toBeVisible();
+    await expect(offerCarousel.getByText(/SMOKY|FAMILY|DUO/i).first()).toBeVisible();
 
     // Round Category Navigation
     const nav = page.locator('nav[aria-label="Categories"]');

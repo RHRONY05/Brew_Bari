@@ -165,58 +165,62 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
   const imageUrl = current.image_url || linkedItem?.image_url;
 
   if (isHero) {
+    const cleanTitle = title.replace(/\r?\n+/g, ' ').trim();
+
     return (
       <div className="w-full px-4" data-testid="offer-carousel">
         {/* Hero offer card */}
         <div
           onClick={() => onSelectOffer?.(current)}
-          className="relative min-h-[210px] h-[210px] rounded-[24px] bg-gradient-to-r from-[var(--offer-from,#D2291C)] via-[var(--offer-via,#B32116)] to-[var(--offer-to,#8E1A12)] overflow-hidden shadow-[0_14px_30px_rgb(var(--offer-shadow-rgb,142_26_18)/0.35)] cursor-pointer group text-brand-ink"
+          className="relative min-h-[195px] h-[195px] sm:h-[210px] rounded-[24px] bg-gradient-to-r from-[var(--offer-from,#D2291C)] via-[var(--offer-via,#B32116)] to-[var(--offer-to,#8E1A12)] overflow-hidden shadow-[0_14px_30px_rgb(var(--offer-shadow-rgb,142_26_18)/0.35)] cursor-pointer group text-brand-ink"
         >
-          {/* Photo slot (bleeds off right side) */}
-          <div className="absolute -right-7 top-[18px] w-[210px] h-[210px] rounded-full bg-[var(--offer-image-bg,#F7C9A8)] border-[6px] border-white/20 overflow-hidden pointer-events-none transition-transform duration-500 group-hover:scale-105 shadow-inner">
+          {/* Transparent food image on right side (no circular container) */}
+          <div className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-[145px] h-[145px] sm:w-[175px] sm:h-[175px] max-w-[42%] flex items-center justify-center pointer-events-none transition-transform duration-500 group-hover:scale-105 z-10">
             {imageUrl ? (
-              <Image
-                src={imageUrl}
-                alt={title}
-                fill
-                sizes="210px"
-                className="object-cover"
-                priority={activeIndex === 0}
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={imageUrl}
+                  alt={cleanTitle}
+                  fill
+                  sizes="(max-width: 640px) 145px, 175px"
+                  className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
+                  priority={activeIndex === 0}
+                />
+              </div>
             ) : (
-              <div className="w-full h-full flex items-center justify-center text-brand-dark">
+              <div className="w-16 h-16 flex items-center justify-center text-brand-ink/80">
                 <Sparkles className="w-12 h-12 stroke-[1.8]" />
               </div>
             )}
           </div>
 
           {/* Content (Left Column) */}
-          <div className="relative p-5 pt-5 pb-4 flex flex-col justify-between h-full z-10 w-[210px] sm:w-[240px]">
-            <div className="flex flex-col gap-2 min-w-0">
+          <div className="relative p-4 sm:p-5 flex flex-col justify-between h-full z-10 w-[58%] sm:w-[60%] min-w-0 pr-1">
+            <div className="flex flex-col gap-1.5 sm:gap-2 min-w-0">
               {badge && (
-                <span className="self-start h-5 px-2.5 rounded-full bg-accent text-accent-ink text-[11px] font-bold uppercase tracking-wider flex items-center shadow-xs">
+                <span className="self-start h-5 px-2.5 rounded-full bg-accent text-accent-ink text-[10.5px] font-bold uppercase tracking-wider flex items-center shadow-xs">
                   {badge}
                 </span>
               )}
-              <h2 className="font-heading font-black text-[23px] sm:text-[26px] leading-[1.02] tracking-wide text-brand-ink uppercase whitespace-pre-line">
-                {title}
+              <h2 className="font-heading font-black text-[19px] sm:text-[23px] leading-[1.12] tracking-tight text-brand-ink uppercase line-clamp-2 [text-wrap:balance]">
+                {cleanTitle}
               </h2>
               {subtitle && (
-                <p className="text-[12px] leading-snug text-brand-ink/90 line-clamp-2">
+                <p className="text-[11.5px] sm:text-[12.5px] leading-snug text-brand-ink/90 line-clamp-2">
                   {subtitle}
                 </p>
               )}
             </div>
 
             <div className="pt-2">
-              <span className="inline-flex items-center gap-2 bg-brand-ink text-brand font-bold text-[13px] py-1.5 pl-3.5 pr-2 rounded-full shadow-sm">
+              <span className="inline-flex items-center gap-2 bg-brand-ink text-brand font-bold text-[12.5px] sm:text-[13px] py-1.5 pl-3.5 pr-2 rounded-full shadow-sm">
                 <span>{linkedItem ? formatTaka(linkedItem.price, locale) : ctaText}</span>
                 {linkedItem?.compare_at_price && (
-                  <span className="line-through text-ink-3 text-[12px] font-medium">
+                  <span className="line-through text-ink-3 text-[11.5px] font-medium">
                     {formatTaka(linkedItem.compare_at_price, locale)}
                   </span>
                 )}
-                <span className="w-6 h-6 rounded-full bg-brand text-brand-ink inline-flex items-center justify-center shrink-0">
+                <span className="w-5.5 h-5.5 sm:w-6 sm:h-6 rounded-full bg-brand text-brand-ink inline-flex items-center justify-center shrink-0">
                   <ArrowRight className="w-3.5 h-3.5 stroke-[2.6]" />
                 </span>
               </span>

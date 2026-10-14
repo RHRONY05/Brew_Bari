@@ -290,8 +290,8 @@ select r.id, v.title_en, v.title_bn, v.sub_en, v.sub_bn, v.badge_en, v.badge_bn,
 from public.restaurants r,
 (values
   (
-    E'SMOKY.\nJUICY.\nNAGA HOT.',
-    E'ধোঁয়া।\nরসালো।\nনাগা ঝাল।',
+    'SMOKY JUICY NAGA HOT',
+    'ধোঁয়াটে রসালো নাগা হট',
     'Solo Combo — any burger, fries & drink',
     'সোলো কম্বো — যেকোনো বার্গার, ফ্রাইজ ও ড্রিংক',
     'This week only',
@@ -302,8 +302,8 @@ from public.restaurants r,
     1
   ),
   (
-    E'FAMILY\nBUCKET\nNIGHT',
-    E'ফ্যামিলি\nবাকেট\nনাইট',
+    'FAMILY BUCKET NIGHT',
+    'ফ্যামিলি বাকেট নাইট',
     '8 pc chicken, 2 fries, 1.25 L drink',
     '৮ পিস চিকেন, ২ ফ্রাইজ, ১.২৫ লি. ড্রিংক',
     'Fri & Sat',
@@ -314,8 +314,8 @@ from public.restaurants r,
     2
   ),
   (
-    E'TWO''S\nCOMPANY',
-    E'দুজনের\nজন্য',
+    'TWO''S COMPANY',
+    'দুজনের স্পেশাল কম্বো',
     'Duo Feast: 2 burgers, 2 fries, 2 drinks',
     'ডুও ফিস্ট: ২ বার্গার, ২ ফ্রাইজ, ২ ড্রিংক',
     'Save 16%',

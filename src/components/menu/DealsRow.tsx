@@ -42,6 +42,9 @@ export function DealsRow({
   const viewAllText = locale === 'bn' ? 'সবগুলো →' : 'View all →';
   const saveLabel = locale === 'bn' ? 'সেভ' : 'SAVE';
 
+  const dealCardWidth =
+    theme.layout.itemCard === 'bold' ? 'w-[158px]' : 'w-[176px]';
+
   return (
     <section
       id="section-deals"
@@ -66,7 +69,7 @@ export function DealsRow({
 
       <div
         data-testid="deals-slider"
-        className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth px-4 pb-2 snap-x"
+        className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth px-4 scroll-px-4 pb-2 snap-x"
       >
         {deals.map((item) => {
           const name = pick(item, 'name', locale);
@@ -86,7 +89,7 @@ export function DealsRow({
               key={item.id}
               data-testid={`deal-card-${item.id}`}
               onClick={() => onSelect(item)}
-              className={`w-[176px] shrink-0 snap-start bg-white rounded-[20px] border border-line shadow-[0_6px_18px_rgb(var(--shadow-rgb)/0.07)] overflow-hidden flex flex-col cursor-pointer transition-transform hover:-translate-y-0.5 ${
+              className={`${dealCardWidth} shrink-0 snap-start bg-white rounded-[20px] border border-line shadow-[0_6px_18px_rgb(var(--shadow-rgb)/0.07)] overflow-hidden flex flex-col cursor-pointer transition-transform hover:-translate-y-0.5 ${
                 isSoldOut ? 'opacity-55' : ''
               }`}
             >

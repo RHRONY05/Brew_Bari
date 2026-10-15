@@ -508,7 +508,13 @@ Did:
   - Lint: 0 errors (`npm run lint`).
   - Unit tests: 112/112 passed across 20 test files (`npm run test`).
   - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
-  - Visual verification: Captured screenshots of category nav, set meals section, burgers section, and Brew Bari regression check.
+- DealsRow slider padding fix:
+  - Added `scroll-px-4` to `DealsRow.tsx` so CSS scroll snap (`snap-x`) honors the 16px container padding instead of auto-scrolling 16px left to snap the first card to the screen edge.
+  - Aligned card width with `theme.layout.itemCard` (`w-[158px]` on Grill Ghar bold cards) so cards match the grid and display cleanly on mobile with peek.
+- Verification & DoD:
+  - Typecheck: 0 errors (`npm run typecheck`).
+  - Unit tests: 112/112 passed across 20 test files (`npm run test`).
+  - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
 Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 gg-menu)
 Commits / branch / PR: `main`
 Next: User review and approval.

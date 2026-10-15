@@ -12,7 +12,7 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 | **Active restaurant** | None — Platform + 2 restaurants complete |
 | **Next task(s) to pick** | Demo walkthroughs, pitch rehearsal with Turjo, maintenance |
 | **Blocked on** | None (Font licence note: Li Alinur Nobin used with hind-siliguri fallback ready). |
-| **Last updated** | 2026-10-14 by Antigravity (G9 Docs, deploy, rehearsal complete) |
+| **Last updated** | 2026-10-15 by Antigravity (Grill Ghar visual polish, AI assets, logo, QR cards complete) |
 
 ## Grill Ghar status
 | Task | Agent | State |

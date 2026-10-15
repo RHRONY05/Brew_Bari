@@ -5,7 +5,7 @@ Grill Ghar is built by **one agent in one go** (tasks G0 → G9). It is smaller 
 ## Before you start (5 minutes)
 1. Answer the **font licence** question at the bottom of [07-TASKS.md](07-TASKS.md) (or tell the agent to use the Hind Siliguri fallback for now).
 2. Antigravity: Supabase MCP connected; terminal auto-run on; browser use allowed; strongest model selected. Same deny list as for Brew Bari (`rm -rf /`, `git push --force`, `git reset --hard origin`, deleting Supabase projects).
-3. Make sure `D:\Projects\Coffe_house` is on `main`, clean, and `.env.local` exists.
+3. Make sure `D:\Projects\Menuwala` is on `main`, clean, and `.env.local` exists.
 
 ## The kickoff prompt (paste into a new Antigravity agent)
 ```

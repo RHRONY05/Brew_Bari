@@ -43,7 +43,7 @@ The active restaurant's `restaurants/<slug>/07-TASKS.md` is the *plan* (what to 
 ## Environment facts (no secrets here!)
 | Item | Value |
 |---|---|
-| GitHub repo | https://github.com/RHRONY05/Brew_Bari.git (**public**) |
+| GitHub repo | https://github.com/RHRONY05/Menuwala.git (**public**) |
 | Supabase project ref / region | vaxjsaknytquzcfxsukv / ap-southeast-1 |
 | Vercel URL | https://menuwala.vercel.app (project `menuwala`). `brew-bari.vercel.app` redirects there. |
 | Staff test accounts | stored in `.env.local` only — names of the env vars: `TEST_STAFF_ADMIN_EMAIL`, … |

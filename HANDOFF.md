@@ -16,7 +16,7 @@ Please read the core architecture and macro-progress documents first:
 ---
 
 ## 1. Project Facts & Status
-- **GitHub Remote:** `https://github.com/RHRONY05/Brew_Bari.git` (branch `main` is clean and pushed).
+- **GitHub Remote:** `https://github.com/RHRONY05/Menuwala.git` (branch `main` is clean and pushed).
 - **Supabase Project:** Ref `vaxjsaknytquzcfxsukv` (`brew-bari-demo`, Region `ap-southeast-1`), credentials in `.env.local`.
 - **Milestone M0 (Foundation & Scaffold):** Complete (Next.js 16, Tailwind v4, shadcn/ui, design tokens, unit tests, Playwright setup).
 - **Milestone M1 (Database & API):**

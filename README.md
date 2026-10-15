@@ -29,8 +29,8 @@ A high-performance, multi-tenant QR menu, table service, and ordering platform f
 
 ### 1. Clone & Install Dependencies
 ```bash
-git clone https://github.com/RHRONY05/Brew_Bari.git
-cd Brew_Bari
+git clone https://github.com/RHRONY05/Menuwala.git
+cd Menuwala
 npm install
 ```
 

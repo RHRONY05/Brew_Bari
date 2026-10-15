@@ -534,9 +534,13 @@ Did:
   - Unit tests: 112/112 passed across 20 test files (`npm run test`).
   - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
   - Visual verification: Captured header screenshot confirming crisp logo rendering on white badge.
-Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 gg-menu)
+- Platform home page UI upgrade & logo fix:
+  - Added `unoptimized` and aesthetic rounded badge tiles to prevent Next.js image loading glitches for restaurant logos.
+  - Redesigned landing page with top sticky navbar, hero badge, elevated restaurant demo showcase cards with cuisine tags, 3-pillar capabilities grid, and deep forest staff operations panel.
+  - Verified across desktop and mobile viewports with Playwright; 18/18 platform e2e tests green.
+Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 platform.spec.ts)
 Commits / branch / PR: `main`
-Next: User review and next instructions.
+Next: Complete! Session ended.
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | 1 | Security (2026-10-14) | Demo staff passwords were in client code on the live site and are in the **public** git history. | **Open — human must change both staff passwords** (Supabase → Authentication → Users) and update `.env.local`. |

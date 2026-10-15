@@ -86,6 +86,6 @@ export const grillGharTheme: Theme = {
     },
   },
   assets: {
-    logo: '/images/brand/grill-ghar.svg',
+    logo: '/images/brand/grill-ghar.webp',
   },
 }

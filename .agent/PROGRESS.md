@@ -515,9 +515,28 @@ Did:
   - Typecheck: 0 errors (`npm run typecheck`).
   - Unit tests: 112/112 passed across 20 test files (`npm run test`).
   - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
+### 2026-10-15 21:30 — Antigravity — Grill Ghar Logo Design & Implementation
+Did:
+- Designed and presented 4 AI-generated logo candidate options in modern minimalist fast-casual style.
+- User selected Option 4: "Grill Ghar" House & Hearth (clean house gable enclosing flame and horizontal grill grates).
+- Image processing with `sharp`:
+  - Performed flood-fill transparency extraction from outer boundaries and house negative space.
+  - Preserved internal flame core highlights and crisp vector line sharpness.
+  - Exported optimized 512×512 WebP (`public/images/brand/grill-ghar.webp`) and PNG (`public/images/brand/grill-ghar.png`).
+- Codebase integration:
+  - Updated `src/themes/grill-ghar.ts`: pointed `assets.logo` to `/images/brand/grill-ghar.webp`.
+  - Updated Supabase `public.restaurants`: set `logo_url = '/images/brand/grill-ghar.webp'` for `slug = 'grill-ghar'`.
+  - Updated `src/components/menu/MenuClient.tsx`: changed header logo badge container to `bg-white border border-line/70` for crisp contrast against page cream background.
+  - Regenerated printable table QR cards PDF (`docs/print/grill-ghar-table-qr-cards.pdf`) with the new logo.
+  - Documented asset in `.agent/restaurants/grill-ghar/IMAGE-CREDITS.md`.
+- Verification & DoD:
+  - Typecheck: 0 errors (`npm run typecheck`).
+  - Unit tests: 112/112 passed across 20 test files (`npm run test`).
+  - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
+  - Visual verification: Captured header screenshot confirming crisp logo rendering on white badge.
 Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 gg-menu)
 Commits / branch / PR: `main`
-Next: User review and approval.
+Next: User review and next instructions.
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | 1 | Security (2026-10-14) | Demo staff passwords were in client code on the live site and are in the **public** git history. | **Open — human must change both staff passwords** (Supabase → Authentication → Users) and update `.env.local`. |

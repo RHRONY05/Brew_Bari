@@ -44,5 +44,7 @@ Every photo used for Grill Ghar (rules: [03-DATA.md §5](03-DATA.md)). One row p
 | Category: All | `public/images/categories/grill-ghar/all.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | 3D fast-food menu combo platter icon |
 | Category: Deals | `public/images/categories/grill-ghar/deals.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | 3D red and gold percentage discount promo badge |
 | Shawarma Duo | `public/images/menu/grill-ghar/shawarma-duo.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent cut shawarma wraps, fries basket & garlic dip |
+| Brand Logo: Grill Ghar | `public/images/brand/grill-ghar.webp` | Studio / Menuwala | Internal mark | Menuwala Brand License | Modern minimalist house silhouette enclosing flame and grill grates |
+
 
 

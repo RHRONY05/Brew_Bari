@@ -256,7 +256,7 @@ export function MenuClient({
             <div
               className={`relative w-12 h-12 shrink-0 ${
                 theme.layout.itemCard === 'bold'
-                  ? 'rounded-[16px] bg-brand p-2 flex items-center justify-center shadow-[0_6px_16px_rgba(var(--brand-rgb,210_41_28)/0.28)]'
+                  ? 'rounded-[16px] bg-white border border-line/70 p-1.5 flex items-center justify-center shadow-xs'
                   : ''
               }`}
             >

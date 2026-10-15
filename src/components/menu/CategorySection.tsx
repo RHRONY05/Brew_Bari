@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { ChevronLeft, ChevronRight, LayoutGrid, SlidersHorizontal } from 'lucide-react';
+import { ChevronLeft, ChevronRight, SlidersHorizontal } from 'lucide-react';
 import type { Category, MenuItem } from '@/lib/menu/data';
 import { ItemCard } from './ItemCard';
 import { pick } from '@/lib/i18n';
@@ -50,12 +50,12 @@ export function CategorySection({
       data-testid={`category-section-${category.id}`}
     >
       {/* Category Header with Title, Count, Navigation Arrows & View Toggle */}
-      <div className="flex items-center justify-between gap-2">
+      <div className="flex items-center justify-between gap-2 px-4">
         <div className="flex items-center gap-2 min-w-0">
           <CategoryIcon
             icon={category.icon}
             name={category.name_en}
-            className="w-5 h-5 text-brand stroke-[2.2] shrink-0"
+            className="w-6 h-6 text-brand stroke-[2.2] shrink-0"
           />
           <h2 className="text-[17px] sm:text-[20px] font-extrabold text-ink tracking-tight truncate">
             {catTitle}
@@ -115,7 +115,7 @@ export function CategorySection({
 
       {/* Items Container: Slider vs Expanded Grid */}
       {isExpanded ? (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 animate-in fade-in duration-200">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4 animate-in fade-in duration-200">
           {items.map((item) => (
             <ItemCard
               key={item.id}
@@ -130,7 +130,7 @@ export function CategorySection({
       ) : (
         <div
           ref={sliderRef}
-          className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x -mx-4 px-4"
+          className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x px-4 scroll-px-4"
         >
           {items.map((item) => (
             <div key={item.id} className={`${sliderItemWidth} shrink-0 snap-start`}>

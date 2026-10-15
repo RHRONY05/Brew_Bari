@@ -101,7 +101,15 @@ export function ItemCard({
               alt={name}
               fill
               sizes="(max-width: 768px) 50vw, 220px"
-              className="object-cover transition-transform group-hover:scale-105 duration-300"
+              className={`${
+                item.image_url.includes('/grill-ghar/') &&
+                (item.image_url.includes('combo') ||
+                  item.image_url.includes('duo') ||
+                  item.image_url.includes('bucket'))
+                  ? 'object-contain p-2.5'
+                  : 'object-cover'
+              } transition-transform group-hover:scale-105 duration-300`}
+              unoptimized={item.image_url.includes('/grill-ghar/')}
             />
           ) : (
             <div className="flex flex-col items-center gap-1 opacity-70">

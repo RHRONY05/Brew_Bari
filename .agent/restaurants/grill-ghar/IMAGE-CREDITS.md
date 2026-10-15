@@ -32,6 +32,17 @@ Every photo used for Grill Ghar (rules: [03-DATA.md §5](03-DATA.md)). One row p
 | Mango Lassi | `public/images/menu/grill-ghar/mango-lassi.webp` | Julia Zyablova | https://unsplash.com/photos/a-glass-filled-with-a-smoothie-next-to-a-mango-KlVIYmGVRQ8 | Unsplash License | Fresh yellow mango lassi drink next to mango fruit |
 | Soft Drink · 250 ml | `public/images/menu/grill-ghar/soft-drink.webp` | Qasim Malick | https://unsplash.com/photos/clear-drinking-glass-with-ice-and-black-liquid-i597Mg_WSPw | Unsplash License | Chilled fizzy cola soft drink in a glass with ice cubes |
 | Mineral Water | `public/images/menu/grill-ghar/mineral-water.webp` | KOBU Agency | https://unsplash.com/photos/clear-drinking-glass-on-gray-surface-TWIRIAizZFU | Unsplash License | Pure clear mineral water in glass |
-| Solo Combo (Hero) | `public/images/offers/grill-ghar/offer-solo-combo.webp` | Jonathan Borba | https://unsplash.com/photos/burger-with-fries-8l8Yl2ruUsg | Unsplash License | Hero presentation of smash burger with fries on wooden board |
-| Family Bucket Night (Hero) | `public/images/offers/grill-ghar/offer-family-bucket.webp` | Erik Mclean | https://unsplash.com/photos/fried-chicken-on-white-ceramic-plate-UBtRdqWUbzc | Unsplash License | Hero platter of crispy golden fried chicken |
-| Two's Company / Duo Feast (Hero) | `public/images/offers/grill-ghar/offer-duo-feast.webp` | KWON JUNHO | https://unsplash.com/photos/a-tray-with-two-sandwiches-and-fries-on-it-yprLHxQj1fM | Unsplash License | Hero presentation of two burgers and fries on a tray |
+| Solo Combo (Hero) | `public/images/offers/grill-ghar/offer-solo-combo.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent smash burger, fries carton & drink cutout |
+| Family Bucket Night (Hero) | `public/images/offers/grill-ghar/offer-family-bucket.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent fried chicken bucket, fries basket & dips cutout |
+| Two's Company / Duo Feast (Hero) | `public/images/offers/grill-ghar/offer-duo-feast.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent duo burgers, waffle fries & two drinks cutout |
+| Category: Set meals | `public/images/categories/grill-ghar/meals.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent fast-food combo set cutout |
+| Category: Burgers | `public/images/categories/grill-ghar/burger.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent double beef smash burger cutout |
+| Category: Fried chicken | `public/images/categories/grill-ghar/chicken.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent crispy golden chicken drumstick cutout |
+| Category: Shawarma & wraps | `public/images/categories/grill-ghar/shawarma.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent sliced chicken shawarma wrap cutout |
+| Category: Fries & sides | `public/images/categories/grill-ghar/fries.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent french fries carton cutout |
+| Category: Shakes & drinks | `public/images/categories/grill-ghar/shakes.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent gourmet chocolate shake cutout |
+| Category: All | `public/images/categories/grill-ghar/all.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | 3D fast-food menu combo platter icon |
+| Category: Deals | `public/images/categories/grill-ghar/deals.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | 3D red and gold percentage discount promo badge |
+| Shawarma Duo | `public/images/menu/grill-ghar/shawarma-duo.webp` | Studio / Menuwala | Internal cutout | Menuwala Asset License | Transparent cut shawarma wraps, fries basket & garlic dip |
+
+

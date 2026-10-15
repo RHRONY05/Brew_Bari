@@ -19,7 +19,26 @@ import {
   Sandwich,
   type LucideIcon,
 } from 'lucide-react';
-import { VenueIcon } from '@/themes/ThemeContext';
+import Image from 'next/image';
+import { VenueIcon, useTheme } from '@/themes/ThemeContext';
+
+export const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  all: '/images/categories/grill-ghar/all.webp',
+  deals: '/images/categories/grill-ghar/deals.webp',
+  meal: '/images/categories/grill-ghar/meals.webp',
+  'set meals': '/images/categories/grill-ghar/meals.webp',
+  burger: '/images/categories/grill-ghar/burger.webp',
+  burgers: '/images/categories/grill-ghar/burger.webp',
+  chicken: '/images/categories/grill-ghar/chicken.webp',
+  'fried chicken': '/images/categories/grill-ghar/chicken.webp',
+  shawarma: '/images/categories/grill-ghar/shawarma.webp',
+  'shawarma & wraps': '/images/categories/grill-ghar/shawarma.webp',
+  fries: '/images/categories/grill-ghar/fries.webp',
+  'fries & sides': '/images/categories/grill-ghar/fries.webp',
+  shake: '/images/categories/grill-ghar/shakes.webp',
+  shakes: '/images/categories/grill-ghar/shakes.webp',
+  'shakes & drinks': '/images/categories/grill-ghar/shakes.webp',
+};
 
 export function FriesIcon({
   className,
@@ -119,6 +138,8 @@ interface CategoryIconProps {
   name?: string | null;
   className?: string;
   fallbackEmoji?: boolean;
+  themeKey?: string;
+  preferImage?: boolean;
 }
 
 export function CategoryIcon({
@@ -126,9 +147,36 @@ export function CategoryIcon({
   name,
   className = 'w-4 h-4',
   fallbackEmoji = true,
+  themeKey,
+  preferImage = true,
 }: CategoryIconProps) {
+  const theme = useTheme();
+  const effectiveThemeKey = themeKey || theme?.key;
+  const isGrillGhar = effectiveThemeKey === 'grill-ghar';
+
   const iconTrimmed = (icon || '').trim();
   const nameTrimmed = (name || '').trim().toLowerCase();
+
+  if (isGrillGhar && preferImage) {
+    const categoryImg =
+      CATEGORY_IMAGE_MAP[iconTrimmed.toLowerCase()] ||
+      CATEGORY_IMAGE_MAP[nameTrimmed];
+
+    if (categoryImg) {
+      return (
+        <span className={`relative inline-flex items-center justify-center shrink-0 ${className}`}>
+          <Image
+            src={categoryImg}
+            alt={name || ''}
+            fill
+            sizes="32px"
+            className="object-contain"
+            unoptimized
+          />
+        </span>
+      );
+    }
+  }
 
   const MatchedIcon =
     CATEGORY_ICON_MAP[iconTrimmed] ||

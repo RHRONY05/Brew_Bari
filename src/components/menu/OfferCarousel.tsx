@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Sparkles, ArrowRight } from 'lucide-react';
 import type { Offer, MenuItem } from '@/lib/menu/data';
@@ -185,6 +185,7 @@ export function OfferCarousel({ offers, items, locale, onSelectOffer, decoration
                   sizes="(max-width: 640px) 145px, 175px"
                   className="object-contain drop-shadow-[0_10px_20px_rgba(0,0,0,0.35)]"
                   priority={activeIndex === 0}
+                  unoptimized
                 />
               </div>
             ) : (

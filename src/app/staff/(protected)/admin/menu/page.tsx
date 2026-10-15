@@ -584,7 +584,8 @@ export default function AdminMenuPage() {
                 <CategoryIcon
                   icon={cat.icon}
                   name={cat.name_en}
-                  className={`w-3.5 h-3.5 stroke-[2.2] shrink-0 ${isSelected ? 'text-accent' : 'text-brand'}`}
+                  themeKey={restaurant?.theme_key}
+                  className={`w-4 h-4 stroke-[2.2] shrink-0 ${isSelected ? 'text-accent' : 'text-brand'}`}
                 />
                 <span>{cat.name_en} · {count}</span>
               </button>

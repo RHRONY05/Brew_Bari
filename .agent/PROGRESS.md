@@ -492,8 +492,26 @@ Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ build ✅
 Commits / branch / PR: `task/G9-docs-deploy` -> `main`, tag `grill-ghar-v1`
 Next: All tasks complete! Pitch rehearsal with Turjo.
 
-
-## Open problems / known bugs
+### 2026-10-15 15:00 — Antigravity — Grill Ghar Visual Polish & Asset Consistency
+Did:
+- Addressed 6 specific visual alignment & asset points on Grill Ghar:
+  1. Missing images under "Set meals": removed obsolete test records from Supabase `menu_items` with null images (`Naga Test Burger`). All 4 set meals now show crisp images.
+  2. Category row label icon consistency: updated `CategoryIcon` with `themeKey` and `preferImage` support so Grill Ghar automatically renders the matching food cutout thumbnail (24×24) in row headers, while Brew Bari retains Lucide icons.
+  3. "All" and "Deals" icons: generated studio 3D icons (`all.webp`: fast-food platter tray; `deals.webp`: 3D discount starburst badge) and integrated into circular navigation.
+  4. AI food cutouts: generated and transparentized clean multi-item combos (`Solo Combo`, `Duo Feast`, `Family Bucket`, `Shawarma Duo`) with `sharp`, added `unoptimized` and `object-contain` to avoid dark background flattening.
+  5. Admin dashboard consistency: passed `themeKey` to category filter chips in admin menu management so staff UI displays matching food icons.
+  6. Horizontal padding & card margins: converted `main` container to `py-4` with inner `px-4`, removed broken `-mx-4`, and added `px-4 scroll-px-4` so cards maintain a 16px inset margin from the screen edge.
+- Documentation & Credits:
+  - Updated `IMAGE-CREDITS.md` with new AI-generated cutouts and 3D icons.
+- Verification & DoD:
+  - Typecheck: 0 errors (`npm run typecheck`).
+  - Lint: 0 errors (`npm run lint`).
+  - Unit tests: 112/112 passed across 20 test files (`npm run test`).
+  - E2E tests: 18/18 passed (`gg-menu.spec.ts`).
+  - Visual verification: Captured screenshots of category nav, set meals section, burgers section, and Brew Bari regression check.
+Tests: typecheck ✅ lint ✅ unit ✅ 112/112 e2e ✅ (18/18 gg-menu)
+Commits / branch / PR: `main`
+Next: User review and approval.
 | # | Found in | Problem | Status |
 |---|---|---|---|
 | 1 | Security (2026-10-14) | Demo staff passwords were in client code on the live site and are in the **public** git history. | **Open — human must change both staff passwords** (Supabase → Authentication → Users) and update `.env.local`. |

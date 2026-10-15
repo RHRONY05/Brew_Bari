@@ -443,10 +443,10 @@ export function MenuClient({
         )}
 
         {/* Main Content Sections */}
-        <main className="p-4 flex flex-col gap-7">
+        <main className="py-4 flex flex-col gap-7">
           {/* SEARCH RESULTS VIEW */}
           {filteredItems !== null ? (
-            <section className="flex flex-col gap-3">
+            <section className="flex flex-col gap-3 px-4">
               <h2 className="text-xl font-extrabold text-ink flex items-center gap-2">
                 <span>{locale === 'bn' ? 'অনুসন্ধানের ফলাফল' : 'Search Results'}</span>
                 <span className="text-sm font-semibold text-ink-3">
@@ -490,7 +490,7 @@ export function MenuClient({
                   className="flex flex-col gap-3.5 scroll-mt-20"
                   data-testid="category-section-quick"
                 >
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center justify-between gap-2 px-4">
                     <div className="flex items-center gap-2 min-w-0">
                       <Zap className="w-5 h-5 text-brand stroke-[2.2] fill-accent shrink-0" />
                       <h2 className="text-[17px] sm:text-[20px] font-extrabold text-ink tracking-tight truncate">
@@ -544,7 +544,7 @@ export function MenuClient({
                   </div>
 
                   {isQuickExpanded ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 animate-in fade-in duration-200">
+                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 px-4 animate-in fade-in duration-200">
                       {quickItems.map((item) => (
                         <ItemCard
                           key={item.id}
@@ -559,7 +559,7 @@ export function MenuClient({
                   ) : (
                     <div
                       ref={quickSliderRef}
-                      className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x -mx-4 px-4"
+                      className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth pb-2 snap-x px-4 scroll-px-4"
                     >
                       {quickItems.map((item) => (
                         <div key={item.id} className="w-[165px] sm:w-[185px] shrink-0 snap-start">
@@ -617,7 +617,7 @@ export function MenuClient({
           )}
 
           {/* Footer */}
-          <footer className="pt-6 pb-2 text-center text-[12px] leading-relaxed text-ink-3 border-t border-line/60">
+          <footer className="mx-4 pt-6 pb-2 text-center text-[12px] leading-relaxed text-ink-3 border-t border-line/60">
             {footerLine && <div>{footerLine}</div>}
             <div className="mt-1 text-[11px] font-semibold text-ink-3">
               Powered by Menuwala

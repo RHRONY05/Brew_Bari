@@ -1,11 +1,28 @@
 'use client';
 
 import React, { useRef, useEffect } from 'react';
-import { Zap, LayoutGrid, Tag } from 'lucide-react';
+import Image from 'next/image';
+import { Zap } from 'lucide-react';
 import type { Category } from '@/lib/menu/data';
 import { pick } from '@/lib/i18n';
 import { CategoryIcon } from '@/components/ui/category-icon';
 import { useTheme } from '@/themes/ThemeContext';
+
+const CATEGORY_IMAGE_MAP: Record<string, string> = {
+  meal: '/images/categories/grill-ghar/meals.webp',
+  'set meals': '/images/categories/grill-ghar/meals.webp',
+  burger: '/images/categories/grill-ghar/burger.webp',
+  burgers: '/images/categories/grill-ghar/burger.webp',
+  chicken: '/images/categories/grill-ghar/chicken.webp',
+  'fried chicken': '/images/categories/grill-ghar/chicken.webp',
+  shawarma: '/images/categories/grill-ghar/shawarma.webp',
+  'shawarma & wraps': '/images/categories/grill-ghar/shawarma.webp',
+  fries: '/images/categories/grill-ghar/fries.webp',
+  'fries & sides': '/images/categories/grill-ghar/fries.webp',
+  shake: '/images/categories/grill-ghar/shakes.webp',
+  shakes: '/images/categories/grill-ghar/shakes.webp',
+  'shakes & drinks': '/images/categories/grill-ghar/shakes.webp',
+};
 
 interface CategoryNavProps {
   categories: Category[];
@@ -77,13 +94,22 @@ export function CategoryNav({
               }`}
             >
               <span
-                className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all overflow-hidden ${
                   isAllActive
-                    ? 'bg-brand text-brand-ink shadow-sm'
+                    ? 'bg-surface-2 ring-2 ring-brand/20 shadow-xs'
                     : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
                 }`}
               >
-                <LayoutGrid className="w-[24px] h-[24px] stroke-[2]" />
+                <div className="relative w-[38px] h-[38px] transition-transform duration-300 group-hover:scale-110">
+                  <Image
+                    src="/images/categories/grill-ghar/all.webp"
+                    alt={allLabel}
+                    fill
+                    sizes="38px"
+                    className="object-contain drop-shadow-2xs"
+                    unoptimized
+                  />
+                </div>
               </span>
             </span>
             <span
@@ -112,13 +138,22 @@ export function CategoryNav({
                 }`}
               >
                 <span
-                  className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                  className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all overflow-hidden ${
                     isDealsActive
-                      ? 'bg-brand text-brand-ink shadow-sm'
+                      ? 'bg-surface-2 ring-2 ring-brand/20 shadow-xs'
                       : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
                   }`}
                 >
-                  <Tag className="w-[24px] h-[24px] stroke-[2]" />
+                  <div className="relative w-[38px] h-[38px] transition-transform duration-300 group-hover:scale-110">
+                    <Image
+                      src="/images/categories/grill-ghar/deals.webp"
+                      alt={dealsLabel}
+                      fill
+                      sizes="38px"
+                      className="object-contain drop-shadow-2xs"
+                      unoptimized
+                    />
+                  </div>
                 </span>
               </span>
               <span
@@ -135,6 +170,9 @@ export function CategoryNav({
           {categories.map((cat) => {
             const isActive = cat.id === activeCategoryId;
             const label = pick(cat, 'name', locale);
+            const categoryImg =
+              CATEGORY_IMAGE_MAP[cat.icon?.toLowerCase() || ''] ||
+              CATEGORY_IMAGE_MAP[cat.name_en?.toLowerCase() || ''];
 
             return (
               <button
@@ -148,22 +186,35 @@ export function CategoryNav({
                 <span
                   className={`p-[3px] rounded-full border-2 transition-all ${
                     isActive
-                      ? 'border-brand'
+                      ? 'border-brand ring-2 ring-brand/20 shadow-xs'
                       : 'border-line group-hover:border-line-soft'
                   }`}
                 >
                   <span
-                    className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all ${
+                    className={`w-[54px] h-[54px] rounded-full flex items-center justify-center transition-all overflow-hidden ${
                       isActive
-                        ? 'bg-brand text-brand-ink shadow-sm'
+                        ? categoryImg ? 'bg-surface-2' : 'bg-brand text-brand-ink shadow-sm'
                         : 'bg-white text-brand-dark group-hover:bg-surface-2/60'
                     }`}
                   >
-                    <CategoryIcon
-                      icon={cat.icon}
-                      name={cat.name_en}
-                      className="w-[26px] h-[26px] stroke-[1.8] shrink-0"
-                    />
+                    {categoryImg ? (
+                      <div className="relative w-[40px] h-[40px] transition-transform duration-300 group-hover:scale-110">
+                        <Image
+                          src={categoryImg}
+                          alt={cat.name_en}
+                          fill
+                          sizes="40px"
+                          className="object-contain drop-shadow-2xs"
+                          unoptimized
+                        />
+                      </div>
+                    ) : (
+                      <CategoryIcon
+                        icon={cat.icon}
+                        name={cat.name_en}
+                        className="w-[26px] h-[26px] stroke-[1.8] shrink-0"
+                      />
+                    )}
                   </span>
                 </span>
                 <span

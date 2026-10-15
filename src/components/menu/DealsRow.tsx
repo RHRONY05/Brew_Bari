@@ -98,7 +98,15 @@ export function DealsRow({
                     alt={name}
                     fill
                     sizes="176px"
-                    className="object-cover"
+                    className={`${
+                      item.image_url.includes('/grill-ghar/') &&
+                      (item.image_url.includes('combo') ||
+                        item.image_url.includes('duo') ||
+                        item.image_url.includes('bucket'))
+                        ? 'object-contain p-2'
+                        : 'object-cover'
+                    }`}
+                    unoptimized={item.image_url.includes('/grill-ghar/')}
                   />
                 ) : (
                   <div className="text-[10px] font-bold text-ink-3">No photo</div>

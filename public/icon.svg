@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="Menuwala">
+  <rect width="64" height="64" rx="16" fill="#1F4D3A"/>
+  <rect x="14" y="14" width="14" height="14" rx="3" fill="none" stroke="#F3B640" stroke-width="3.5"/>
+  <rect x="36" y="14" width="14" height="14" rx="3" fill="none" stroke="#F3B640" stroke-width="3.5"/>
+  <rect x="14" y="36" width="14" height="14" rx="3" fill="none" stroke="#F3B640" stroke-width="3.5"/>
+  <rect x="19" y="19" width="4" height="4" fill="#F3B640"/>
+  <rect x="41" y="19" width="4" height="4" fill="#F3B640"/>
+  <rect x="19" y="41" width="4" height="4" fill="#F3B640"/>
+  <path d="M37 50c0-7.2 5.8-13 13-13" fill="none" stroke="#F6F3EA" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M37 43h6M37 37h3" stroke="#F6F3EA" stroke-width="3.5" stroke-linecap="round"/>
+</svg>
